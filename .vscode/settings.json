@@ -1,0 +1,4 @@
+{
+  "typescript.compileOnSave": true,
+  "editor.codeActionsOnSave": { "source.addMissingImports": true }
+}
