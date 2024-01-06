@@ -3,10 +3,78 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <style>
+      * {
+        font-family: 'Sora';
+      }
+
+      body {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        background-color: rgba(18, 91, 167, 0.5);
+      }
+
+      canvas {
+        border: 1px solid white;
+      }
+
+      .row {
+        width: 528px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      button {
+        outline: none;
+        outline: 1px solid white;
+        border: none;
+        width: 512px;
+        background-color: rgb(18, 91, 167);
+        color: white;
+        padding: 8px;
+        margin: 8px;
+        font-weight: bold;
+      }
+
+      input[type='number'] {
+        outline: none;
+        outline: 1px solid white;
+        border: none;
+        width: 512px;
+        background-color: rgb(18, 91, 167);
+        color: white;
+        padding: 8px;
+        margin: 8px;
+        font-weight: bold;
+        text-align: center;
+      }
+
+      /* Remove default arrow buttons on number input (for some browsers) */
+      input[type='number']::-webkit-inner-spin-button,
+      input[type='number']::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+    </style>
+    <title>Minecraft CA</title>
   </head>
   <body>
-    <button id="update-button">Update</button>
+    <div class="row">
+      <button id="update-button">Update</button>
+      <input
+        type="number"
+        id="update-speed-input"
+        value="0"
+        placeholder="Step Speed (ms)"
+      />
+    </div>
+
+    <canvas id="canvas" width="512" height="512"></canvas>
+
     <script src="./dist/bundle.js"></script>
   </body>
 </html>

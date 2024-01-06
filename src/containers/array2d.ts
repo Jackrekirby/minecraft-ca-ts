@@ -25,7 +25,10 @@ export class Array2D<T> {
   }
 
   private getIndex (v: Vec2): number {
-    return v.y * this.width + v.x
+    if (v.x >= 0 && v.y >= 0 && v.x < this.width && v.y < this.height) {
+      return v.y * this.width + v.x
+    }
+    return -1
   }
 
   public setValue (v: Vec2, value: T): void {
