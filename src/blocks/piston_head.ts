@@ -11,9 +11,8 @@ import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { Direction } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
-import { addCreateBlockFunction } from '../utils/create_block'
+import { addCreateBlockFunction, createBlock } from '../utils/create_block'
 import { createAirBlock } from './air'
-import { createGlassBlock, GlassBlock } from './glass_block'
 import { Piston } from './piston'
 
 export interface PistonHead extends DirectionalBlock {
@@ -46,10 +45,11 @@ export const createPistonHead = (state: {
       if (isBlock<Piston>(backBlock, BlockType.Piston)) {
         if (
           isRetracting &&
-          isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
+          isMoveableBlock(frontBlock) &&
           frontBlock.movement === Movement.RetractionPending
         ) {
-          return createGlassBlock({
+          return createBlock(frontBlock.type, {
+            ...frontBlock,
             movement: Movement.RetractionComplete,
             movementDirection: direction
           })
