@@ -1,15 +1,22 @@
 import {
   Block,
-  BlockType,
   BlockMovement,
-  isBlock,
+  BlockType,
   DirectionalBlock,
+  isBlock,
   Movement
 } from '../block'
 import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
-import { Direction, getOtherDirections } from '../direction'
+import {
+  Direction,
+  getOppositeDirection,
+  getOtherDirections,
+  getRelativeDirection
+} from '../direction'
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
+import { addCreateBlockFunction } from '../utils/create_block'
+import { zipArrays } from '../utils/general'
 import { GlassBlock } from './glass_block'
 import { PistonHead } from './piston_head'
 
@@ -28,14 +35,20 @@ export const createPiston = (state: {
     isBeingPowered,
     direction,
     update: (position: Vec2, blocks: Array2D<Block>): Block => {
+      const nonFrontDirections = getOtherDirections(Direction.Up)
       const nonFrontBlocks: Block[] = getNeighbourBlocks(
         position,
         blocks,
-        getOtherDirections(Direction.Up)
+        nonFrontDirections
       )
 
-      const isBeingPowered = nonFrontBlocks.some(block =>
-        block.isOutputtingPower()
+      const isBeingPowered = zipArrays(nonFrontDirections, nonFrontBlocks).some(
+        ([neighbourDirection, block]: [Direction, Block]) =>
+          block.isOutputtingPower(
+            getOppositeDirection(
+              getRelativeDirection(neighbourDirection, direction)
+            )
+          )
       )
 
       return createPiston({ isBeingPowered, direction })
@@ -70,3 +83,5 @@ export const createPiston = (state: {
     }
   }
 }
+
+addCreateBlockFunction(BlockType.Piston, createPiston)

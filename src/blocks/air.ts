@@ -1,9 +1,10 @@
 import { Block, BlockMovement, BlockType, isBlock, Movement } from '../block'
 import { Array2D } from '../containers/array2d'
-import { Vec2, vec2Add } from '../containers/vec2'
+import { Vec2 } from '../containers/vec2'
 import { getAllDirections, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
-import { GlassBlock, createGlassBlock } from './glass_block'
+import { addCreateBlockFunction } from '../utils/create_block'
+import { createGlassBlock, GlassBlock } from './glass_block'
 import { Piston } from './piston'
 import { createPistonHead } from './piston_head'
 
@@ -41,3 +42,5 @@ export const createAirBlock = (_state: {}): Air => ({
   isOutputtingPower: () => false,
   getMovementMethod: () => BlockMovement.Breaks
 })
+
+addCreateBlockFunction(BlockType.Air, createAirBlock)

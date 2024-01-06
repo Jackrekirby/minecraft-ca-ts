@@ -1,14 +1,15 @@
 import {
-  MoveableBlock,
-  BlockType,
-  Movement,
   Block,
+  BlockMovement,
+  BlockType,
   isBlock,
-  BlockMovement
+  MoveableBlock,
+  Movement
 } from '../block'
 import { Array2D } from '../containers/array2d'
 import { Vec2, vec2Add } from '../containers/vec2'
 import { Direction } from '../direction'
+import { addCreateBlockFunction } from '../utils/create_block'
 import { createAirBlock } from './air'
 import { Piston } from './piston'
 import { createPistonHead, PistonHead } from './piston_head'
@@ -139,3 +140,5 @@ export const createGlassBlock = (state: {
     }
   }
 }
+
+addCreateBlockFunction(BlockType.GlassBlock, createGlassBlock)

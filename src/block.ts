@@ -14,7 +14,8 @@ export enum BlockType {
   RedstoneTorch = 'RedstoneTorch',
   Piston = 'Piston',
   PistonHead = 'PistonHead',
-  GlassBlock = 'GlassBlock'
+  GlassBlock = 'GlassBlock',
+  RedstoneLamp = 'RedstoneLamp'
 }
 
 export interface Block {
@@ -23,7 +24,8 @@ export interface Block {
   toString: () => string
   getTextureName: (position: Vec2, blocks: Array2D<Block>) => string
   // TODO make power redstone interface
-  isOutputtingPower: () => boolean
+  // direction relative to the block you are requesting power from
+  isOutputtingPower: (direction: Direction) => boolean
   // general traits
   getMovementMethod: () => BlockMovement
 }

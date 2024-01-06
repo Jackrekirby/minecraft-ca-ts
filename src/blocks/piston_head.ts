@@ -8,11 +8,12 @@ import {
   Movement
 } from '../block'
 import { Array2D } from '../containers/array2d'
-import { Vec2, vec2Add } from '../containers/vec2'
+import { Vec2 } from '../containers/vec2'
 import { Direction } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
-import { Air, createAirBlock } from './air'
-import { GlassBlock, createGlassBlock } from './glass_block'
+import { addCreateBlockFunction } from '../utils/create_block'
+import { createAirBlock } from './air'
+import { createGlassBlock, GlassBlock } from './glass_block'
 import { Piston } from './piston'
 
 export interface PistonHead extends DirectionalBlock {
@@ -42,21 +43,24 @@ export const createPistonHead = (state: {
         Direction.Up
       )
 
-      if (
-        isRetracting &&
-        isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
-        frontBlock.movement === Movement.RetractionPending
-      ) {
-        return createGlassBlock({ movement: Movement.RetractionComplete })
-      } else if (isRetracting && !isMoveableBlock(frontBlock)) {
+      if (isBlock<Piston>(backBlock, BlockType.Piston)) {
+        if (
+          isRetracting &&
+          isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
+          frontBlock.movement === Movement.RetractionPending
+        ) {
+          return createGlassBlock({ movement: Movement.RetractionComplete })
+        } else if (isRetracting && !isMoveableBlock(frontBlock)) {
+          return createAirBlock({})
+        } else {
+          return createPistonHead({
+            isRetracting: !backBlock.isBeingPowered,
+            direction
+          })
+        }
+      } else {
         return createAirBlock({})
-      } else if (
-        isBlock<Piston>(backBlock, BlockType.Piston) &&
-        !backBlock.isBeingPowered
-      ) {
-        return createPistonHead({ isRetracting: true, direction })
       }
-      return createPistonHead({ isRetracting: false, direction })
     },
     toString: function () {
       // function allows `this` to refer to the RedstoneTorch
@@ -71,3 +75,5 @@ export const createPistonHead = (state: {
     getMovementMethod: () => BlockMovement.Immovable
   }
 }
+
+addCreateBlockFunction(BlockType.PistonHead, createPistonHead)

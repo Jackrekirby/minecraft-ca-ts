@@ -1,8 +1,9 @@
-import { Block, BlockType, BlockMovement, DirectionalBlock } from '../block'
+import { Block, BlockMovement, BlockType, DirectionalBlock } from '../block'
 import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
-import { Direction } from '../direction'
+import { Direction, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addCreateBlockFunction } from '../utils/create_block'
 
 export interface RedstoneTorch extends DirectionalBlock {
   type: BlockType.RedstoneTorch
@@ -14,6 +15,7 @@ export const createRedstoneTorch = (state: {
   direction?: Direction
 }): RedstoneTorch => {
   const { isBeingPowered = false, direction = Direction.Up } = state
+  const isOn = !isBeingPowered
   return {
     type: BlockType.RedstoneTorch,
     isBeingPowered,
@@ -25,20 +27,23 @@ export const createRedstoneTorch = (state: {
         Direction.Down
       )
 
-      const isBeingPowered = backBlock.isOutputtingPower()
+      const isBeingPowered = backBlock.isOutputtingPower(
+        getOppositeDirection(direction)
+      )
 
       return createRedstoneTorch({ isBeingPowered, direction })
     },
     toString: function () {
-      // function allows `this` to refer to the RedstoneTorch
-      return `RT${this.isOutputtingPower() ? '*' : ''}`
+      return `RT${isOn ? '*' : ''}`
     },
     getTextureName: function () {
-      return `redstone_torch_${
-        this.isOutputtingPower() ? 'on' : 'off'
-      }_${direction.toLowerCase()}`
+      return `redstone_torch_${isOn ? 'on' : 'off'}_${direction.toLowerCase()}`
     },
-    isOutputtingPower: () => !isBeingPowered,
+    isOutputtingPower: function (direction: Direction) {
+      return direction !== getOppositeDirection(this.direction) && isOn
+    },
     getMovementMethod: () => BlockMovement.Immovable
   }
 }
+
+addCreateBlockFunction(BlockType.RedstoneTorch, createRedstoneTorch)

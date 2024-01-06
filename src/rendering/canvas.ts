@@ -1,6 +1,5 @@
-import { vec2Subtract, vec2Add, Vec2 } from '../containers/vec2'
-import { loadImages } from './image_loader'
 import { Array2D } from '../containers/array2d'
+import { Vec2, vec2Add, vec2Subtract } from '../containers/vec2'
 import { TileInfo, tilemap } from '../images/tilemap'
 
 function roundToNearestPowerOf2 (number: number): number {
@@ -193,7 +192,7 @@ export class Canvas {
     // this.ctx.strokeStyle = 'white'
     // this.ctx.lineWidth = 1
     // this.ctx.strokeText(text, p.x, p.y - 4, screenCellWidth)
-    this.ctx.fillText(text, p.x, p.y - 4, screenCellWidth)
+    this.ctx.fillText(text, p.x + 3, p.y - 4, screenCellWidth)
   }
 
   drawRect = (x: number, y: number, w: number, h: number) => {

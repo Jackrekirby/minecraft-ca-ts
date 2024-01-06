@@ -1,16 +1,17 @@
-import { block } from 'sharp'
 import { Block, BlockType } from './block'
 import { createAirBlock } from './blocks/air'
 import { createGlassBlock } from './blocks/glass_block'
 import { createPiston } from './blocks/piston'
 import { createPistonHead } from './blocks/piston_head'
 import { createRedstoneBlock } from './blocks/redstone_block'
-import { Canvas } from './rendering/canvas'
-import { loadImages } from './rendering/image_loader'
+import { createRedstoneLamp } from './blocks/redstone_lamp'
+import { createRedstoneTorch } from './blocks/redstone_torch'
 import { Array2D } from './containers/array2d'
 import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
 import { Direction } from './direction'
-import { createRedstoneTorch } from './blocks/redstone_torch'
+import { Canvas } from './rendering/canvas'
+import { loadImages } from './rendering/image_loader'
+import { createBlock } from './utils/create_block'
 
 // dom
 
@@ -41,25 +42,6 @@ const updateBlocks = (blocks: Array2D<Block>) => {
   )
   blocks.array = newBlocks.array
   // logBlocks(blocks)
-}
-
-const createBlock = (blockType: BlockType, state: object): Block => {
-  switch (blockType) {
-    case BlockType.Air:
-      return createAirBlock(state)
-    case BlockType.GlassBlock:
-      return createGlassBlock(state)
-    case BlockType.Piston:
-      return createPiston(state)
-    case BlockType.PistonHead:
-      return createPistonHead(state)
-    case BlockType.RedstoneBlock:
-      return createRedstoneBlock(state)
-    case BlockType.RedstoneTorch:
-      return createRedstoneTorch(state)
-    default:
-      throw new Error(`Block type ${blockType} not implemented`)
-  }
 }
 
 type ClickCallback = () => void
@@ -101,38 +83,7 @@ const main = async () => {
     16,
     createAirBlock({})
   )
-
-  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
-  blocks.setValue(
-    { x: 0, y: 1 },
-    createRedstoneTorch({ direction: Direction.Up })
-  )
-
-  blocks.setValue(
-    { x: 2, y: 5 },
-    createPiston({
-      isBeingPowered: true,
-      direction: Direction.Right
-    })
-  )
-  blocks.setValue(
-    { x: 3, y: 5 },
-    createPistonHead({ direction: Direction.Right })
-  )
-  blocks.setValue({ x: 4, y: 5 }, createGlassBlock({}))
-  blocks.setValue({ x: 5, y: 5 }, createGlassBlock({}))
-
-  blocks.setValue({ x: 1, y: 7 }, createRedstoneBlock({}))
-  blocks.setValue(
-    { x: 2, y: 7 },
-    createPiston({
-      isBeingPowered: false,
-      direction: Direction.Right
-    })
-  )
-  blocks.setValue({ x: 3, y: 7 }, createGlassBlock({}))
-  blocks.setValue({ x: 4, y: 7 }, createGlassBlock({}))
-  blocks.setValue({ x: 5, y: 7 }, createGlassBlock({}))
+  buildWorld(blocks)
 
   const canvas = new Canvas(
     canvasElement,
@@ -218,6 +169,52 @@ const main = async () => {
 
   logBlocks(blocks)
   updateCanvas()
+}
+
+const buildWorld = (blocks: Array2D<Block>) => {
+  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
+  blocks.setValue(
+    { x: 0, y: 1 },
+    createRedstoneTorch({ direction: Direction.Up })
+  )
+
+  blocks.setValue({ x: 0, y: 2 }, createRedstoneLamp({}))
+
+  blocks.setValue(
+    { x: 2, y: 5 },
+    createPiston({
+      isBeingPowered: true,
+      direction: Direction.Right
+    })
+  )
+  blocks.setValue(
+    { x: 3, y: 5 },
+    createPistonHead({ direction: Direction.Right })
+  )
+  blocks.setValue({ x: 4, y: 5 }, createGlassBlock({}))
+  blocks.setValue({ x: 5, y: 5 }, createGlassBlock({}))
+
+  blocks.setValue({ x: 1, y: 7 }, createRedstoneBlock({}))
+  blocks.setValue(
+    { x: 2, y: 7 },
+    createPiston({
+      isBeingPowered: false,
+      direction: Direction.Right
+    })
+  )
+  blocks.setValue({ x: 3, y: 7 }, createGlassBlock({}))
+  blocks.setValue({ x: 4, y: 7 }, createGlassBlock({}))
+  blocks.setValue({ x: 5, y: 7 }, createGlassBlock({}))
+
+  blocks.setValue({ x: 9, y: 3 }, createRedstoneBlock({}))
+  blocks.setValue(
+    { x: 8, y: 3 },
+    createPiston({
+      isBeingPowered: false,
+      direction: Direction.Left
+    })
+  )
+  blocks.setValue({ x: 7, y: 3 }, createGlassBlock({}))
 }
 
 main()
