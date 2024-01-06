@@ -60,6 +60,16 @@
         -webkit-appearance: none;
         margin: 0;
       }
+
+      #built-time {
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+
+        color: rgba(255, 255, 255, 0.5);
+        font-size: small;
+      }
     </style>
     <title>Minecraft CA</title>
   </head>
@@ -76,6 +86,7 @@
 
     <canvas id="canvas" width="512" height="512"></canvas>
 
+    <div id="built-time">Test</div>
     <script src="./dist/bundle.js"></script>
   </body>
 </html>

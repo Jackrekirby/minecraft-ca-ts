@@ -1,5 +1,6 @@
 // webpack.config.js
 const path = require('path');
+const webpack = require('webpack');
 
 module.exports = {
     mode: 'development',
@@ -27,5 +28,10 @@ module.exports = {
                 ],
             }
         ]
-    }
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'process.env.BUILD_TIME': JSON.stringify(new Date().toLocaleString())
+        })
+    ]
 };

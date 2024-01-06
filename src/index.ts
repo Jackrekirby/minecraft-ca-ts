@@ -25,6 +25,14 @@ const updateSpeedInput = document.getElementById(
   'update-speed-input'
 ) as HTMLInputElement
 
+const builtTimeElement = document.getElementById(
+  'built-time'
+) as HTMLInputElement
+
+builtTimeElement.textContent = `BUILD ${process.env.BUILD_TIME?.replace(
+  ',',
+  ''
+)}`
 // main
 
 const logBlocks = (blocks: Array2D<Block>) => {
