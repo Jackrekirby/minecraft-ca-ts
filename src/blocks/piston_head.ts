@@ -49,7 +49,10 @@ export const createPistonHead = (state: {
           isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
           frontBlock.movement === Movement.RetractionPending
         ) {
-          return createGlassBlock({ movement: Movement.RetractionComplete })
+          return createGlassBlock({
+            movement: Movement.RetractionComplete,
+            movementDirection: direction
+          })
         } else if (isRetracting && !isMoveableBlock(frontBlock)) {
           return createAirBlock({})
         } else {

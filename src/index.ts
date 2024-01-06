@@ -215,6 +215,10 @@ const buildWorld = (blocks: Array2D<Block>) => {
     })
   )
   blocks.setValue({ x: 7, y: 3 }, createGlassBlock({}))
+  blocks.setValue({ x: 6, y: 3 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 5, y: 3 }, createGlassBlock({}))
+  blocks.setValue({ x: 4, y: 3 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 3, y: 3 }, createGlassBlock({}))
 }
 
 main()
