@@ -1,45 +1,73 @@
-import { Block, BlockMovement, BlockType, isBlock, Movement } from '../block'
+import {
+  Block,
+  BlockMovement,
+  BlockType,
+  DirectionalBlock,
+  isBlock,
+  isMoveableBlock,
+  Movement
+} from '../block'
 import { Array2D } from '../containers/array2d'
 import { Vec2, vec2Add } from '../containers/vec2'
+import { Direction } from '../direction'
+import { getNeighbourBlock } from '../utils/block_fetching'
+import { Air, createAirBlock } from './air'
 import { GlassBlock, createGlassBlock } from './glass_block'
 import { Piston } from './piston'
 
-export interface PistonHead extends Block {
+export interface PistonHead extends DirectionalBlock {
   type: BlockType.PistonHead
   isRetracting: boolean
 }
 
-export const createPistonHead = (
-  isRetracting: boolean = false
-): PistonHead => ({
-  type: BlockType.PistonHead,
-  isRetracting,
-  update: (position: Vec2, blocks: Array2D<Block>): Block => {
-    const leftBlock: Block = blocks.getValue(vec2Add(position, { x: -1, y: 0 }))
-    const rightBlock: Block = blocks.getValue(vec2Add(position, { x: 1, y: 0 }))
+export const createPistonHead = (state: {
+  isRetracting?: boolean
+  direction?: Direction
+}): PistonHead => {
+  const { isRetracting = false, direction = Direction.Up } = state
+  return {
+    type: BlockType.PistonHead,
+    isRetracting,
+    direction,
+    update: (position: Vec2, blocks: Array2D<Block>): Block => {
+      const backBlock: Block = getNeighbourBlock(
+        position,
+        blocks,
+        Direction.Down
+      )
 
-    if (
-      isRetracting &&
-      isBlock<GlassBlock>(rightBlock, BlockType.GlassBlock) &&
-      rightBlock.movement === Movement.RetractionPending
-    ) {
-      return createGlassBlock(Movement.RetractionComplete)
-    }
-    if (
-      isBlock<Piston>(leftBlock, BlockType.Piston) &&
-      !leftBlock.isBeingPowered
-    ) {
-      return createPistonHead(true)
-    }
-    return createPistonHead(false)
-  },
-  toString: function () {
-    // function allows `this` to refer to the RedstoneTorch
-    return `PH${isRetracting ? '<' : ''}`
-  },
-  getTextureName: function () {
-    return `piston_head${isRetracting ? '_retracting' : ''}_right`
-  },
-  isOutputtingPower: () => false,
-  getMovementMethod: () => BlockMovement.Immovable
-})
+      const frontBlock: Block = getNeighbourBlock(
+        position,
+        blocks,
+        Direction.Up
+      )
+
+      if (
+        isRetracting &&
+        isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
+        frontBlock.movement === Movement.RetractionPending
+      ) {
+        return createGlassBlock({ movement: Movement.RetractionComplete })
+      } else if (isRetracting && !isMoveableBlock(frontBlock)) {
+        return createAirBlock({})
+      } else if (
+        isBlock<Piston>(backBlock, BlockType.Piston) &&
+        !backBlock.isBeingPowered
+      ) {
+        return createPistonHead({ isRetracting: true, direction })
+      }
+      return createPistonHead({ isRetracting: false, direction })
+    },
+    toString: function () {
+      // function allows `this` to refer to the RedstoneTorch
+      return `PH${isRetracting ? '<' : ''}`
+    },
+    getTextureName: function () {
+      return `piston_head${
+        isRetracting ? '_retracting' : ''
+      }_${direction.toLowerCase()}`
+    },
+    isOutputtingPower: () => false,
+    getMovementMethod: () => BlockMovement.Immovable
+  }
+}

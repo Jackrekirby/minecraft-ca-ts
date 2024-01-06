@@ -8,8 +8,9 @@ import { createRedstoneBlock } from './blocks/redstone_block'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
 import { Array2D } from './containers/array2d'
-import { Vec2, vec2Apply, vec2Zero } from './containers/vec2'
+import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
 import { Direction } from './direction'
+import { createRedstoneTorch } from './blocks/redstone_torch'
 
 // dom
 
@@ -28,7 +29,7 @@ const updateSpeedInput = document.getElementById(
 const logBlocks = (blocks: Array2D<Block>) => {
   const x = blocks
     .map(block => block.toString())
-    .toDictionary(block => block !== createAirBlock().toString())
+    .toDictionary(block => block !== createAirBlock({}).toString())
   const y = blocks.toFormattedString(block => block.toString().padEnd(4))
   console.log(x)
 }
@@ -42,21 +43,55 @@ const updateBlocks = (blocks: Array2D<Block>) => {
   // logBlocks(blocks)
 }
 
-const createBlock = (blockType: BlockType): Block => {
+const createBlock = (blockType: BlockType, state: object): Block => {
   switch (blockType) {
     case BlockType.Air:
-      return createAirBlock()
+      return createAirBlock(state)
     case BlockType.GlassBlock:
-      return createGlassBlock()
+      return createGlassBlock(state)
     case BlockType.Piston:
-      return createPiston({})
+      return createPiston(state)
     case BlockType.PistonHead:
-      return createPistonHead()
+      return createPistonHead(state)
     case BlockType.RedstoneBlock:
-      return createRedstoneBlock()
+      return createRedstoneBlock(state)
+    case BlockType.RedstoneTorch:
+      return createRedstoneTorch(state)
     default:
-      throw new Error('Block type not implemented')
+      throw new Error(`Block type ${blockType} not implemented`)
   }
+}
+
+type ClickCallback = () => void
+
+const addClickHandlerWithDragCheck = (
+  element: HTMLElement,
+  clickCallback: ClickCallback
+): void => {
+  let isDragging = false
+
+  const mouseDownHandler = (_downEvent: MouseEvent) => {
+    isDragging = false
+
+    const mouseMoveHandler = (_moveEvent: MouseEvent) => {
+      isDragging = true
+    }
+
+    const mouseUpHandler = () => {
+      document.removeEventListener('mousemove', mouseMoveHandler)
+      document.removeEventListener('mouseup', mouseUpHandler)
+
+      if (!isDragging) {
+        // Invoke the callback for a regular click
+        clickCallback()
+      }
+    }
+
+    document.addEventListener('mousemove', mouseMoveHandler)
+    document.addEventListener('mouseup', mouseUpHandler)
+  }
+
+  element.addEventListener('mousedown', mouseDownHandler)
 }
 
 const main = async () => {
@@ -64,10 +99,15 @@ const main = async () => {
   const blocks: Array2D<Block> = Array2D.createWithDefaultValue(
     16,
     16,
-    createAirBlock()
+    createAirBlock({})
   )
 
-  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock())
+  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
+  blocks.setValue(
+    { x: 0, y: 1 },
+    createRedstoneTorch({ direction: Direction.Up })
+  )
+
   blocks.setValue(
     { x: 2, y: 5 },
     createPiston({
@@ -75,11 +115,14 @@ const main = async () => {
       direction: Direction.Right
     })
   )
-  blocks.setValue({ x: 3, y: 5 }, createPistonHead())
-  blocks.setValue({ x: 4, y: 5 }, createGlassBlock())
-  blocks.setValue({ x: 5, y: 5 }, createGlassBlock())
+  blocks.setValue(
+    { x: 3, y: 5 },
+    createPistonHead({ direction: Direction.Right })
+  )
+  blocks.setValue({ x: 4, y: 5 }, createGlassBlock({}))
+  blocks.setValue({ x: 5, y: 5 }, createGlassBlock({}))
 
-  blocks.setValue({ x: 1, y: 7 }, createRedstoneBlock())
+  blocks.setValue({ x: 1, y: 7 }, createRedstoneBlock({}))
   blocks.setValue(
     { x: 2, y: 7 },
     createPiston({
@@ -87,9 +130,9 @@ const main = async () => {
       direction: Direction.Right
     })
   )
-  blocks.setValue({ x: 3, y: 7 }, createGlassBlock())
-  blocks.setValue({ x: 4, y: 7 }, createGlassBlock())
-  blocks.setValue({ x: 5, y: 7 }, createGlassBlock())
+  blocks.setValue({ x: 3, y: 7 }, createGlassBlock({}))
+  blocks.setValue({ x: 4, y: 7 }, createGlassBlock({}))
+  blocks.setValue({ x: 5, y: 7 }, createGlassBlock({}))
 
   const canvas = new Canvas(
     canvasElement,
@@ -107,27 +150,39 @@ const main = async () => {
   }
 
   let selectedBlockType: BlockType = BlockType.Air
-  canvasElement.addEventListener('click', () => {
+  const placeBlock = () => {
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
+
+    const getPlacementDirection = (v: Vec2) => {
+      if (Math.abs(v.x - 0.5) > Math.abs(v.y - 0.5)) {
+        return v.x > 0.5 ? Direction.Right : Direction.Left
+      } else {
+        return v.y > 0.5 ? Direction.Up : Direction.Down
+      }
+    }
+
+    const direction: Direction = getPlacementDirection(vec2Subtract(p, pi))
 
     const block = blocks.getValue(pi)
 
     if (block.type === BlockType.Air) {
-      blocks.setValue(pi, createBlock(selectedBlockType))
+      blocks.setValue(pi, createBlock(selectedBlockType, { direction }))
       updateCanvas()
     } else {
       selectedBlockType = block.type
     }
 
     // console.log(p, pi, block)
-  })
+  }
+  addClickHandlerWithDragCheck(canvasElement, placeBlock)
+  // canvasElement.addEventListener('click')
 
   canvasElement.addEventListener('dblclick', function (e: MouseEvent) {
     e.preventDefault()
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
-    blocks.setValue(pi, createAirBlock())
+    blocks.setValue(pi, createAirBlock({}))
     updateCanvas()
   })
 

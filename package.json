@@ -6,7 +6,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack",
-    "watch": "webpack --watch"
+    "watch": "webpack --watch",
+    "compile-textures": "ts-node .\\src\\rendering\\image_generation.ts"
   },
   "keywords": [],
   "author": "",

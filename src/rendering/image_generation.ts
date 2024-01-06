@@ -65,7 +65,11 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: false
   },
-  piston: {
+  piston_on: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  piston_off: {
     isDirectional: true,
     isMoveable: true
   },

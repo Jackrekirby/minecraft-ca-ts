@@ -6,10 +6,10 @@ export interface RedstoneBlock extends Block {
   type: BlockType.RedstoneBlock
 }
 
-export const createRedstoneBlock = (): RedstoneBlock => ({
+export const createRedstoneBlock = (_state: {}): RedstoneBlock => ({
   type: BlockType.RedstoneBlock,
   update: (_position: Vec2, _blocks: Array2D<Block>): Block => {
-    return createRedstoneBlock()
+    return createRedstoneBlock({})
   },
   toString: () => 'RDB',
   getTextureName: () => 'redstone_block',

@@ -7,6 +7,32 @@ export enum Direction {
   Right = 'Right'
 }
 
+export const getOtherDirections = (direction: Direction): Direction[] => {
+  switch (direction) {
+    case Direction.Up:
+      return [Direction.Left, Direction.Right, Direction.Down]
+    case Direction.Down:
+      return [Direction.Left, Direction.Right, Direction.Up]
+    case Direction.Left:
+      return [Direction.Up, Direction.Right, Direction.Down]
+    case Direction.Right:
+      return [Direction.Left, Direction.Up, Direction.Down]
+  }
+}
+
+export const getOppositeDirection = (direction: Direction): Direction => {
+  switch (direction) {
+    case Direction.Up:
+      return Direction.Down
+    case Direction.Down:
+      return Direction.Up
+    case Direction.Left:
+      return Direction.Right
+    case Direction.Right:
+      return Direction.Left
+  }
+}
+
 export const getRelativeDirection = (
   facing: Direction,
   turn: Direction
@@ -61,4 +87,9 @@ export const directionToVec2 = (direction: Direction): Vec2 => {
     case Direction.Right:
       return { x: 1, y: 0 }
   }
+}
+
+export const getAllDirections = (): Direction[] => {
+  const directions: Direction[] = Object.values(Direction)
+  return directions
 }

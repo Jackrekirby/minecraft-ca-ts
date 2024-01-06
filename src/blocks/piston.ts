@@ -3,13 +3,13 @@ import {
   BlockType,
   BlockMovement,
   isBlock,
-  Movement,
-  DirectionalBlock
+  DirectionalBlock,
+  Movement
 } from '../block'
 import { Array2D } from '../containers/array2d'
-import { Vec2, vec2Add } from '../containers/vec2'
-import { Direction } from '../direction'
-import { getNeighbourBlock } from '../utils/block_fetching'
+import { Vec2 } from '../containers/vec2'
+import { Direction, getOtherDirections } from '../direction'
+import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
 import { GlassBlock } from './glass_block'
 import { PistonHead } from './piston_head'
 
@@ -28,37 +28,16 @@ export const createPiston = (state: {
     isBeingPowered,
     direction,
     update: (position: Vec2, blocks: Array2D<Block>): Block => {
-      const leftBlock: Block = getNeighbourBlock(
+      const nonFrontBlocks: Block[] = getNeighbourBlocks(
         position,
         blocks,
-        Direction.Down
+        getOtherDirections(Direction.Up)
       )
 
-      const rightBlock: Block = getNeighbourBlock(
-        position,
-        blocks,
-        Direction.Up
+      const isBeingPowered = nonFrontBlocks.some(block =>
+        block.isOutputtingPower()
       )
-      // const leftBlock: Block = blocks.getValue(
-      //   vec2Add(position, { x: -1, y: 0 })
-      // )
 
-      // const rightBlock: Block = blocks.getValue(
-      //   vec2Add(position, { x: 1, y: 0 })
-      // )
-
-      const isBeingPowered = leftBlock.isOutputtingPower()
-      const right2Block: Block = blocks.getValue(
-        vec2Add(position, { x: 2, y: 0 })
-      )
-      // const isExtended = // (retraction, extension)
-      //   (isBlock<PistonHead>(rightBlock, BlockType.PistonHead) &&
-      //     isBlock<GlassBlock>(right2Block, BlockType.GlassBlock) &&
-      //     right2Block.movement !== Movement.RetractionPending) ||
-      //   (isBlock<GlassBlock>(rightBlock, BlockType.GlassBlock) &&
-      //     rightBlock.movement === Movement.Pending &&
-      //     isBlock<GlassBlock>(right2Block, BlockType.GlassBlock) &&
-      //     right2Block.movement === Movement.Complete)
       return createPiston({ isBeingPowered, direction })
     },
     toString: function () {
@@ -72,8 +51,12 @@ export const createPiston = (state: {
         Direction.Up
       )
       const isExtended = isBlock<PistonHead>(frontBlock, BlockType.PistonHead)
+      const isPowered =
+        isBeingPowered ||
+        (isBlock<GlassBlock>(frontBlock, BlockType.GlassBlock) &&
+          frontBlock.movement === Movement.Pending)
       const tex = `piston${
-        isExtended ? '_extended' : ''
+        isExtended ? '_extended' : isPowered ? '_on' : '_off'
       }_${direction.toLowerCase()}`
       return tex
     },

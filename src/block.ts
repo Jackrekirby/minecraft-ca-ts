@@ -50,6 +50,7 @@ export enum Movement {
 
 export interface MoveableBlock extends Block {
   movement: Movement
+  movementDirection: Direction
 }
 
 export interface DirectionalBlock extends Block {
