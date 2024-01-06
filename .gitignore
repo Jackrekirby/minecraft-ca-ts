@@ -1,2 +1,8 @@
 node_modules/
-dist/
+
+# Ignore all files in dist/ folder
+dist/*
+
+# Except the bundle.js file
+!dist/bundle.js
+
