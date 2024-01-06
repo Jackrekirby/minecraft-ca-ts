@@ -2,6 +2,23 @@
 
 This project aims to recreate minecraft redstone using cellular automaton.
 
+## Using Website
+
+Below is a link to the website where you can run the cellular automaton.
+
+https://jackrekirby.github.io/minecraft-ca-ts/
+
+### Guide
+
+- Control the update speed on the top left input. Default 200ms.
+- If the update speed is zero, manually update by clicking the top right input.
+
+- Pan around the world map by clicking and dragging the mouse.
+- Scale the world map using the mouse scroll wheel.
+
+- Single click will place a block if the location is air, otherwise it will pick the block.
+- Double Click will delete a block.
+
 ## Current To Do List
 
 - [x] Make `isOutputtingPower` directional
