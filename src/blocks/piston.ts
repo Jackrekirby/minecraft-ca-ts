@@ -51,12 +51,20 @@ export const createPiston = (state: {
     movement,
     movementDirection,
     update: (position: Vec2, blocks: BlockContainer): Block => {
-      const movementUpdateChange: MovementUpdateChange = updateMovement(
-        position,
-        blocks,
-        movement,
-        movementDirection
-      )
+      let movementUpdateChange: MovementUpdateChange
+      if (isBeingPowered) {
+        movementUpdateChange = {
+          type: MovementUpdateType.StateChange,
+          state: { movement, movementDirection }
+        }
+      } else {
+        movementUpdateChange = updateMovement(
+          position,
+          blocks,
+          movement,
+          movementDirection
+        )
+      }
 
       if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
         return movementUpdateChange.block
@@ -96,12 +104,15 @@ export const createPiston = (state: {
         blocks,
         Direction.Up
       )
-      const isExtended = isBlock<PistonHead>(frontBlock, BlockType.PistonHead)
+      const isExtended =
+        isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
+        frontBlock.direction === direction
       const isPowered =
         isBeingPowered ||
         (movement === Movement.None &&
           isMoveableBlock(frontBlock) &&
-          frontBlock.movement === Movement.Pending)
+          frontBlock.movement === Movement.Pending &&
+          frontBlock.movementDirection === direction)
       const tex =
         `piston${
           isExtended ? '_extended' : isPowered ? '_on' : '_off'

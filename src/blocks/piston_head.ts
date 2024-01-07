@@ -64,6 +64,12 @@ export const createPistonHead = (state: {
           // at end of each tick
           // this is a TEMPORARY measure
           return createAirBlock({})
+        } else if (
+          isRetracting &&
+          isMoveableBlock(frontBlock) &&
+          frontBlock.getMovementMethod() === BlockMovement.Immovable
+        ) {
+          return createAirBlock({})
         } else if (isRetracting && !isMoveableBlock(frontBlock)) {
           return createAirBlock({})
         } else {

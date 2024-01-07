@@ -12,11 +12,12 @@ import {
 export const getNeighbourBlock = (
   position: Vec2,
   blocks: BlockContainer,
-  direction: Direction
+  direction: Direction,
+  useAbsoluteDirection: boolean = false
 ): Block => {
   const block: Block = blocks.getValue(position)
   let relativeDirection: Direction = direction
-  if (isDirectionalBlock(block)) {
+  if (isDirectionalBlock(block) && !useAbsoluteDirection) {
     relativeDirection = getRelativeDirection(block.direction, direction)
   }
   const offset: Vec2 = directionToVec2(relativeDirection)

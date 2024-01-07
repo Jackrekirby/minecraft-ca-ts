@@ -96,18 +96,21 @@ export const updateMovement = (
     const frontNeighbour: Block = getNeighbourBlock(
       position,
       blocks,
-      movementDirection
+      movementDirection,
+      true // movementDirection is an absolute direction
     )
 
     const backNeighbour: Block = getNeighbourBlock(
       position,
       blocks,
-      getOppositeDirection(movementDirection)
+      getOppositeDirection(movementDirection),
+      true // movementDirection is an absolute direction
     )
 
     if (
       isMoveableBlock(frontNeighbour) &&
-      frontNeighbour.movement === Movement.Complete
+      frontNeighbour.movement === Movement.Complete &&
+      frontNeighbour.movementDirection === movementDirection
     ) {
       if (
         isBlock<Piston>(backNeighbour, BlockType.Piston) &&

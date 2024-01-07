@@ -48,7 +48,7 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [x] Piston will not retract if pending block
 - [ ] Side blocks disappear on complete block
 - [x] Make saveable state (to file so users can try them out)
-- [ ] Test pistons pushing eachother
+- [x] Test pistons pushing and facing eachother (they replicate infinitely!!!)
 - [ ] Make blocks classes so they can use prototypes
 - [ ] Add subticks
 - [x] Add chunk system (infinite world)
@@ -57,6 +57,11 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [ ] Make block picker
 - [ ] Make world selection system
 - [ ] Make world snap to grid
-- [ ] Make minor and major grid lines
+- [x] Make minor and major grid lines
 - [x] Make world panning have minimum threshold
 - [x] Negate the single click select block function on double click delete block
+- [ ] cannot just check if block is of moveable type. A moveable type can be temporarily immovable. Must check movement method
+- [ ] reconsider movement method function on block interface
+- [ ] save world location and scale
+- [ ] auto-position camera at largest mass of blocks?
+- [ ] duplicate pistons in double piston extender when powered incorrectly

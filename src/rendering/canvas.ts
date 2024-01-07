@@ -246,8 +246,6 @@ export class Canvas {
   }
 
   drawLine = (x1: number, y1: number, x2: number, y2: number) => {
-    this.ctx.lineWidth = 1
-    this.ctx.strokeStyle = 'rgba(255, 255, 255, 0.5)'
     const q1 = this.calculateWorldToScreenPosition(x1, y1)
     const p1 = this.calculateAxisFlippedPosition(q1.x, q1.y)
 
@@ -274,11 +272,17 @@ export class Canvas {
       Math.floor(roundToNearestPowerOf2(numCellsWide / 10))
     )
 
+    const setLineStyle = (z: number) => {
+      const isMajorLine = z % (gridSize * 4) === 0
+      this.ctx.lineWidth = isMajorLine ? 1 : 1
+      this.ctx.strokeStyle = `rgba(255, 255, 255, ${isMajorLine ? 0.6 : 0.2})`
+    }
     for (
       let y = floorToNearest(bottomLeft.y, gridSize);
       y < topRight.y;
       y += gridSize
     ) {
+      setLineStyle(y)
       this.drawLine(bottomLeft.x, y, topRight.x, y)
       this.drawText(`${y}`, bottomLeft.x, y)
     }
@@ -288,6 +292,7 @@ export class Canvas {
       x < topRight.x;
       x += gridSize
     ) {
+      setLineStyle(x)
       this.drawLine(x, bottomLeft.y, x, topRight.y)
       this.drawText(`${x}`, x, bottomLeft.y)
     }
