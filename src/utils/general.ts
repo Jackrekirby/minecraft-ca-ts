@@ -8,3 +8,15 @@ export const zipArrays = <T, U>(arr1: T[], arr2: U[]): [T, U][] => {
 
   return zippedArray
 }
+
+export const getMissingKeys = (a: object, b: object) => {
+  const missingKeys = []
+
+  for (const key in b) {
+    if (b.hasOwnProperty(key) && !a.hasOwnProperty(key)) {
+      missingKeys.push(key)
+    }
+  }
+
+  return missingKeys
+}

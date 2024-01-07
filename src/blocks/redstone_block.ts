@@ -1,11 +1,11 @@
 import {
   Block,
+  BlockContainer,
   BlockMovement,
   BlockType,
   MoveableBlock,
   Movement
 } from '../block'
-import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { Direction } from '../direction'
 import {
@@ -29,7 +29,7 @@ export const createRedstoneBlock = (state: {
     type: BlockType.RedstoneBlock,
     movement,
     movementDirection,
-    update: (position: Vec2, blocks: Array2D<Block>): Block => {
+    update: (position: Vec2, blocks: BlockContainer): Block => {
       const movementUpdateChange: MovementUpdateChange = updateMovement(
         position,
         blocks,

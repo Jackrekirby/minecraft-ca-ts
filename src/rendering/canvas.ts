@@ -1,4 +1,4 @@
-import { Array2D } from '../containers/array2d'
+import { Dict2D } from '../containers/array2d'
 import { Vec2, vec2Add, vec2Subtract } from '../containers/vec2'
 import { TileInfo, tilemap } from '../images/tilemap'
 
@@ -28,7 +28,7 @@ export class Canvas {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   images: Map<string, HTMLImageElement>
-  imageGrid: Array2D<string>
+  imageGrid: Dict2D<string>
 
   // panning and scaling
   scale: number
@@ -50,7 +50,7 @@ export class Canvas {
     this.ctx.imageSmoothingEnabled = false
 
     this.images = images
-    this.imageGrid = new Array2D<string>(0, 0, [])
+    this.imageGrid = new Dict2D<string>()
 
     this.scale = scale
     this.scaleFactor = scaleFactor
@@ -300,7 +300,7 @@ export class Canvas {
     }
   }
 
-  public setGridImages (imageGrid: Array2D<string>) {
+  public setGridImages (imageGrid: Dict2D<string>) {
     this.imageGrid = imageGrid
   }
 

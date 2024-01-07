@@ -1,0 +1,214 @@
+{
+    "0 0": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Up"
+    },
+    "2 0": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "4 0": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": false
+    },
+    "6 0": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "8 0": {
+        "type": "GlassBlock",
+        "movement": "None",
+        "movementDirection": "Up"
+    },
+    "5 2": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": false
+    },
+    "6 2": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": true
+    },
+    "6 3": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Left"
+    },
+    "7 3": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Left"
+    },
+    "2 4": {
+        "type": "Piston",
+        "isBeingPowered": true,
+        "direction": "Up"
+    },
+    "3 4": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Left"
+    },
+    "4 4": {
+        "type": "PistonHead",
+        "isRetracting": true,
+        "direction": "Left"
+    },
+    "5 4": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Left"
+    },
+    "2 5": {
+        "type": "PistonHead",
+        "isRetracting": false,
+        "direction": "Up"
+    },
+    "4 5": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "7 5": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Down"
+    },
+    "8 5": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Right"
+    },
+    "9 5": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Right"
+    },
+    "2 6": {
+        "type": "GlassBlock",
+        "movement": "Pending",
+        "movementDirection": "Down"
+    },
+    "4 6": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Up"
+    },
+    "7 6": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Down"
+    },
+    "9 6": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Up"
+    },
+    "1 7": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": false
+    },
+    "2 7": {
+        "type": "GlassBlock",
+        "movement": "Pending",
+        "movementDirection": "Down"
+    },
+    "5 7": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "direction": "Right"
+    },
+    "6 7": {
+        "type": "RedstoneBlock",
+        "movement": "None",
+        "movementDirection": "Right"
+    },
+    "9 7": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "10 7": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Right"
+    },
+    "1 8": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": true
+    },
+    "2 8": {
+        "type": "RedstoneBlock",
+        "movement": "Pending",
+        "movementDirection": "Down"
+    },
+    "4 8": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "7 8": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "9 8": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Up"
+    },
+    "10 8": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "2 9": {
+        "type": "GlassBlock",
+        "movement": "Pending",
+        "movementDirection": "Down"
+    },
+    "4 9": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Up"
+    },
+    "7 9": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": true
+    },
+    "9 9": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": false
+    },
+    "10 9": {
+        "type": "RedstoneLamp",
+        "isBeingPowered": false
+    },
+    "2 10": {
+        "type": "GlassBlock",
+        "movement": "Pending",
+        "movementDirection": "Down"
+    },
+    "4 10": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Up"
+    },
+    "2 11": {
+        "type": "Piston",
+        "isBeingPowered": true,
+        "direction": "Down"
+    },
+    "3 11": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": false,
+        "direction": "Left"
+    },
+    "4 11": {
+        "type": "RedstoneTorch",
+        "isBeingPowered": true,
+        "direction": "Up"
+    }
+}

@@ -1,6 +1,8 @@
-import { Array2D } from './containers/array2d'
+import { ChunkContainer } from './containers/array2d'
 import { Vec2 } from './containers/vec2'
 import { Direction } from './direction'
+
+export type BlockContainer = ChunkContainer<Block>
 
 export enum BlockMovement {
   Immovable,
@@ -20,9 +22,9 @@ export enum BlockType {
 
 export interface Block {
   type: BlockType
-  update: (position: Vec2, blocks: Array2D<Block>) => Block
+  update: (position: Vec2, blocks: BlockContainer) => Block
   toString: () => string
-  getTextureName: (position: Vec2, blocks: Array2D<Block>) => string
+  getTextureName: (position: Vec2, blocks: BlockContainer) => string
   // TODO make power redstone interface
   // direction relative to the block you are requesting power from
   isOutputtingPower: (direction: Direction) => boolean

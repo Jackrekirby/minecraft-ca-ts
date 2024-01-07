@@ -7,6 +7,10 @@ export function vec2 (x: number, y: number): Vec2 {
   return { x, y }
 }
 
+export function scalarToVec2 (z: number): Vec2 {
+  return { x: z, y: z }
+}
+
 export const vec2Subtract = (v: Vec2, u: Vec2) => {
   return { x: v.x - u.x, y: v.y - u.y }
 }

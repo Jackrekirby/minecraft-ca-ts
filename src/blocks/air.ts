@@ -1,12 +1,12 @@
 import {
   Block,
+  BlockContainer,
   BlockMovement,
   BlockType,
   isBlock,
   isMoveableBlock,
   Movement
 } from '../block'
-import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { getAllDirections, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
@@ -20,7 +20,7 @@ export interface Air extends Block {
 
 export const createAirBlock = (_state: {}): Air => ({
   type: BlockType.Air,
-  update: (position: Vec2, blocks: Array2D<Block>): Block => {
+  update: (position: Vec2, blocks: BlockContainer): Block => {
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
       const oppositeDirection = getOppositeDirection(direction)

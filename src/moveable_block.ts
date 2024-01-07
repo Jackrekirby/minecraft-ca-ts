@@ -1,5 +1,6 @@
 import {
   Block,
+  BlockContainer,
   BlockType,
   isBlock,
   isMoveableBlock,
@@ -9,7 +10,6 @@ import {
 import { createAirBlock } from './blocks/air'
 import { Piston } from './blocks/piston'
 import { createPistonHead, PistonHead } from './blocks/piston_head'
-import { Array2D } from './containers/array2d'
 import { Vec2 } from './containers/vec2'
 import { Direction, getAllDirections, getOppositeDirection } from './direction'
 import { getNeighbourBlock } from './utils/block_fetching'
@@ -46,7 +46,7 @@ export type MovementUpdateChange =
 
 export const updateMovement = (
   position: Vec2,
-  blocks: Array2D<Block>,
+  blocks: BlockContainer,
   movement: Movement,
   movementDirection: Direction
 ): MovementUpdateChange => {

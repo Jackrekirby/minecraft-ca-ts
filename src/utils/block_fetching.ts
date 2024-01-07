@@ -1,6 +1,5 @@
-import { Block, isDirectionalBlock } from '../block'
+import { Block, BlockContainer, isDirectionalBlock } from '../block'
 import { createAirBlock } from '../blocks/air'
-import { Array2D } from '../containers/array2d'
 import { Vec2, vec2Add } from '../containers/vec2'
 import {
   Direction,
@@ -11,7 +10,7 @@ import {
 
 export const getNeighbourBlock = (
   position: Vec2,
-  blocks: Array2D<Block>,
+  blocks: BlockContainer,
   direction: Direction
 ): Block => {
   const block: Block = blocks.getValue(position)
@@ -27,7 +26,7 @@ export const getNeighbourBlock = (
 
 export const getNeighbourBlocks = (
   position: Vec2,
-  blocks: Array2D<Block>,
+  blocks: BlockContainer,
   directions: Direction[]
 ) => {
   return directions.map(direction =>
@@ -37,7 +36,7 @@ export const getNeighbourBlocks = (
 
 export const getAllNeighbourBlocks = (
   position: Vec2,
-  blocks: Array2D<Block>
+  blocks: BlockContainer
 ) => {
   return getAllDirections().map(direction =>
     getNeighbourBlock(position, blocks, direction)

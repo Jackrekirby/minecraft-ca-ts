@@ -1,4 +1,4 @@
-import { Block, BlockType } from './block'
+import { Block, BlockContainer, BlockType } from './block'
 import { createAirBlock } from './blocks/air'
 import { createGlassBlock } from './blocks/glass_block'
 import { createPiston } from './blocks/piston'
@@ -6,7 +6,7 @@ import { createPistonHead } from './blocks/piston_head'
 import { createRedstoneBlock } from './blocks/redstone_block'
 import { createRedstoneLamp } from './blocks/redstone_lamp'
 import { createRedstoneTorch } from './blocks/redstone_torch'
-import { Array2D } from './containers/array2d'
+import { ChunkContainer, Dict2D, StringDict } from './containers/array2d'
 import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
 import { Direction } from './direction'
 import { Canvas } from './rendering/canvas'
@@ -18,6 +18,10 @@ import { createBlock } from './utils/create_block'
 const updateButton = document.getElementById(
   'update-button'
 ) as HTMLButtonElement
+
+const resetButton = document.getElementById('reset-button') as HTMLButtonElement
+
+const loadDemoButton = document.getElementById('load-demo') as HTMLButtonElement
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
@@ -35,20 +39,27 @@ builtTimeElement.textContent = `BUILD ${process.env.BUILD_TIME?.replace(
 )}`
 // main
 
-const logBlocks = (blocks: Array2D<Block>) => {
-  const x = blocks
-    .map(block => block.toString())
-    .toDictionary(block => block !== createAirBlock({}).toString())
-  const y = blocks.toFormattedString(block => block.toString().padEnd(4))
-  console.log(x)
+const logBlocks = (blocks: BlockContainer) => {
+  // const x = blocks
+  //   .map(block => block.toString())
+  //   .toDictionary(block => block !== createAirBlock({}).toString())
+  // const y = blocks.toFormattedString(block => block.toString().padEnd(4))
+  // console.log(Object.keys(blocks.chunks))
+  console.log(blocks)
 }
 
-const updateBlocks = (blocks: Array2D<Block>) => {
+const updateBlocks = (blocks: BlockContainer) => {
   // console.log('update')
-  const newBlocks: Array2D<Block> = blocks.map((block: Block, v: Vec2) =>
+  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
     block.update(v, blocks)
   )
-  blocks.array = newBlocks.array
+  blocks.clone(newBlocks)
+  const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+    (block: Block, v: Vec2) => {
+      return block
+    }
+  )
+  localStorage.setItem('chunks', JSON.stringify(blocksForStorage.items))
   // logBlocks(blocks)
 }
 
@@ -84,14 +95,47 @@ const addClickHandlerWithDragCheck = (
   element.addEventListener('mousedown', mouseDownHandler)
 }
 
+const loadChunksFromStorage = async (
+  allowLocalStorage: boolean = true,
+  allowWorldDemos: boolean = true
+) => {
+  const chunksRaw = localStorage.getItem('chunks')
+
+  const blocks: BlockContainer = new ChunkContainer<Block>(
+    16,
+    () => createAirBlock({}),
+    (block: Block) => block.type === BlockType.Air,
+    true
+  )
+
+  // console.log('chunksRaw', chunksRaw)
+
+  const loadChunks = (chunks: StringDict<Block>) => {
+    const chunkDict = new Dict2D(chunks)
+    console.log(chunkDict)
+
+    chunkDict.map((block: Block, v: Vec2) => {
+      blocks.setValue(v, createBlock(block.type, block))
+    })
+  }
+
+  if (chunksRaw && allowLocalStorage) {
+    const chunks = JSON.parse(chunksRaw) as StringDict<Block>
+    loadChunks(chunks)
+  } else if (allowWorldDemos) {
+    const chunks = (await loadWorldSave()) as StringDict<Block>
+    loadChunks(chunks)
+  }
+
+  placeAllBlocks(blocks)
+
+  return blocks
+}
+
 const main = async () => {
   console.log('main')
-  const blocks: Array2D<Block> = Array2D.createWithDefaultValue(
-    16,
-    16,
-    createAirBlock({})
-  )
-  buildWorld(blocks)
+
+  const blocks = await loadChunksFromStorage()
 
   const canvas = new Canvas(
     canvasElement,
@@ -102,9 +146,10 @@ const main = async () => {
   )
 
   const updateCanvas = () => {
-    canvas.setGridImages(
-      blocks.map((block: Block, v: Vec2) => block.getTextureName(v, blocks))
-    )
+    const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
+      return block.getTextureName(v, blocks)
+    })
+    canvas.setGridImages(gridImages)
     canvas.render()
   }
 
@@ -126,7 +171,9 @@ const main = async () => {
     const block = blocks.getValue(pi)
 
     if (block.type === BlockType.Air) {
-      blocks.setValue(pi, createBlock(selectedBlockType, { direction }))
+      const newBlock = createBlock(selectedBlockType, { direction })
+      blocks.setValue(pi, newBlock)
+      blocks.setValue(pi, newBlock.update(pi, blocks))
       updateCanvas()
     } else {
       selectedBlockType = block.type
@@ -175,11 +222,49 @@ const main = async () => {
     updateCanvas()
   }
 
+  resetButton.addEventListener('click', async () => {
+    console.log('reset')
+    blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
+  })
+
+  loadDemoButton.addEventListener('click', async () => {
+    console.log('load demo')
+    blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
+  })
+
   logBlocks(blocks)
   updateCanvas()
 }
 
-const buildWorld = (blocks: Array2D<Block>) => {
+const placeAllBlocks = (blocks: BlockContainer) => {
+  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
+
+  blocks.setValue({ x: 2, y: 0 }, createRedstoneTorch({}))
+
+  blocks.setValue({ x: 4, y: 0 }, createRedstoneLamp({}))
+
+  blocks.setValue({ x: 6, y: 0 }, createPiston({}))
+
+  blocks.setValue({ x: 8, y: 0 }, createGlassBlock({}))
+}
+
+const loadWorldSave = async () => {
+  try {
+    const response = await fetch('saves/world1.json')
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! Status: ${response.status}`)
+    }
+
+    const jsonData = await response.json()
+    console.log('JSON data:', jsonData)
+    return jsonData
+  } catch (error) {
+    console.error('Error fetching JSON:', error)
+  }
+}
+
+const buildWorld = (blocks: BlockContainer) => {
   blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
   blocks.setValue(
     { x: 0, y: 1 },

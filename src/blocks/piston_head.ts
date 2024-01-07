@@ -1,5 +1,6 @@
 import {
   Block,
+  BlockContainer,
   BlockMovement,
   BlockType,
   DirectionalBlock,
@@ -7,9 +8,8 @@ import {
   isMoveableBlock,
   Movement
 } from '../block'
-import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
-import { Direction } from '../direction'
+import { Direction, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction, createBlock } from '../utils/create_block'
 import { createAirBlock } from './air'
@@ -29,7 +29,7 @@ export const createPistonHead = (state: {
     type: BlockType.PistonHead,
     isRetracting,
     direction,
-    update: (position: Vec2, blocks: Array2D<Block>): Block => {
+    update: (position: Vec2, blocks: BlockContainer): Block => {
       const backBlock: Block = getNeighbourBlock(
         position,
         blocks,
@@ -46,13 +46,24 @@ export const createPistonHead = (state: {
         if (
           isRetracting &&
           isMoveableBlock(frontBlock) &&
-          frontBlock.movement === Movement.RetractionPending
+          frontBlock.movement === Movement.RetractionPending &&
+          frontBlock.movementDirection === direction
         ) {
           return createBlock(frontBlock.type, {
             ...frontBlock,
             movement: Movement.RetractionComplete,
             movementDirection: direction
           })
+        } else if (
+          isRetracting &&
+          isMoveableBlock(frontBlock) &&
+          frontBlock.movement === Movement.Pending &&
+          frontBlock.movementDirection === getOppositeDirection(direction)
+        ) {
+          // TODO: once subticks are added all motions should be cancelled
+          // at end of each tick
+          // this is a TEMPORARY measure
+          return createAirBlock({})
         } else if (isRetracting && !isMoveableBlock(frontBlock)) {
           return createAirBlock({})
         } else {

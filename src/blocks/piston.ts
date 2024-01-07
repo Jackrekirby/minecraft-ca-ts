@@ -1,12 +1,12 @@
 import {
   Block,
+  BlockContainer,
   BlockMovement,
   BlockType,
   DirectionalBlock,
   isBlock,
   Movement
 } from '../block'
-import { Array2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import {
   Direction,
@@ -34,7 +34,7 @@ export const createPiston = (state: {
     type: BlockType.Piston,
     isBeingPowered,
     direction,
-    update: (position: Vec2, blocks: Array2D<Block>): Block => {
+    update: (position: Vec2, blocks: BlockContainer): Block => {
       const nonFrontDirections = getOtherDirections(Direction.Up)
       const nonFrontBlocks: Block[] = getNeighbourBlocks(
         position,
@@ -57,7 +57,7 @@ export const createPiston = (state: {
       // function allows `this` to refer to the RedstoneTorch
       return `P${isBeingPowered ? '*' : ''}`
     },
-    getTextureName: (position: Vec2, blocks: Array2D<Block>) => {
+    getTextureName: (position: Vec2, blocks: BlockContainer) => {
       const frontBlock: Block = getNeighbourBlock(
         position,
         blocks,

@@ -45,7 +45,7 @@
         outline: none;
         outline: 1px solid white;
         border: none;
-        width: 512px;
+        min-width: 8rem;
         background-color: rgb(18, 91, 167);
         color: white;
         padding: 8px;
@@ -75,7 +75,9 @@
   </head>
   <body>
     <div class="row">
-      <button id="update-button">Update</button>
+      <button id="load-demo">Load Demo</button>
+      <button id="reset-button">Clear World</button>
+      <button id="update-button">Tick Step</button>
       <input
         type="number"
         id="update-speed-input"

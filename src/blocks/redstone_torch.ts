@@ -1,5 +1,10 @@
-import { Block, BlockMovement, BlockType, DirectionalBlock } from '../block'
-import { Array2D } from '../containers/array2d'
+import {
+  Block,
+  BlockContainer,
+  BlockMovement,
+  BlockType,
+  DirectionalBlock
+} from '../block'
 import { Vec2 } from '../containers/vec2'
 import { Direction, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
@@ -20,16 +25,14 @@ export const createRedstoneTorch = (state: {
     type: BlockType.RedstoneTorch,
     isBeingPowered,
     direction,
-    update: (position: Vec2, blocks: Array2D<Block>): Block => {
+    update: (position: Vec2, blocks: BlockContainer): Block => {
       const backBlock: Block = getNeighbourBlock(
         position,
         blocks,
         Direction.Down
       )
 
-      const isBeingPowered = backBlock.isOutputtingPower(
-        getOppositeDirection(direction)
-      )
+      const isBeingPowered = backBlock.isOutputtingPower(direction)
 
       return createRedstoneTorch({ isBeingPowered, direction })
     },
