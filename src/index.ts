@@ -154,6 +154,7 @@ const main = async () => {
   }
 
   let selectedBlockType: BlockType = BlockType.Air
+  let previousSelectedBlockType: BlockType = BlockType.Air
   const placeBlock = () => {
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
@@ -176,9 +177,11 @@ const main = async () => {
       blocks.setValue(pi, newBlock.update(pi, blocks))
       updateCanvas()
     } else {
+      if (block.type != selectedBlockType) {
+        previousSelectedBlockType = selectedBlockType
+      }
       selectedBlockType = block.type
     }
-
     // console.log(p, pi, block)
   }
   addClickHandlerWithDragCheck(canvasElement, placeBlock)
@@ -189,7 +192,18 @@ const main = async () => {
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
     blocks.setValue(pi, createAirBlock({}))
+    // on double click we also perform the single click action of selecting the
+    // block we just deleted. Revert the selection
+    selectedBlockType = previousSelectedBlockType
     updateCanvas()
+  })
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'e') {
+      const p = canvas.getMouseWorldPosition()
+      const pi = vec2Apply(p, Math.floor)
+      console.log(blocks.getValue(pi))
+    }
   })
 
   let updateIntervalId: NodeJS.Timeout | null = null
@@ -225,11 +239,13 @@ const main = async () => {
   resetButton.addEventListener('click', async () => {
     console.log('reset')
     blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
+    updateCanvas()
   })
 
   loadDemoButton.addEventListener('click', async () => {
     console.log('load demo')
     blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
+    updateCanvas()
   })
 
   logBlocks(blocks)

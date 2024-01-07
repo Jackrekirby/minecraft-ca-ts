@@ -5,6 +5,7 @@ import {
   Direction,
   directionToVec2,
   getAllDirections,
+  getOppositeDirection,
   getRelativeDirection
 } from '../direction'
 
@@ -22,6 +23,19 @@ export const getNeighbourBlock = (
   const neighbour: Block =
     blocks.getValue(vec2Add(position, offset)) ?? createAirBlock({})
   return neighbour
+}
+
+export const getOppositeRelativeDirection = (
+  position: Vec2,
+  blocks: BlockContainer,
+  direction: Direction
+) => {
+  const block: Block = blocks.getValue(position)
+  let relativeDirection: Direction = direction
+  if (isDirectionalBlock(block)) {
+    relativeDirection = getRelativeDirection(block.direction, direction)
+  }
+  return getOppositeDirection(relativeDirection)
 }
 
 export const getNeighbourBlocks = (

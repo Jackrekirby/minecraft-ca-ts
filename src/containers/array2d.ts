@@ -217,6 +217,13 @@ export class Dict2D<T> {
     }
     return newContainer
   }
+
+  public foreach<U> (callback: (value: T, v: Vec2) => U): void {
+    for (const [index, value] of Object.entries(this.items)) {
+      const v: Vec2 = this.indexToVec2(index)
+      callback(value, v)
+    }
+  }
 }
 
 export class Array2D<T> {

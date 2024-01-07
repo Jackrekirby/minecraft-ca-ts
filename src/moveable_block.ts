@@ -12,7 +12,10 @@ import { Piston } from './blocks/piston'
 import { createPistonHead, PistonHead } from './blocks/piston_head'
 import { Vec2 } from './containers/vec2'
 import { Direction, getAllDirections, getOppositeDirection } from './direction'
-import { getNeighbourBlock } from './utils/block_fetching'
+import {
+  getNeighbourBlock,
+  getOppositeRelativeDirection
+} from './utils/block_fetching'
 import { createBlock } from './utils/create_block'
 
 export enum MovementUpdateType {
@@ -54,7 +57,11 @@ export const updateMovement = (
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
 
-      const oppositeDirection = getOppositeDirection(direction)
+      const oppositeDirection = getOppositeRelativeDirection(
+        position,
+        blocks,
+        direction
+      )
       if (
         isBlock<Piston>(neighbour, BlockType.Piston) &&
         neighbour.direction === oppositeDirection &&
@@ -75,7 +82,8 @@ export const updateMovement = (
         })
       } else if (
         isBlock<PistonHead>(neighbour, BlockType.PistonHead) &&
-        neighbour.isRetracting
+        neighbour.isRetracting &&
+        neighbour.direction === oppositeDirection
       ) {
         // [piston head retracting] [block] [pending block]
         return createStateChange({
@@ -103,7 +111,8 @@ export const updateMovement = (
     ) {
       if (
         isBlock<Piston>(backNeighbour, BlockType.Piston) &&
-        backNeighbour.direction === movementDirection
+        backNeighbour.direction === movementDirection &&
+        backNeighbour.movement === Movement.None
       ) {
         return createBlockChange(
           createPistonHead({ direction: movementDirection })

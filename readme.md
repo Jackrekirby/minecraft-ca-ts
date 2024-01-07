@@ -26,6 +26,10 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - Single click will place a block if the location is air, otherwise it will pick the block.
 - Double Click will delete a block.
 
+### Keys
+
+- Press `e` to log a block to the console.
+
 ## Task List
 
 - [x] Add zoomable and pannable world renderer
@@ -48,3 +52,11 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [ ] Make blocks classes so they can use prototypes
 - [ ] Add subticks
 - [x] Add chunk system (infinite world)
+- [ ] Add moveable pistons
+- [ ] Make rendering block more efficient (chunking?)
+- [ ] Make block picker
+- [ ] Make world selection system
+- [ ] Make world snap to grid
+- [ ] Make minor and major grid lines
+- [x] Make world panning have minimum threshold
+- [x] Negate the single click select block function on double click delete block

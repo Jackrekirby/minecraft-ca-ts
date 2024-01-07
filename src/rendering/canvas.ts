@@ -1,5 +1,5 @@
 import { Dict2D } from '../containers/array2d'
-import { Vec2, vec2Add, vec2Subtract } from '../containers/vec2'
+import { Vec2, vec2Add, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { TileInfo, tilemap } from '../images/tilemap'
 
 function roundToNearestPowerOf2 (number: number): number {
@@ -98,19 +98,33 @@ export class Canvas {
     const canvas = this.canvas
     let lastMouse: Vec2 = { x: 0, y: 0 }
     let isPanning: boolean = false
+    let hasMetMinimumMovementThreshold = false
+    let movementThreshold = 8
 
     const handleMouseMove = (event: MouseEvent): void => {
-      lastMouse = this.mouse
       this.mouse = { x: event.offsetX, y: event.offsetY }
 
       if (isPanning) {
         const mouseOffset = vec2Subtract(this.mouse, lastMouse)
 
-        this.offset = vec2Add(this.offset, {
-          x: mouseOffset.x,
-          y: -mouseOffset.y
-        })
-        this.render()
+        if (
+          Math.abs(mouseOffset.x) > movementThreshold ||
+          Math.abs(mouseOffset.y) > movementThreshold
+        ) {
+          hasMetMinimumMovementThreshold = true
+          lastMouse = this.mouse
+        } else if (hasMetMinimumMovementThreshold) {
+          lastMouse = this.mouse
+
+          this.offset = vec2Add(this.offset, {
+            x: mouseOffset.x,
+            y: -mouseOffset.y
+          })
+          this.render()
+        }
+      } else {
+        hasMetMinimumMovementThreshold = false
+        lastMouse = this.mouse
       }
     }
 
@@ -209,7 +223,10 @@ export class Canvas {
     h: number
   ) => {
     const tileInfo: TileInfo = tilemap[imageName]
-    if (!tileInfo) return
+    if (!tileInfo) {
+      console.warn(`ImageName: ${imageName} missing from tilemap`)
+      return
+    }
     const image = this.images.get('combinedImage')
     if (!image) return
     // console.log(imageName, tileInfo)
@@ -277,25 +294,45 @@ export class Canvas {
   }
 
   drawGrid () {
-    const topRight = this.calculateScreenToWorldPosition(
-      this.canvas.width,
-      this.canvas.height
+    const topRight = vec2Apply(
+      this.calculateScreenToWorldPosition(
+        this.canvas.width,
+        this.canvas.height
+      ),
+      Math.floor
     )
-    const bottomLeft = this.calculateScreenToWorldPosition(0, 0)
+    const bottomLeft = vec2Apply(
+      this.calculateScreenToWorldPosition(0, 0),
+      Math.floor
+    )
 
-    for (
-      let y = Math.floor(bottomLeft.y);
-      y <= Math.floor(topRight.y + 1);
-      y += 1
-    ) {
-      for (
-        let x = Math.floor(bottomLeft.x);
-        x <= Math.floor(topRight.x + 1);
-        x += 1
-      ) {
-        const texture_name = this.imageGrid.getValue({ x, y })
-
-        this.drawImage(texture_name, x, y, 1, 1)
+    // TODO automatically which render method depending on render space
+    // and grid size. Could chunk imageGrid as well.
+    if (true) {
+      // attempt to render all blocks and cull those outside render space
+      // good if blocks in world < blocks in render space
+      this.imageGrid.foreach((textureName: string, v: Vec2) => {
+        if (
+          v.x >= bottomLeft.x &&
+          v.x <= topRight.x + 1 &&
+          v.y >= bottomLeft.y &&
+          v.y <= topRight.y + 1
+        ) {
+          this.drawImage(textureName, v.x, v.y, 1, 1)
+        }
+      })
+    } else {
+      // attempt to render all blocks in render space and skip rendering
+      // if block does not exist
+      // good if blocks in render space < blocks in world
+      for (let y = bottomLeft.y; y <= topRight.y + 1; y += 1) {
+        for (let x = bottomLeft.x; x <= topRight.x + 1; x += 1) {
+          const texture_name = this.imageGrid.getValue({ x, y })
+          if (texture_name === undefined) {
+            continue
+          }
+          this.drawImage(texture_name, x, y, 1, 1)
+        }
       }
     }
   }
