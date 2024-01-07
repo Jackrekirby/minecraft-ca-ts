@@ -10,8 +10,15 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 
 ### Guide
 
-- Control the update speed on the top left input. Default 200ms.
-- If the update speed is zero, manually update by clicking the top right input.
+### Buttons
+
+- `Tick Step` - Manually update the world by one game tick. Use only if `Step Speed (ms)` set to `zero`.
+
+- `Step Speed (ms)` - Control the update speed on the top left input. Default `200ms`.
+- `Load Demo` - Load the world demo
+- `Clear World` - Clears the world but provides the basic blocks at world origin.
+
+### Mouse
 
 - Pan around the world map by clicking and dragging the mouse.
 - Scale the world map using the mouse scroll wheel.
@@ -19,8 +26,13 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - Single click will place a block if the location is air, otherwise it will pick the block.
 - Double Click will delete a block.
 
-## Current To Do List
+## Task List
 
+- [x] Add zoomable and pannable world renderer
+- [x] Make tool for layering and rotating textures
+- [x] Make texture atlas generator
+- [x] Add pistons, redstone block, moveable block
+- [x] Add redstone torch
 - [x] Make `isOutputtingPower` directional
 - [x] Make placement directional
 - [x] Convert all create block function to take state input
@@ -29,9 +41,10 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [x] Make generic moveable block function
 - [x] Make piston powered texture
 - [x] Add redstone lamp
-- [x] piston will not retract if pending block
-- [ ] side blocks disappear on complete block
-- [ ] make saveable state (to file so users can try them out)
-- [ ] test pistons pushin eachother
-- [ ] make blocks classes so they can use prototypes
-- [ ] add subticks
+- [x] Piston will not retract if pending block
+- [ ] Side blocks disappear on complete block
+- [x] Make saveable state (to file so users can try them out)
+- [ ] Test pistons pushing eachother
+- [ ] Make blocks classes so they can use prototypes
+- [ ] Add subticks
+- [x] Add chunk system (infinite world)
