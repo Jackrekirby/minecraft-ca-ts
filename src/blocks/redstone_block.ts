@@ -16,40 +16,56 @@ import {
 } from '../moveable_block'
 import { addCreateBlockFunction } from '../utils/create_block'
 
-export interface RedstoneBlock extends MoveableBlock {
-  type: BlockType.RedstoneBlock
-}
+export class RedstoneBlock implements MoveableBlock {
+  type: BlockType = BlockType.RedstoneBlock
+  movement: Movement
+  movementDirection: Direction
 
-export const createRedstoneBlock = (state: {
-  movement?: Movement
-  movementDirection?: Direction
-}): RedstoneBlock => {
-  const { movement = Movement.None, movementDirection = Direction.Up } = state
-  return {
-    type: BlockType.RedstoneBlock,
-    movement,
-    movementDirection,
-    update: (position: Vec2, blocks: BlockContainer): Block => {
-      const movementUpdateChange: MovementUpdateChange = updateMovement(
-        position,
-        blocks,
-        movement,
-        movementDirection
-      )
+  constructor ({
+    movement = Movement.None,
+    movementDirection = Direction.Up
+  }: {
+    movement?: Movement
+    movementDirection?: Direction
+  } = {}) {
+    this.movement = movement
+    this.movementDirection = movementDirection
+  }
 
-      if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
-        return movementUpdateChange.block
-      } else {
-        return createRedstoneBlock(movementUpdateChange.state)
-      }
-    },
-    toString: () => 'RDB',
-    getTextureName: function () {
-      return `redstone_block` + getMovementTextureName(this)
-    },
-    isOutputtingPower: () => true,
-    getMovementMethod: () => BlockMovement.Moveable
+  public update (position: Vec2, blocks: BlockContainer): Block {
+    const movementUpdateChange: MovementUpdateChange = updateMovement(
+      position,
+      blocks,
+      this.movement,
+      this.movementDirection
+    )
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new RedstoneBlock(movementUpdateChange.state)
+    }
+  }
+
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    return new RedstoneBlock(this)
+  }
+
+  public toString (): string {
+    return 'RDB'
+  }
+
+  public getTextureName (): string {
+    return `redstone_block` + getMovementTextureName(this)
+  }
+
+  public isOutputtingPower (): boolean {
+    return true
+  }
+
+  public getMovementMethod (): BlockMovement {
+    return BlockMovement.Moveable
   }
 }
 
-addCreateBlockFunction(BlockType.RedstoneBlock, createRedstoneBlock)
+addCreateBlockFunction(BlockType.RedstoneBlock, RedstoneBlock)

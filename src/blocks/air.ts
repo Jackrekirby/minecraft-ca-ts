@@ -12,30 +12,29 @@ import { getAllDirections, getOppositeDirection } from '../direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction, createBlock } from '../utils/create_block'
 import { Piston } from './piston'
-import { createPistonHead } from './piston_head'
+import { PistonHead } from './piston_head'
 
-export interface Air extends Block {
-  type: BlockType.Air
-}
+export class Air implements Block {
+  type: BlockType = BlockType.Air
 
-export const createAirBlock = (_state: {}): Air => ({
-  type: BlockType.Air,
-  update: (position: Vec2, blocks: BlockContainer): Block => {
+  constructor ({}: {} = {}) {}
+
+  public update (position: Vec2, blocks: BlockContainer): Block {
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
       const oppositeDirection = getOppositeDirection(direction)
 
       if (
         isBlock<Piston>(neighbour, BlockType.Piston) &&
-        neighbour.direction == oppositeDirection &&
+        neighbour.direction === oppositeDirection &&
         neighbour.isBeingPowered
       ) {
-        return createPistonHead({ direction: neighbour.direction })
+        return new PistonHead({ direction: neighbour.direction })
       } else if (
-        // TODO check if instance of movable block
-        // TODO add movement direction
+        // TODO: check if instance of movable block
+        // TODO: add movement direction
         isMoveableBlock(neighbour) &&
-        neighbour.movementDirection == oppositeDirection &&
+        neighbour.movementDirection === oppositeDirection &&
         neighbour.movement === Movement.Pending
       ) {
         return createBlock(neighbour.type, {
@@ -46,12 +45,28 @@ export const createAirBlock = (_state: {}): Air => ({
       }
     }
 
-    return createAirBlock({})
-  },
-  toString: () => '[ ]',
-  getTextureName: () => '',
-  isOutputtingPower: () => false,
-  getMovementMethod: () => BlockMovement.Breaks
-})
+    return new Air()
+  }
 
-addCreateBlockFunction(BlockType.Air, createAirBlock)
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    return new Air(this)
+  }
+
+  public toString (): string {
+    return '[ ]'
+  }
+
+  public getTextureName (): string {
+    return ''
+  }
+
+  public isOutputtingPower (): boolean {
+    return false
+  }
+
+  public getMovementMethod (): BlockMovement {
+    return BlockMovement.Breaks
+  }
+}
+
+addCreateBlockFunction(BlockType.Air, Air)

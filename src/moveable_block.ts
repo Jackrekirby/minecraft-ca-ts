@@ -7,9 +7,9 @@ import {
   MoveableBlock,
   Movement
 } from './block'
-import { createAirBlock } from './blocks/air'
+import { Air } from './blocks/air'
 import { Piston } from './blocks/piston'
-import { createPistonHead, PistonHead } from './blocks/piston_head'
+import { PistonHead } from './blocks/piston_head'
 import { Vec2 } from './containers/vec2'
 import { Direction, getAllDirections, getOppositeDirection } from './direction'
 import {
@@ -118,7 +118,7 @@ export const updateMovement = (
         backNeighbour.movement === Movement.None
       ) {
         return createBlockChange(
-          createPistonHead({ direction: movementDirection })
+          new PistonHead({ direction: movementDirection })
         )
       } else {
         return createBlockChange(
@@ -140,7 +140,7 @@ export const updateMovement = (
       })
     }
   } else if (movement === Movement.RetractionPending) {
-    return createBlockChange(createAirBlock({}))
+    return createBlockChange(new Air())
   }
 
   return createStateChange({

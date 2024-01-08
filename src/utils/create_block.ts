@@ -1,20 +1,21 @@
 import { Block, BlockType } from '../block'
 
-const createBlockFunctions: { [key: string]: (state: object) => Block } = {}
+const createBlockFunctions: { [key: string]: new (state: object) => Block } = {}
 
 export const addCreateBlockFunction = (
   blockType: BlockType,
-  createBlockFunction: (state: object) => Block
+  blockConstructor: new (state: object) => Block
 ): void => {
-  createBlockFunctions[blockType] = createBlockFunction
+  createBlockFunctions[blockType] = blockConstructor
 }
 
 export const createBlock = (blockType: BlockType, state: object): Block => {
-  const fnc: (state: object) => Block = createBlockFunctions[blockType]
-  if (!fnc) {
+  const blockConstructor: new (state: object) => Block =
+    createBlockFunctions[blockType]
+  if (!blockConstructor) {
     throw new Error(
-      `createBlockFunctions for block type ${blockType} not implemented`
+      `Block constructor for block type ${blockType} not implemented`
     )
   }
-  return fnc(state)
+  return new blockConstructor(state)
 }

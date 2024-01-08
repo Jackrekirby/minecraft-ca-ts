@@ -23,6 +23,7 @@ export enum BlockType {
 export interface Block {
   type: BlockType
   update: (position: Vec2, blocks: BlockContainer) => Block
+  subupdate: (position: Vec2, blocks: BlockContainer) => Block
   toString: () => string
   getTextureName: (position: Vec2, blocks: BlockContainer) => string
   // TODO make power redstone interface

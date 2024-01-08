@@ -1,5 +1,5 @@
 import { Block, BlockContainer, isDirectionalBlock } from '../block'
-import { createAirBlock } from '../blocks/air'
+import { Air } from '../blocks/air'
 import { Vec2, vec2Add } from '../containers/vec2'
 import {
   Direction,
@@ -22,7 +22,7 @@ export const getNeighbourBlock = (
   }
   const offset: Vec2 = directionToVec2(relativeDirection)
   const neighbour: Block =
-    blocks.getValue(vec2Add(position, offset)) ?? createAirBlock({})
+    blocks.getValue(vec2Add(position, offset)) ?? new Air()
   return neighbour
 }
 

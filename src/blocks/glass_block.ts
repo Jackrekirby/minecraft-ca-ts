@@ -16,54 +16,66 @@ import {
 } from '../moveable_block'
 import { addCreateBlockFunction } from '../utils/create_block'
 
-export interface GlassBlock extends MoveableBlock {
-  type: BlockType.GlassBlock
-}
+export class GlassBlock implements MoveableBlock {
+  type: BlockType = BlockType.GlassBlock
+  movement: Movement
+  movementDirection: Direction
 
-export const createGlassBlock = (state: {
-  movement?: Movement
-  movementDirection?: Direction
-}): GlassBlock => {
-  const { movement = Movement.None, movementDirection = Direction.Up } = state
-  return {
-    type: BlockType.GlassBlock,
-    movement,
-    movementDirection,
-    update: (position: Vec2, blocks: BlockContainer): Block => {
-      const movementUpdateChange: MovementUpdateChange = updateMovement(
-        position,
-        blocks,
-        movement,
-        movementDirection
-      )
+  constructor ({
+    movement = Movement.None,
+    movementDirection = Direction.Up
+  }: {
+    movement?: Movement
+    movementDirection?: Direction
+  } = {}) {
+    this.movement = movement
+    this.movementDirection = movementDirection
+  }
 
-      if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
-        return movementUpdateChange.block
-      } else {
-        return createGlassBlock(movementUpdateChange.state)
-      }
-    },
-    toString: function () {
-      return `MB${
-        {
-          [Movement.None]: '',
-          [Movement.Pending]: '?',
-          [Movement.Complete]: '*',
-          [Movement.RetractionPending]: '<',
-          [Movement.RetractionComplete]: '^'
-        }[movement]
-      }`
-    },
-    getTextureName: function () {
-      return `glass` + getMovementTextureName(this)
-    },
-    isOutputtingPower: () => false,
-    getMovementMethod: function () {
-      return this.movement === Movement.None
-        ? BlockMovement.Moveable
-        : BlockMovement.Immovable
+  public update (position: Vec2, blocks: BlockContainer): Block {
+    const movementUpdateChange: MovementUpdateChange = updateMovement(
+      position,
+      blocks,
+      this.movement,
+      this.movementDirection
+    )
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new GlassBlock(movementUpdateChange.state)
     }
+  }
+
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    return new GlassBlock(this)
+  }
+
+  public toString (): string {
+    return `MB${
+      {
+        [Movement.None]: '',
+        [Movement.Pending]: '?',
+        [Movement.Complete]: '*',
+        [Movement.RetractionPending]: '<',
+        [Movement.RetractionComplete]: '^'
+      }[this.movement]
+    }`
+  }
+
+  public getTextureName (): string {
+    return `glass` + getMovementTextureName(this)
+  }
+
+  public isOutputtingPower (): boolean {
+    return false
+  }
+
+  public getMovementMethod (): BlockMovement {
+    return this.movement === Movement.None
+      ? BlockMovement.Moveable
+      : BlockMovement.Immovable
   }
 }
 
-addCreateBlockFunction(BlockType.GlassBlock, createGlassBlock)
+addCreateBlockFunction(BlockType.GlassBlock, GlassBlock)

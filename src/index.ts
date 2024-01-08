@@ -1,11 +1,11 @@
 import { Block, BlockContainer, BlockType } from './block'
-import { createAirBlock } from './blocks/air'
-import { createGlassBlock } from './blocks/glass_block'
-import { createPiston } from './blocks/piston'
-import { createPistonHead } from './blocks/piston_head'
-import { createRedstoneBlock } from './blocks/redstone_block'
-import { createRedstoneLamp } from './blocks/redstone_lamp'
-import { createRedstoneTorch } from './blocks/redstone_torch'
+import { Air } from './blocks/air'
+import { GlassBlock } from './blocks/glass_block'
+import { Piston } from './blocks/piston'
+import { PistonHead } from './blocks/piston_head'
+import { RedstoneBlock } from './blocks/redstone_block'
+import { RedstoneLamp } from './blocks/redstone_lamp'
+import { RedstoneTorch } from './blocks/redstone_torch'
 import { ChunkContainer, Dict2D, StringDict } from './containers/array2d'
 import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
 import { Direction } from './direction'
@@ -42,7 +42,7 @@ builtTimeElement.textContent = `BUILD ${process.env.BUILD_TIME?.replace(
 const logBlocks = (blocks: BlockContainer) => {
   // const x = blocks
   //   .map(block => block.toString())
-  //   .toDictionary(block => block !== createAirBlock({}).toString())
+  //   .toDictionary(block => block !== new Air({}).toString())
   // const y = blocks.toFormattedString(block => block.toString().padEnd(4))
   // console.log(Object.keys(blocks.chunks))
   console.log(blocks)
@@ -103,7 +103,7 @@ const loadChunksFromStorage = async (
 
   const blocks: BlockContainer = new ChunkContainer<Block>(
     16,
-    () => createAirBlock({}),
+    () => new Air({}),
     (block: Block) => block.type === BlockType.Air,
     true
   )
@@ -191,7 +191,7 @@ const main = async () => {
     e.preventDefault()
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
-    blocks.setValue(pi, createAirBlock({}))
+    blocks.setValue(pi, new Air({}))
     // on double click we also perform the single click action of selecting the
     // block we just deleted. Revert the selection
     selectedBlockType = previousSelectedBlockType
@@ -253,15 +253,15 @@ const main = async () => {
 }
 
 const placeAllBlocks = (blocks: BlockContainer) => {
-  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
 
-  blocks.setValue({ x: 2, y: 0 }, createRedstoneTorch({}))
+  blocks.setValue({ x: 2, y: 0 }, new RedstoneTorch({}))
 
-  blocks.setValue({ x: 4, y: 0 }, createRedstoneLamp({}))
+  blocks.setValue({ x: 4, y: 0 }, new RedstoneLamp({}))
 
-  blocks.setValue({ x: 6, y: 0 }, createPiston({}))
+  blocks.setValue({ x: 6, y: 0 }, new Piston({}))
 
-  blocks.setValue({ x: 8, y: 0 }, createGlassBlock({}))
+  blocks.setValue({ x: 8, y: 0 }, new GlassBlock({}))
 }
 
 const loadWorldSave = async () => {
@@ -281,53 +281,53 @@ const loadWorldSave = async () => {
 }
 
 const buildWorld = (blocks: BlockContainer) => {
-  blocks.setValue({ x: 0, y: 0 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
   blocks.setValue(
     { x: 0, y: 1 },
-    createRedstoneTorch({ direction: Direction.Up })
+    new RedstoneTorch({ direction: Direction.Up })
   )
 
-  blocks.setValue({ x: 0, y: 2 }, createRedstoneLamp({}))
+  blocks.setValue({ x: 0, y: 2 }, new RedstoneLamp({}))
 
   blocks.setValue(
     { x: 2, y: 5 },
-    createPiston({
+    new Piston({
       isBeingPowered: true,
       direction: Direction.Right
     })
   )
   blocks.setValue(
     { x: 3, y: 5 },
-    createPistonHead({ direction: Direction.Right })
+    new PistonHead({ direction: Direction.Right })
   )
-  blocks.setValue({ x: 4, y: 5 }, createGlassBlock({}))
-  blocks.setValue({ x: 5, y: 5 }, createGlassBlock({}))
+  blocks.setValue({ x: 4, y: 5 }, new GlassBlock({}))
+  blocks.setValue({ x: 5, y: 5 }, new GlassBlock({}))
 
-  blocks.setValue({ x: 1, y: 7 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 1, y: 7 }, new RedstoneBlock({}))
   blocks.setValue(
     { x: 2, y: 7 },
-    createPiston({
+    new Piston({
       isBeingPowered: false,
       direction: Direction.Right
     })
   )
-  blocks.setValue({ x: 3, y: 7 }, createGlassBlock({}))
-  blocks.setValue({ x: 4, y: 7 }, createGlassBlock({}))
-  blocks.setValue({ x: 5, y: 7 }, createGlassBlock({}))
+  blocks.setValue({ x: 3, y: 7 }, new GlassBlock({}))
+  blocks.setValue({ x: 4, y: 7 }, new GlassBlock({}))
+  blocks.setValue({ x: 5, y: 7 }, new GlassBlock({}))
 
-  blocks.setValue({ x: 9, y: 3 }, createRedstoneBlock({}))
+  blocks.setValue({ x: 9, y: 3 }, new RedstoneBlock({}))
   blocks.setValue(
     { x: 8, y: 3 },
-    createPiston({
+    new Piston({
       isBeingPowered: false,
       direction: Direction.Left
     })
   )
-  blocks.setValue({ x: 7, y: 3 }, createGlassBlock({}))
-  blocks.setValue({ x: 6, y: 3 }, createRedstoneBlock({}))
-  blocks.setValue({ x: 5, y: 3 }, createGlassBlock({}))
-  blocks.setValue({ x: 4, y: 3 }, createRedstoneBlock({}))
-  blocks.setValue({ x: 3, y: 3 }, createGlassBlock({}))
+  blocks.setValue({ x: 7, y: 3 }, new GlassBlock({}))
+  blocks.setValue({ x: 6, y: 3 }, new RedstoneBlock({}))
+  blocks.setValue({ x: 5, y: 3 }, new GlassBlock({}))
+  blocks.setValue({ x: 4, y: 3 }, new RedstoneBlock({}))
+  blocks.setValue({ x: 3, y: 3 }, new GlassBlock({}))
 }
 
 main()

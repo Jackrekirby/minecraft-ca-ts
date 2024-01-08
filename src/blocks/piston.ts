@@ -27,108 +27,113 @@ import { addCreateBlockFunction } from '../utils/create_block'
 import { zipArrays } from '../utils/general'
 import { PistonHead } from './piston_head'
 
-export interface Piston extends DirectionalBlock, MoveableBlock {
-  type: BlockType.Piston
+export class Piston implements DirectionalBlock, MoveableBlock {
+  type: BlockType = BlockType.Piston
   isBeingPowered: boolean
-}
+  direction: Direction
+  movement: Movement
+  movementDirection: Direction
 
-export const createPiston = (state: {
-  isBeingPowered?: boolean
-  direction?: Direction
-  movement?: Movement
-  movementDirection?: Direction
-}): Piston => {
-  const {
+  constructor ({
     isBeingPowered = false,
     direction = Direction.Up,
     movement = Movement.None,
     movementDirection = Direction.Up
-  } = state
-  return {
-    type: BlockType.Piston,
-    isBeingPowered,
-    direction,
-    movement,
-    movementDirection,
-    update: (position: Vec2, blocks: BlockContainer): Block => {
-      let movementUpdateChange: MovementUpdateChange
-      if (isBeingPowered) {
-        movementUpdateChange = {
-          type: MovementUpdateType.StateChange,
-          state: { movement, movementDirection }
+  }: {
+    isBeingPowered?: boolean
+    direction?: Direction
+    movement?: Movement
+    movementDirection?: Direction
+  } = {}) {
+    this.isBeingPowered = isBeingPowered
+    this.direction = direction
+    this.movement = movement
+    this.movementDirection = movementDirection
+  }
+
+  public update (position: Vec2, blocks: BlockContainer): Block {
+    let movementUpdateChange: MovementUpdateChange
+
+    if (this.isBeingPowered) {
+      movementUpdateChange = {
+        type: MovementUpdateType.StateChange,
+        state: {
+          movement: this.movement,
+          movementDirection: this.movementDirection
         }
-      } else {
-        movementUpdateChange = updateMovement(
-          position,
-          blocks,
-          movement,
-          movementDirection
-        )
       }
-
-      if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
-        return movementUpdateChange.block
-      } else {
-        const nonFrontDirections = getOtherDirections(Direction.Up)
-        const nonFrontBlocks: Block[] = getNeighbourBlocks(
-          position,
-          blocks,
-          nonFrontDirections
-        )
-
-        const isBeingPowered = zipArrays(
-          nonFrontDirections,
-          nonFrontBlocks
-        ).some(([neighbourDirection, block]: [Direction, Block]) =>
-          block.isOutputtingPower(
-            getOppositeDirection(
-              getRelativeDirection(neighbourDirection, direction)
-            )
-          )
-        )
-
-        return createPiston({
-          ...movementUpdateChange.state,
-          isBeingPowered,
-          direction
-        })
-      }
-    },
-    toString: function () {
-      // function allows `this` to refer to the RedstoneTorch
-      return `P${isBeingPowered ? '*' : ''}`
-    },
-    getTextureName: function (position: Vec2, blocks: BlockContainer) {
-      const frontBlock: Block = getNeighbourBlock(
+    } else {
+      movementUpdateChange = updateMovement(
         position,
         blocks,
-        Direction.Up
+        this.movement,
+        this.movementDirection
       )
-      const isExtended =
-        isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
-        frontBlock.direction === direction
-      const isPowered =
-        isBeingPowered ||
-        (movement === Movement.None &&
-          isMoveableBlock(frontBlock) &&
-          frontBlock.movement === Movement.Pending &&
-          frontBlock.movementDirection === direction)
-      const tex =
-        `piston${
-          isExtended ? '_extended' : isPowered ? '_on' : '_off'
-        }_${direction.toLowerCase()}` +
-        (isPowered || isExtended ? '' : getMovementTextureName(this))
-      return tex
-    },
-    isOutputtingPower: () => false,
-    getMovementMethod: function () {
-      // todo isExtended not used, just use isPowered?
-      // maybe extension pending
-      return this.isBeingPowered
-        ? BlockMovement.Immovable
-        : BlockMovement.Moveable
     }
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      const nonFrontDirections = getOtherDirections(Direction.Up)
+      const nonFrontBlocks: Block[] = getNeighbourBlocks(
+        position,
+        blocks,
+        nonFrontDirections
+      )
+
+      const isBeingPowered = zipArrays(nonFrontDirections, nonFrontBlocks).some(
+        ([neighbourDirection, block]: [Direction, Block]) =>
+          block.isOutputtingPower(
+            getOppositeDirection(
+              getRelativeDirection(neighbourDirection, this.direction)
+            )
+          )
+      )
+
+      return new Piston({
+        ...movementUpdateChange.state,
+        isBeingPowered,
+        direction: this.direction
+      })
+    }
+  }
+
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    return new Piston(this)
+  }
+
+  public toString (): string {
+    return `P${this.isBeingPowered ? '*' : ''}`
+  }
+
+  public getTextureName (position: Vec2, blocks: BlockContainer): string {
+    const frontBlock: Block = getNeighbourBlock(position, blocks, Direction.Up)
+    const isExtended =
+      isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
+      frontBlock.direction === this.direction
+    const isPowered =
+      this.isBeingPowered ||
+      (this.movement === Movement.None &&
+        isMoveableBlock(frontBlock) &&
+        frontBlock.movement === Movement.Pending &&
+        frontBlock.movementDirection === this.direction)
+    const tex =
+      `piston${
+        isExtended ? '_extended' : isPowered ? '_on' : '_off'
+      }_${this.direction.toLowerCase()}` +
+      (isPowered || isExtended ? '' : getMovementTextureName(this))
+    return tex
+  }
+
+  public isOutputtingPower (): boolean {
+    return false
+  }
+
+  public getMovementMethod (): BlockMovement {
+    return this.isBeingPowered
+      ? BlockMovement.Immovable
+      : BlockMovement.Moveable
   }
 }
 
-addCreateBlockFunction(BlockType.Piston, createPiston)
+addCreateBlockFunction(BlockType.Piston, Piston)
