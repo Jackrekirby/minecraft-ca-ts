@@ -60,8 +60,10 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [x] Make minor and major grid lines
 - [x] Make world panning have minimum threshold
 - [x] Negate the single click select block function on double click delete block
-- [ ] cannot just check if block is of moveable type. A moveable type can be temporarily immovable. Must check movement method
-- [ ] reconsider movement method function on block interface
-- [ ] save world location and scale
-- [ ] auto-position camera at largest mass of blocks?
-- [ ] duplicate pistons in double piston extender when powered incorrectly
+- [ ] Cannot just check if block is of moveable type. A moveable type can be temporarily immovable. Must check movement method
+- [ ] Reconsider movement method function on block interface
+- [ ] Save world location and scale
+- [ ] Auto-position camera at largest mass of blocks?
+- [ ] Fix duplicate pistons in double piston extender when powered incorrectly
+- [ ] Remove defaults from blocks (maybe have explicit default function)
+- [x] Convert blocks to use prototypes to improve efficiency / performance
