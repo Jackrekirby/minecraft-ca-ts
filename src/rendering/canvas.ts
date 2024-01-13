@@ -92,7 +92,7 @@ export class Canvas {
       axisFlippedPos.x,
       axisFlippedPos.y
     )
-    console.log(this.mouse, worldPos)
+    // console.log(this.mouse, worldPos)
     return worldPos
   }
 
@@ -217,7 +217,12 @@ export class Canvas {
     // this.ctx.strokeStyle = 'white'
     // this.ctx.lineWidth = 1
     // this.ctx.strokeText(text, p.x, p.y - 4, screenCellWidth)
-    this.ctx.fillText(text, p.x + 3, p.y - 4, screenCellWidth)
+    this.ctx.fillText(
+      text,
+      Math.floor(p.x + 3),
+      Math.floor(p.y - 4),
+      screenCellWidth
+    )
   }
 
   private getGridSize () {
@@ -236,7 +241,12 @@ export class Canvas {
   drawRect = (x: number, y: number, w: number, h: number) => {
     const q1 = this.calculateWorldToScreenPosition(x, y)
     const p = this.calculateAxisFlippedPosition(q1.x, q1.y)
-    this.ctx.fillRect(p.x, p.y, w * this.scale.get(), h * this.scale.get())
+    this.ctx.fillRect(
+      Math.floor(p.x),
+      Math.floor(p.y),
+      Math.ceil(w * this.scale.get()),
+      Math.ceil(h * this.scale.get())
+    )
   }
 
   drawImage = (
@@ -264,8 +274,8 @@ export class Canvas {
       tileInfo.h,
       Math.floor(p.x),
       Math.floor(p.y),
-      Math.floor(w * this.scale.get()),
-      Math.floor(h * this.scale.get())
+      Math.ceil(w * this.scale.get()),
+      Math.ceil(h * this.scale.get())
     )
   }
 
@@ -277,8 +287,8 @@ export class Canvas {
     const p2 = this.calculateAxisFlippedPosition(q2.x, q2.y)
 
     this.ctx.beginPath()
-    this.ctx.moveTo(Math.round(p1.x), Math.round(p1.y))
-    this.ctx.lineTo(Math.round(p2.x), Math.round(p2.y))
+    this.ctx.moveTo(Math.floor(p1.x), Math.ceil(p1.y))
+    this.ctx.lineTo(Math.floor(p2.x), Math.ceil(p2.y))
     this.ctx.stroke()
   }
 

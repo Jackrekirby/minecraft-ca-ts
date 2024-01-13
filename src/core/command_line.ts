@@ -1,4 +1,4 @@
-import { zipArrays } from '../utils/general'
+import { createState, zipArrays } from '../utils/general'
 
 const commandLineElement = document.getElementById(
   'command-line'
@@ -104,7 +104,7 @@ export class CommandManager {
       item => item.pattern === input
     )
 
-    console.log({ input, viableCommands, currentCommandIndex })
+    // console.log({ input, viableCommands, currentCommandIndex })
     let newCommand: Command
     if (currentCommandIndex > 0) {
       newCommand = viableCommands[0]
@@ -119,7 +119,7 @@ export class CommandManager {
   public async ifCommandExecute (input: string) {
     for (const command of this.commands) {
       const inputs = this.ifCommandGetInputs(input, command.pattern)
-      console.log({ inputs, input, cmd: command.pattern })
+      // console.log({ inputs, input, cmd: command.pattern })
       if (inputs) {
         this.addHistory(input)
         const output: string = await command.callback(inputs)
@@ -146,11 +146,14 @@ const focusEndOfCommandLine = () => {
 
 export const buildCommandSuggestions = (cm: CommandManager) => {
   commandListElement.innerHTML = ''
+  commandListHeadingElement.textContent = 'HINT'
   const input = commandLineElement.value
 
   const viableCommands = cm.commands.filter(command =>
     cm.isCommandPartialMatch(input, command.pattern)
   )
+
+  viableCommands.sort((a, b) => a.pattern.localeCompare(b.pattern))
 
   viableCommands.forEach(command => {
     const commandItem = document.createElement('div')
@@ -166,6 +169,7 @@ export const buildCommandSuggestions = (cm: CommandManager) => {
 
 const buildCommandHistory = (cm: CommandManager) => {
   commandListElement.innerHTML = ''
+  commandListHeadingElement.textContent = 'HISTORY'
 
   if (cm.history.length === 0) {
     const commandItem = document.createElement('div')
@@ -208,6 +212,13 @@ const buildCommandOutput = (cm: CommandManager) => {
 export const initCommandLineEventListeners = (cm: CommandManager) => {
   document.addEventListener('keydown', event => {
     if (event.key === '/') {
+      if (
+        commandLineElement !== document.activeElement &&
+        ['', '/'].includes(commandLineElement.value)
+      ) {
+        event.preventDefault()
+      }
+
       focusEndOfCommandLine()
     }
   })
@@ -221,10 +232,12 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
         // on enter run command or exit command line
         const command = commandLineElement.value
         if (['', '/'].includes(command)) {
-          commandListElement.style.display = 'none'
+          commandListWrapperElement.style.display = 'none'
           commandLineElement.blur()
+        } else {
+          await cm.ifCommandExecute(command)
         }
-        await cm.ifCommandExecute(command)
+
         commandLineElement.value = ''
       } else if (event.key === 'Tab') {
         // on tab select the first suggested command
@@ -251,7 +264,6 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
           commandLineElement.value
         )
         setTimeout(() => {
-          commandListHeadingElement.textContent = 'HISTORY'
           buildCommandHistory(cm)
           focusEndOfCommandLine()
         }, 0)
@@ -265,7 +277,6 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
         if (commandLineElement.value === '' && cm.outputs.length > 0) {
           buildCommandOutput(cm)
         } else if (!['ArrowUp', 'Tab', 'Enter'].includes(event.key)) {
-          commandListHeadingElement.textContent = 'HINT'
           buildCommandSuggestions(cm)
         }
       }, 0)
@@ -277,7 +288,7 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
   // on focus of the command line show suggestions
   commandLineElement.onfocus = () => {
     clearTimeout(commandLineExitTimeout)
-    commandListHeadingElement.textContent = 'HINT'
+
     if (commandLineElement.value === '' && cm.outputs.length > 0) {
       buildCommandOutput(cm)
     } else {
@@ -296,3 +307,15 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
     }, 100)
   }
 }
+
+export const commandLineVisibilityState = createState<boolean>(
+  true,
+  'show-command-line',
+  (isCommandLineVisible: boolean) => {
+    if (isCommandLineVisible) {
+      commandLineElement.classList.remove('invisible-on-blur')
+    } else {
+      commandLineElement.classList.add('invisible-on-blur')
+    }
+  }
+)

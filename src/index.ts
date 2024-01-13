@@ -1,93 +1,26 @@
-import { Air } from './blocks/air'
-import { GlassBlock } from './blocks/glass_block'
-import { Piston } from './blocks/piston'
-import { RedstoneBlock } from './blocks/redstone_block'
-import { RedstoneLamp } from './blocks/redstone_lamp'
-import { RedstoneTorch } from './blocks/redstone_torch'
-import { ChunkContainer, Dict2D, StringDict } from './containers/array2d'
-import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
+import { Dict2D } from './containers/array2d'
+import { Vec2, vec2Zero } from './containers/vec2'
 import { Block, BlockContainer, BlockType } from './core/block'
 import {
+  commandLineVisibilityState,
   CommandManager,
   initCommandLineEventListeners
 } from './core/command_line'
-import { Direction } from './core/direction'
+import { debugPanelState, updateDebugInfo } from './core/debug_panel'
+import { Game } from './core/game_loop'
+import { GLOBALS } from './core/globals'
+import {
+  initBlockEventListeners,
+  initCanvasResizeListener
+} from './core/user_input'
+import { loadChunksFromStorage } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
-import { createBlock } from './utils/create_block'
+import { areObjectsEqual, debounce, isEnum } from './utils/general'
 
 // dom
 
-const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
-
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
-
-const resizeCanvas = () => {
-  const context = canvasElement.getContext('2d')!
-  const pixelRatio = window.devicePixelRatio || 1
-  console.log(pixelRatio)
-  canvasElement.width = canvasElement.clientWidth * pixelRatio
-  canvasElement.height = canvasElement.clientHeight * pixelRatio
-  context.imageSmoothingEnabled = false
-}
-resizeCanvas()
-
-let resizeTimeout: NodeJS.Timeout
-window.addEventListener('resize', () => {
-  clearTimeout(resizeTimeout)
-  resizeTimeout = setTimeout(() => {
-    resizeCanvas()
-  }, 200)
-})
-
-// main
-
-interface GlobalValue<T> {
-  set: (value: T) => void
-  get: () => T
-  display: () => string
-}
-
-const createGlobalValue = <T>(name: string, initialValue: T) => {
-  let currentValue: T = initialValue
-  const set = (value: T) => {
-    currentValue = value
-  }
-  const get = () => {
-    return currentValue
-  }
-  const display = () => `${name}: ${currentValue}`
-
-  const state: GlobalValue<T> = { get, set, display }
-  return state
-}
-
-const debounce = (callback: () => void, delay: number): (() => void) => {
-  let timeoutId: NodeJS.Timeout
-  let isPending = false
-
-  return function () {
-    if (isPending) {
-      return
-    }
-
-    clearTimeout(timeoutId)
-
-    isPending = true
-
-    timeoutId = setTimeout(() => {
-      callback()
-      isPending = false
-    }, delay)
-  }
-}
-
-const GLOBALS: StringDict<GlobalValue<any>> = {
-  build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
-  tick: createGlobalValue('TICK', 0),
-  subtick: createGlobalValue('SUBTICK', 0),
-  selectedBlock: createGlobalValue('PICKED', createBlock(BlockType.Air, {}))
-}
 
 const debouncedUpdateDebugInfo = debounce(() => {
   updateDebugInfo()
@@ -98,36 +31,35 @@ const setGlobal = (name: string, value: any) => {
   debouncedUpdateDebugInfo()
 }
 
-setTimeout(() => (debugPanel.style.display = ''), 1000)
-
-const updateDebugInfo = () => {
-  debugPanel.innerHTML = ''
-
-  Object.values(GLOBALS).forEach(globalValue => {
-    const item = document.createElement('div')
-    item.textContent = globalValue.display()
-
-    debugPanel.appendChild(item)
-  })
-}
-
 const logBlocks = (blocks: BlockContainer) => {
   console.log(blocks)
 }
 
 const subUpdateBlocks = (blocks: BlockContainer) => {
   setGlobal('subtick', (GLOBALS.subtick.get() + 1) % 16)
-  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
-    block.subupdate(v, blocks)
-  )
+
+  let anyBlocksUpdated = false
+  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
+    const newBlock: Block = block.subupdate(v, blocks)
+    if (!areObjectsEqual(block, newBlock)) {
+      anyBlocksUpdated = true
+    }
+    return newBlock
+  })
+
   blocks.clone(newBlocks)
+
+  return anyBlocksUpdated
 }
 
 const updateBlocks = (blocks: BlockContainer) => {
   setGlobal('tick', GLOBALS.tick.get() + 1)
-  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
-    block.update(v, blocks)
-  )
+
+  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
+    const newBlock: Block = block.update(v, blocks)
+    return newBlock
+  })
+
   blocks.clone(newBlocks)
   const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
     (block: Block, v: Vec2) => {
@@ -138,78 +70,7 @@ const updateBlocks = (blocks: BlockContainer) => {
   // logBlocks(blocks)
 }
 
-type ClickCallback = () => void
-
-const addClickHandlerWithDragCheck = (
-  element: HTMLElement,
-  clickCallback: ClickCallback
-): void => {
-  let isDragging = false
-
-  const mouseDownHandler = (_downEvent: MouseEvent) => {
-    isDragging = false
-
-    const mouseMoveHandler = (_moveEvent: MouseEvent) => {
-      isDragging = true
-    }
-
-    const mouseUpHandler = () => {
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', mouseUpHandler)
-
-      if (!isDragging) {
-        // Invoke the callback for a regular click
-        clickCallback()
-      }
-    }
-
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mouseup', mouseUpHandler)
-  }
-
-  element.addEventListener('mousedown', mouseDownHandler)
-}
-
-const loadChunksFromStorage = async (
-  allowLocalStorage: boolean = true,
-  allowWorldDemos: boolean = true
-) => {
-  const chunksRaw = localStorage.getItem('chunks')
-
-  const blocks: BlockContainer = new ChunkContainer<Block>(
-    16,
-    () => new Air({}),
-    (block: Block) => block.type === BlockType.Air,
-    true
-  )
-
-  // console.log('chunksRaw', chunksRaw)
-
-  const loadChunks = (chunks: StringDict<Block>) => {
-    const chunkDict = new Dict2D(chunks)
-    console.log(chunkDict)
-
-    chunkDict.map((block: Block, v: Vec2) => {
-      blocks.setValue(v, createBlock(block.type, block))
-    })
-  }
-
-  if (chunksRaw && allowLocalStorage) {
-    const chunks = JSON.parse(chunksRaw) as StringDict<Block>
-    loadChunks(chunks)
-  } else if (allowWorldDemos) {
-    const chunks = (await loadWorldSave()) as StringDict<Block>
-    loadChunks(chunks)
-  }
-
-  placeAllBlocks(blocks)
-
-  return blocks
-}
-
 const main = async () => {
-  console.log('main')
-
   const blocks = await loadChunksFromStorage()
 
   const canvas = new Canvas(
@@ -227,62 +88,6 @@ const main = async () => {
     canvas.setGridImages(gridImages)
     canvas.render()
   }
-
-  let selectedBlockType: BlockType = BlockType.Air
-
-  let previousSelectedBlockType: BlockType = BlockType.Air
-  const placeBlock = () => {
-    const p = canvas.getMouseWorldPosition()
-    const pi = vec2Apply(p, Math.floor)
-
-    const getPlacementDirection = (v: Vec2) => {
-      if (Math.abs(v.x - 0.5) > Math.abs(v.y - 0.5)) {
-        return v.x > 0.5 ? Direction.Right : Direction.Left
-      } else {
-        return v.y > 0.5 ? Direction.Up : Direction.Down
-      }
-    }
-
-    const direction: Direction = getPlacementDirection(vec2Subtract(p, pi))
-
-    const block = blocks.getValue(pi)
-
-    if (block.type === BlockType.Air) {
-      const newBlock = createBlock(selectedBlockType, { direction })
-      blocks.setValue(pi, newBlock)
-      blocks.setValue(pi, newBlock.update(pi, blocks))
-      updateCanvas()
-    } else {
-      if (block.type != selectedBlockType) {
-        previousSelectedBlockType = selectedBlockType
-      }
-      selectedBlockType = block.type
-
-      setGlobal('selectedBlock', block.type)
-    }
-  }
-  addClickHandlerWithDragCheck(canvasElement, placeBlock)
-
-  canvasElement.addEventListener('dblclick', function (e: MouseEvent) {
-    e.preventDefault()
-    const p = canvas.getMouseWorldPosition()
-    const pi = vec2Apply(p, Math.floor)
-    blocks.setValue(pi, new Air({}))
-    // on double click we also perform the single click action of selecting the
-    // block we just deleted. Revert the selection
-    selectedBlockType = previousSelectedBlockType
-    updateCanvas()
-  })
-
-  document.addEventListener('keydown', event => {
-    if (event.key === 'e') {
-      const p = canvas.getMouseWorldPosition()
-      const pi = vec2Apply(p, Math.floor)
-      console.log(blocks.getValue(pi))
-    }
-  })
-
-  // Updates Per Second
 
   const processUpdatesPerSecondInput = (value: string) => {
     const speed = Number(value)
@@ -316,8 +121,12 @@ const main = async () => {
       // if subUpdateTimeStep very fast then just loop through subupdates
       // as quickly as possible
 
-      for (let i = 0; i < 16; ++i) {
-        subUpdateBlocks(blocks)
+      for (let i = 0; i < 1000; ++i) {
+        if (!subUpdateBlocks(blocks)) {
+          // console.log('subupdates', i)
+          // if subupdates complete break out
+          break
+        }
       }
       updateBlocks(blocks)
       updateCanvas()
@@ -363,16 +172,19 @@ const main = async () => {
   logBlocks(blocks)
   updateCanvas()
 
+  initBlockEventListeners(canvas, blocks, updateCanvas, setGlobal)
+  initCanvasResizeListener()
+
   // load commands
 
   const commandManager = new CommandManager()
 
-  commandManager.createCommand('/load_world {name:string}', async input => {
+  commandManager.createCommand('/world load {name:string}', async input => {
     blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     updateCanvas()
     return `loaded world ${input.name}`
   })
-  commandManager.createCommand('/clear_world', async () => {
+  commandManager.createCommand('/world clear', async () => {
     blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
     updateCanvas()
     return `cleared world`
@@ -390,7 +202,7 @@ const main = async () => {
     return `stepped subtick to ${GLOBALS.subtick.get()}`
   })
   commandManager.createCommand(
-    '/set updates per second {ups:float}',
+    '/set updates_per_second {ups:float}',
     async input => {
       processUpdatesPerSecondInput(input.ups)
       return `set updates per second ${input.ups}`
@@ -408,102 +220,47 @@ const main = async () => {
       }
     }
   )
+
   commandManager.createCommand('/toggle debug_window', async input => {
-    if (debugPanel.style.display == 'none') {
-      debugPanel.style.display = ''
-      return 'debug window displayed'
-    } else {
-      debugPanel.style.display = 'none'
+    if (debugPanelState.get()) {
+      debugPanelState.set(false)
       return 'debug window hidden'
+    } else {
+      debugPanelState.set(true)
+      return 'debug window revealed'
+    }
+  })
+
+  commandManager.createCommand(
+    '/toggle command_line_visibility',
+    async input => {
+      if (commandLineVisibilityState.get()) {
+        commandLineVisibilityState.set(false)
+        return 'command line hidden'
+      } else {
+        commandLineVisibilityState.set(true)
+        return 'command line revealed'
+      }
+    }
+  )
+
+  commandManager.createCommand('/block list', async _ => {
+    const blockList = (Object.values(BlockType) as String[]).join(', ')
+    return `blocks: ${blockList}`
+  })
+
+  commandManager.createCommand('/block pick {type:string}', async input => {
+    if (isEnum<BlockType>(input.type as BlockType, Object.values(BlockType))) {
+      setGlobal('selectedBlock', input.type)
+      return `picked block '${input.type}'`
+    } else {
+      return `cannot pick invalid block '${input.type}'`
     }
   })
 
   initCommandLineEventListeners(commandManager)
 
   game.startGameLoop()
-}
-
-const placeAllBlocks = (blocks: BlockContainer) => {
-  blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
-
-  blocks.setValue({ x: 2, y: 0 }, new RedstoneTorch({}))
-
-  blocks.setValue({ x: 4, y: 0 }, new RedstoneLamp({}))
-
-  blocks.setValue({ x: 6, y: 0 }, new Piston({}))
-
-  blocks.setValue({ x: 8, y: 0 }, new GlassBlock({}))
-}
-
-const loadWorldSave = async () => {
-  try {
-    const response = await fetch('saves/world1.json')
-
-    if (!response.ok) {
-      throw new Error(`HTTP error! Status: ${response.status}`)
-    }
-
-    const jsonData = await response.json()
-    console.log('JSON data:', jsonData)
-    return jsonData
-  } catch (error) {
-    console.error('Error fetching JSON:', error)
-  }
-}
-
-class Game {
-  private lastUpdateTime: number = 0
-  private updateTimeStep: number
-  private updateCallback: () => void
-  private canTimeStep: boolean = false
-  private hasUpdateCompleted: boolean = true
-
-  constructor (updatesPerSecond: number, updateCallback: () => void) {
-    this.updateTimeStep = 1000 / updatesPerSecond
-    this.updateCallback = updateCallback
-    this.canTimeStep = false
-  }
-
-  setUpdateComplete () {
-    this.hasUpdateCompleted = true
-  }
-
-  allowTimeStep () {
-    this.canTimeStep = true
-  }
-
-  setUpdatesPerSecond (updatesPerSecond: number) {
-    if (updatesPerSecond <= 0) {
-      this.updateTimeStep = 0
-    } else {
-      this.updateTimeStep = 1000 / updatesPerSecond
-    }
-  }
-
-  private update = (currentTime: number) => {
-    if (this.hasUpdateCompleted) {
-      let deltaTime = currentTime - this.lastUpdateTime
-
-      if (
-        this.canTimeStep ||
-        (this.updateTimeStep > 0 && deltaTime >= this.updateTimeStep)
-      ) {
-        this.canTimeStep = false
-        this.hasUpdateCompleted = false
-        this.updateCallback()
-        this.lastUpdateTime = currentTime - (deltaTime % this.updateTimeStep)
-        if (isNaN(this.lastUpdateTime)) {
-          this.lastUpdateTime = 0
-        }
-      }
-    }
-
-    requestAnimationFrame(this.update)
-  }
-
-  public startGameLoop = () => {
-    requestAnimationFrame(this.update)
-  }
 }
 
 main()

@@ -17,7 +17,7 @@ export const loadImages = async () => {
   const images: Map<string, HTMLImageElement> = new Map()
 
   const imagePaths = fetchPngFilenames()
-  console.log(imagePaths)
+  // console.log(imagePaths)
   const loadImagePromises = imagePaths.map(async path => {
     const img = await loadImage('./src/images/' + path)
     images.set(path.replace('.png', ''), img)

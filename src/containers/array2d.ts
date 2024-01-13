@@ -72,7 +72,7 @@ export class ChunkContainer<T> {
     const chunk = this.chunks[chunkIndex]
     if (!chunk) {
       if (this.listenToChunkCreation) {
-        console.log('creating chunk', chunkIndex)
+        // console.log('creating chunk', chunkIndex)
       }
 
       this.chunks[chunkIndex] = this.createChunk()
