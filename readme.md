@@ -49,7 +49,7 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [ ] Side blocks disappear on complete block
 - [x] Make saveable state (to file so users can try them out)
 - [x] Test pistons pushing and facing eachother (they replicate infinitely!!!)
-- [ ] Make blocks classes so they can use prototypes
+- [x] Make blocks classes so they can use prototypes
 - [ ] Add subticks
 - [x] Add chunk system (infinite world)
 - [ ] Add moveable pistons
@@ -67,3 +67,12 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 - [ ] Fix duplicate pistons in double piston extender when powered incorrectly
 - [ ] Remove defaults from blocks (maybe have explicit default function)
 - [x] Convert blocks to use prototypes to improve efficiency / performance
+- [ ] Add touch support
+- [ ] Add controller support
+- [ ] Split index.ts into more files
+- [ ] Support Full Screen Canvas
+- [x] Add basic command line
+- [ ] Add bitmap font rendering
+- [ ] Prevent texture bleeding on atlas
+- [ ] Grid size should be based on pixel width of block, large screens should remain at unit grid size longer
+- [ ] if updates are faster than the frame rate then do not render (do not wait to render before processing next step)

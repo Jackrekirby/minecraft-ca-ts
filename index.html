@@ -4,29 +4,173 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <style>
+      @font-face {
+        font-family: 'PixelFont';
+        src: url('fonts/easvhs.ttf') format('truetype');
+      }
+
       * {
         font-family: 'Sora';
         user-select: none;
+        font-smooth: none;
+        -webkit-font-smoothing: none;
+        -moz-osx-font-smoothing: grayscale;
+        font-weight: 400;
+        box-sizing: border-box;
+        font-size: 12px;
       }
 
       body {
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
+        background-color: white;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+      }
+
+      #game-wrapper {
         background-color: rgba(18, 91, 167, 0.5);
+        padding: 16px;
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      #canvas-wrapper {
+        border: 1px solid white;
+        background-color: rgba(18, 91, 167, 0.5);
+        width: 100%;
+        height: 100%;
+        position: relative;
       }
 
       canvas {
-        border: 1px solid white;
+        width: 100%;
+        height: 100%;
+      }
+
+      #debug-wrapper {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 25%;
+        min-width: 256px;
+        max-width: 512px;
+        margin: 16px;
+      }
+
+      #debug-button {
+        outline: none;
+        outline: 1px solid white;
+        border: none;
+        width: 50%;
+        background-color: rgb(18, 91, 167, 0.5);
+        color: white;
+        padding: 8px;
+        margin: 8px;
+      }
+
+      #debug-panel {
+        outline: none;
+        outline: 1px solid rgb(255, 255, 255, 0.2);
+        border: none;
+        width: 100%;
+        background-color: rgb(18, 91, 167, 0.5);
+        color: white;
+        padding: 8px;
+        margin: 8px;
+      }
+
+      #command-wrapper {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 50%;
+        min-width: 256px;
+        max-width: 512px;
+        margin: 16px;
+        color: white;
+      }
+
+      #command-line {
+        outline: none;
+        outline: 1px solid rgb(255, 255, 255, 0.1);
+        border: none;
+        width: 100%;
+        background-color: rgb(18, 91, 167, 0.2);
+        color: rgb(255, 255, 255, 0.5);
+        padding: 8px;
+        margin: 8px;
+      }
+
+      #command-line:focus {
+        outline: none;
+        outline: 1px solid rgb(255, 255, 255, 0.8);
+        border: none;
+        width: 100%;
+        background-color: rgb(18, 91, 167, 0.8);
+        color: white;
+        padding: 8px;
+        margin: 8px;
+      }
+
+      #command-line::placeholder {
+        color: rgb(255, 255, 255, 0.5);
+      }
+
+      #command-line:focus::placeholder {
+        color: rgb(255, 255, 255, 0);
+      }
+
+      #command-list {
+        outline: none;
+        outline: 1px solid rgb(255, 255, 255, 0.8);
+        border: none;
+        width: 100%;
+        background-color: rgb(18, 91, 167, 0.8);
+        color: white;
+
+        margin: 8px;
+
+        max-height: max(64px, 25%);
+        overflow-y: auto;
+      }
+
+      .command-item {
+        background-color: rgb(255, 255, 255, 0);
+        padding: 4px;
+      }
+
+      .command-item:hover {
+        background-color: rgb(255, 255, 255, 0.2);
+      }
+
+      /* For WebKit browsers (Chrome, Safari) */
+      #command-list::-webkit-scrollbar {
+        width: 4px;
+      }
+
+      #command-list::-webkit-scrollbar-thumb {
+        background-color: rgb(255, 255, 255, 0.8);
+        border-radius: 0px;
+      }
+
+      #command-list::-webkit-scrollbar-track {
+        background-color: rgb(255, 255, 255, 0.1);
+        border-radius: 0px;
       }
 
       .row {
-        width: 528px;
+        position: absolute;
+        top: 32px;
+        left: 50%;
+        transform: translateX(-50%);
+        background-color: rgba(255, 255, 255, 0.2);
+        width: 512px;
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
+        z-index: 1;
       }
 
       button {
@@ -38,20 +182,6 @@
         color: white;
         padding: 8px;
         margin: 8px;
-        font-weight: bold;
-      }
-
-      input[type='number'] {
-        outline: none;
-        outline: 1px solid white;
-        border: none;
-        min-width: 8rem;
-        background-color: rgb(18, 91, 167);
-        color: white;
-        padding: 8px;
-        margin: 8px;
-        font-weight: bold;
-        text-align: center;
       }
 
       /* Remove default arrow buttons on number input (for some browsers) */
@@ -62,33 +192,90 @@
       }
 
       #built-time {
+        color: rgba(255, 255, 255, 1);
+      }
+      #tick-info {
+        color: rgba(255, 255, 255, 1);
+      }
+
+      .labelled-input {
+        position: relative;
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      .labelled-input label {
+        width: 60%;
+        padding: 1px 8px;
+        color: white;
+        background-color: rgba(18, 91, 167, 1);
+
         position: absolute;
-        bottom: 0;
+        top: 0;
         left: 50%;
         transform: translateX(-50%);
+        text-align: center;
+      }
 
-        color: rgba(255, 255, 255, 0.5);
-        font-size: small;
+      .labelled-input input[type='number'] {
+        outline: none;
+        outline: 1px solid rgb(18, 91, 167);
+        border: none;
+
+        width: 6rem;
+        background-color: rgb(240, 240, 255);
+        color: rgb(18, 91, 167);
+        padding: 14px 8px 6px 8px;
+        margin: 8px;
+
+        text-align: center;
       }
     </style>
     <title>Minecraft CA</title>
   </head>
   <body>
-    <div class="row">
-      <button id="load-demo">Load Demo</button>
-      <button id="reset-button">Clear World</button>
-      <button id="update-button">Tick Step</button>
-      <input
-        type="number"
-        id="update-speed-input"
-        value="0"
-        placeholder="Step Speed (ms)"
-      />
+    <div class="row" style="display: none;">
+      <button id="load-demo">LOAD DEMO</button>
+      <button id="reset-button">CLEAR WORLD</button>
+
+      <button id="tickStepButton">TICK STEP</button>
+      <button id="subTickStepButton">SUBTICK STEP</button>
+      <div class="labelled-input">
+        <label>UPS</label>
+        <input type="number" id="updatesPerSecondInput" value="0" />
+      </div>
+
+      <div class="labelled-input">
+        <label>SUPS</label>
+        <input type="number" id="subUpdatesPerSecondInput" value="0" />
+      </div>
     </div>
 
-    <canvas id="canvas" width="512" height="512"></canvas>
+    <div id="game-wrapper">
+      <div id="canvas-wrapper">
+        <div id="debug-wrapper">
+          <!-- <div id="debug-button">DEBUG ➤</div> -->
+          <div id="debug-panel">
+            <div id="tick-info">TICK: 5 SUBTICK: 1</div>
+            <div id="built-time">BUILD</div>
+          </div>
+        </div>
 
-    <div id="built-time">Test</div>
+        <div id="command-wrapper">
+          <div id="command-list" style="display: none;"></div>
+          <input
+            type="text"
+            id="command-line"
+            spellcheck="false"
+            value=""
+            placeholder="/command"
+          />
+        </div>
+        <canvas id="canvas" width="612" height="512"></canvas>
+      </div>
+    </div>
+
     <script src="./dist/bundle.js"></script>
   </body>
 </html>

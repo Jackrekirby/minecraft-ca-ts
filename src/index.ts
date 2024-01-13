@@ -11,12 +11,199 @@ import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
 import { Direction } from './direction'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
+import {
+  CommandManager,
+  initCommandLineEventListeners
+} from './utils/command_line'
 import { createBlock } from './utils/create_block'
+import { zipArrays } from './utils/general'
 
 // dom
 
-const updateButton = document.getElementById(
-  'update-button'
+// const debugButton = document.getElementById('debug-button') as HTMLButtonElement
+
+const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
+
+// debugButton.onclick = () => {
+//   debugPanel.style.display = debugPanel.style.display == 'none' ? '' : 'none'
+// }
+
+const commandLine = document.getElementById('command-line') as HTMLInputElement
+const commandList = document.getElementById('command-list') as HTMLDivElement
+
+interface Command {
+  pattern: string
+  callback: (inputs: StringDict<string>) => void
+}
+
+const createCommand = (
+  pattern: string,
+  callback: (inputs: StringDict<string>) => void
+) => {
+  return { pattern, callback }
+}
+
+function replacePlaceholders (input: string) {
+  return input.replace(/\{[^}]+\}/g, '?')
+}
+
+const commands: Command[] = []
+const commandHistory: string[] = []
+
+function parseCommand (input: string) {
+  for (const command of commands) {
+    const commandParts = command.pattern.split(' ')
+    const inputParts = input.split(' ')
+
+    const findCommandAndGetInputs = () => {
+      const inputs: StringDict<string> = {}
+      for (const [commandPart, inputPart] of zipArrays(
+        commandParts,
+        inputParts
+      )) {
+        if (commandPart[0] != '{') {
+          if (commandPart !== inputPart) {
+            return null
+          }
+        } else {
+          const input_name = commandPart.split(':')[0].slice(1)
+          const input_value = inputPart
+          inputs[input_name] = input_value
+        }
+      }
+      return inputs
+    }
+
+    const inputs = findCommandAndGetInputs()
+    if (inputs) {
+      console.log(command, inputs)
+      const newCommandHistory = commandHistory.filter(item => item !== input)
+      commandHistory.length = 0
+      commandHistory.push(input)
+      commandHistory.push(...newCommandHistory)
+      console.log(commandHistory)
+      command.callback(inputs)
+    }
+  }
+}
+
+function buildCommandItems () {
+  commandList.innerHTML = ''
+
+  const viableCommands = commands.filter(command => {
+    if (commandLine.value !== '') {
+      const commandParts = command.pattern.split(' ')
+      const inputParts = commandLine.value.split(' ')
+
+      for (let i = 0; i < inputParts.length - 1; i++) {
+        const commandPart = commandParts[i]
+        const inputPart = inputParts[i]
+        if (commandPart[0] != '{') {
+          if (commandPart !== inputPart) {
+            return false
+          }
+        }
+      }
+
+      const commandPart = commandParts[inputParts.length - 1]
+      const inputPart = inputParts[inputParts.length - 1]
+      if (commandPart[0] != '{') {
+        if (!commandPart.startsWith(inputPart)) {
+          return false
+        }
+      }
+    }
+    return true
+  })
+
+  // console.log('buildCommandItems', commandLine.value, viableCommands)
+
+  viableCommands.forEach(command => {
+    const commandItem = document.createElement('div')
+    commandItem.classList.add('command-item')
+    commandItem.textContent = command.pattern
+    commandItem.onclick = () => {
+      commandLine.value = replacePlaceholders(command.pattern)
+      // commandList.style.display = 'none'
+      commandLine.focus()
+      // Set cursor position at the end of the string
+      const inputValueLength = commandLine.value.length
+      commandLine.setSelectionRange(inputValueLength, inputValueLength)
+    }
+    commandList.appendChild(commandItem)
+  })
+}
+
+function buildCommandHistory () {
+  commandList.innerHTML = ''
+
+  commandHistory.forEach(command => {
+    const commandItem = document.createElement('div')
+    commandItem.classList.add('command-item')
+    commandItem.textContent = command
+    commandItem.onclick = () => {
+      commandLine.value = command
+      // commandList.style.display = 'none'
+      commandLine.focus()
+      // Set cursor position at the end of the string
+      const inputValueLength = commandLine.value.length
+      commandLine.setSelectionRange(inputValueLength, inputValueLength)
+    }
+    commandList.appendChild(commandItem)
+  })
+}
+
+commandLine.addEventListener('keydown', event => {
+  if (event.key === 'Enter') {
+    const command = commandLine.value
+    if (command === '' || command === '/') {
+      commandList.style.display = 'none'
+      commandLine.blur()
+    }
+    parseCommand(command)
+    commandLine.value = ''
+  } else if (event.key === 'Tab') {
+    ;(commandList.children[0] as HTMLButtonElement).click()
+    event.preventDefault()
+  }
+
+  if (event.key === 'ArrowUp') {
+    setTimeout(buildCommandHistory, 0)
+    const newCommand = commandHistory.find(item => item !== commandLine.value)
+    commandLine.value = newCommand ?? ''
+    setTimeout(() => {
+      // Set cursor position at the end of the string
+      const inputValueLength = commandLine.value.length
+      commandLine.setSelectionRange(inputValueLength, inputValueLength)
+    }, 0)
+  } else {
+    setTimeout(buildCommandItems, 0)
+  }
+})
+
+let commandLineExitTimeout: NodeJS.Timeout
+
+commandLine.onfocus = () => {
+  clearTimeout(commandLineExitTimeout)
+  buildCommandItems()
+  commandList.style.display = ''
+}
+
+commandLine.onblur = () => {
+  commandLineExitTimeout = setTimeout(() => {
+    if (commandLine !== document.activeElement) {
+      console.log('blurring')
+      commandList.style.display = 'none'
+    }
+  }, 100)
+}
+
+const tickStepButton = document.getElementById(
+  'tickStepButton'
+) as HTMLButtonElement
+
+const subTickStepButton = document.getElementById(
+  'subTickStepButton'
 ) as HTMLButtonElement
 
 const resetButton = document.getElementById('reset-button') as HTMLButtonElement
@@ -25,19 +212,64 @@ const loadDemoButton = document.getElementById('load-demo') as HTMLButtonElement
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
-const updateSpeedInput = document.getElementById(
-  'update-speed-input'
+const resizeCanvas = () => {
+  const context = canvasElement.getContext('2d')!
+  // Adjust the canvas resolution
+  const pixelRatio = window.devicePixelRatio || 1
+  console.log(pixelRatio)
+  canvasElement.width = canvasElement.clientWidth * pixelRatio
+  canvasElement.height = canvasElement.clientHeight * pixelRatio
+
+  // // Scale the context to match the new resolution
+  // context.scale(pixelRatio, pixelRatio)
+
+  // Set imageSmoothingEnabled to false
+  context.imageSmoothingEnabled = false
+}
+resizeCanvas()
+
+document.addEventListener('keydown', event => {
+  if (event.key === '/') {
+    commandLine.focus()
+  }
+})
+
+let resizeTimeout: NodeJS.Timeout
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimeout)
+  resizeTimeout = setTimeout(() => {
+    resizeCanvas()
+  }, 200)
+})
+
+const updatesPerSecondInput = document.getElementById(
+  'updatesPerSecondInput'
+) as HTMLInputElement
+
+const subUpdatesPerSecondInput = document.getElementById(
+  'subUpdatesPerSecondInput'
 ) as HTMLInputElement
 
 const builtTimeElement = document.getElementById(
   'built-time'
 ) as HTMLInputElement
 
+const TickInfoElement = document.getElementById('tick-info') as HTMLInputElement
+
 builtTimeElement.textContent = `BUILD ${process.env.BUILD_TIME?.replace(
   ',',
   ''
 )}`
 // main
+
+const GLOBALS = {
+  subtick: 0,
+  tick: 0
+}
+
+const setTickInfo = () => {
+  TickInfoElement.textContent = `TICK: ${GLOBALS.tick} SUBTICK ${GLOBALS.subtick}`
+}
 
 const logBlocks = (blocks: BlockContainer) => {
   // const x = blocks
@@ -48,8 +280,19 @@ const logBlocks = (blocks: BlockContainer) => {
   console.log(blocks)
 }
 
+const subUpdateBlocks = (blocks: BlockContainer) => {
+  GLOBALS.subtick = (GLOBALS.subtick + 1) % 16
+  setTickInfo()
+  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
+    block.subupdate(v, blocks)
+  )
+  blocks.clone(newBlocks)
+}
+
 const updateBlocks = (blocks: BlockContainer) => {
   // console.log('update')
+  GLOBALS.tick += 1
+  setTickInfo()
   const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
     block.update(v, blocks)
   )
@@ -206,35 +449,113 @@ const main = async () => {
     }
   })
 
-  let updateIntervalId: NodeJS.Timeout | null = null
+  // Updates Per Second
 
-  updateSpeedInput.value = localStorage.getItem('update-speed') ?? '200'
+  // updatesPerSecondInput.addEventListener('change', () => {
+  //   processUpdatesPerSecondInput()
+  //   localStorage.setItem('updatesPerSecond', updatesPerSecondInput.value)
+  // })
 
-  const processSpeedInput = () => {
-    const speed = Number(updateSpeedInput.value)
-    console.log('Update speed', speed)
-    if (updateIntervalId) {
-      clearInterval(updateIntervalId)
-    }
-    if (speed > 0) {
-      updateIntervalId = setInterval(() => {
-        updateBlocks(blocks)
-        updateCanvas()
-      }, speed)
-    }
+  const processUpdatesPerSecondInput = (value: string) => {
+    const speed = Number(value)
+    game.setUpdatesPerSecond(speed)
   }
 
-  updateSpeedInput.addEventListener('change', () => {
-    processSpeedInput()
-    localStorage.setItem('update-speed', updateSpeedInput.value)
+  const updatesPerSecondValue = localStorage.getItem('updatesPerSecond') ?? 5
+
+  // Sub-Updates Per Second
+  const subUpdatesPerSecondValue =
+    localStorage.getItem('subUpdatesPerSecond') ?? 1000
+  // if (subUpdatesPerSecondValue) {
+  //   subUpdatesPerSecondInput.value = subUpdatesPerSecondValue
+  // }
+
+  // subUpdatesPerSecondInput.addEventListener('change', () => {
+  //   setSubUpdatesPerSecond(Number(subUpdatesPerSecondInput.value))
+  //   localStorage.setItem('subUpdatesPerSecond', subUpdatesPerSecondInput.value)
+  // })
+
+  let subUpdatesPerSecond: number = Number(subUpdatesPerSecondValue)
+  let subUpdateTimeStep =
+    subUpdatesPerSecond > 0 ? 1000 / subUpdatesPerSecond : 0
+  let canSubUpdate = false
+
+  const setSubUpdatesPerSecond = (x: number) => {
+    subUpdatesPerSecond = Number(x)
+    subUpdateTimeStep = subUpdatesPerSecond > 0 ? 1000 / subUpdatesPerSecond : 0
+    localStorage.setItem('subUpdatesPerSecond', String(x))
+  }
+
+  const game = new Game(Number(updatesPerSecondValue), () => {
+    let lastUpdateTime = 0
+
+    let iteration = 0
+    // console.log('help', { canSubUpdate, subUpdateTimeStep })
+
+    if (subUpdateTimeStep < 10) {
+      // if subUpdateTimeStep very fast then just loop through subupdates
+      // as quickly as possible
+
+      for (let i = 0; i < 16; ++i) {
+        subUpdateBlocks(blocks)
+      }
+      updateBlocks(blocks)
+      updateCanvas()
+      game.setUpdateComplete()
+      return
+    }
+
+    const runSubUpdate = (currentTime: number) => {
+      let deltaTime = currentTime - lastUpdateTime
+
+      if (
+        canSubUpdate ||
+        (subUpdateTimeStep > 0 && deltaTime >= subUpdateTimeStep)
+      ) {
+        canSubUpdate = false
+        subUpdateBlocks(blocks)
+
+        if (subUpdateTimeStep === 0) {
+          // only update the canvas if we are viewing subupdates
+          updateCanvas()
+        }
+        lastUpdateTime = currentTime - (deltaTime % subUpdateTimeStep)
+        if (isNaN(lastUpdateTime)) {
+          lastUpdateTime = 0
+        }
+
+        iteration += 1
+        if (iteration < 16) {
+          // console.log('subupdate', iteration)
+        } else {
+          // console.log('update')
+          updateBlocks(blocks)
+          updateCanvas()
+          game.setUpdateComplete()
+          return
+        }
+      }
+      requestAnimationFrame(runSubUpdate)
+    }
+    requestAnimationFrame(runSubUpdate)
   })
 
-  processSpeedInput()
+  // manual tick stepping
 
-  updateButton.onclick = () => {
-    updateBlocks(blocks)
-    updateCanvas()
+  tickStepButton.onclick = () => {
+    updatesPerSecondInput.value = '0'
+    game.setUpdatesPerSecond(0)
+    game.allowTimeStep()
   }
+
+  subTickStepButton.onclick = () => {
+    // console.log('canSubUpdate')
+    subUpdatesPerSecondInput.value = '0'
+    setSubUpdatesPerSecond(0)
+    canSubUpdate = true
+  }
+
+  // processUpdatesPerSecondInput()
 
   resetButton.addEventListener('click', async () => {
     console.log('reset')
@@ -250,6 +571,49 @@ const main = async () => {
 
   logBlocks(blocks)
   updateCanvas()
+
+  // load commands
+
+  const commandManager = new CommandManager()
+
+  commandManager.createCommand('/load_world {name:string}', async input => {
+    console.log('loading world', input)
+    blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
+    updateCanvas()
+  })
+  commandManager.createCommand('/clear_world', async () => {
+    blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
+    updateCanvas()
+  })
+  commandManager.createCommand('/step tick', () => {
+    updatesPerSecondInput.value = '0'
+    game.setUpdatesPerSecond(0)
+    game.allowTimeStep()
+  })
+  commandManager.createCommand('/step subtick', () => {
+    subUpdatesPerSecondInput.value = '0'
+    setSubUpdatesPerSecond(0)
+    canSubUpdate = true
+  })
+  commandManager.createCommand('/set updates_per_second {ups:float}', input => {
+    processUpdatesPerSecondInput(input.ups)
+  })
+  commandManager.createCommand(
+    '/set subupdates_per_second {sups:float}',
+    input => {
+      const sups = Number(input.sups)
+      if (!isNaN(sups)) {
+        setSubUpdatesPerSecond(sups)
+      }
+    }
+  )
+  commandManager.createCommand('/toggle debug_window', input => {
+    debugPanel.style.display = debugPanel.style.display == 'none' ? '' : 'none'
+  })
+
+  initCommandLineEventListeners(commandManager)
+
+  game.startGameLoop()
 }
 
 const placeAllBlocks = (blocks: BlockContainer) => {
@@ -328,6 +692,61 @@ const buildWorld = (blocks: BlockContainer) => {
   blocks.setValue({ x: 5, y: 3 }, new GlassBlock({}))
   blocks.setValue({ x: 4, y: 3 }, new RedstoneBlock({}))
   blocks.setValue({ x: 3, y: 3 }, new GlassBlock({}))
+}
+
+class Game {
+  private lastUpdateTime: number = 0
+  private updateTimeStep: number
+  private updateCallback: () => void
+  private canTimeStep: boolean = false
+  private hasUpdateCompleted: boolean = true
+
+  constructor (updatesPerSecond: number, updateCallback: () => void) {
+    this.updateTimeStep = 1000 / updatesPerSecond
+    this.updateCallback = updateCallback
+    this.canTimeStep = false
+  }
+
+  setUpdateComplete () {
+    this.hasUpdateCompleted = true
+  }
+
+  allowTimeStep () {
+    this.canTimeStep = true
+  }
+
+  setUpdatesPerSecond (updatesPerSecond: number) {
+    if (updatesPerSecond <= 0) {
+      this.updateTimeStep = 0
+    } else {
+      this.updateTimeStep = 1000 / updatesPerSecond
+    }
+  }
+
+  private update = (currentTime: number) => {
+    if (this.hasUpdateCompleted) {
+      let deltaTime = currentTime - this.lastUpdateTime
+
+      if (
+        this.canTimeStep ||
+        (this.updateTimeStep > 0 && deltaTime >= this.updateTimeStep)
+      ) {
+        this.canTimeStep = false
+        this.hasUpdateCompleted = false
+        this.updateCallback()
+        this.lastUpdateTime = currentTime - (deltaTime % this.updateTimeStep)
+        if (isNaN(this.lastUpdateTime)) {
+          this.lastUpdateTime = 0
+        }
+      }
+    }
+
+    requestAnimationFrame(this.update)
+  }
+
+  public startGameLoop = () => {
+    requestAnimationFrame(this.update)
+  }
 }
 
 main()

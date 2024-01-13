@@ -238,10 +238,10 @@ export class Canvas {
       tileInfo.y,
       tileInfo.w,
       tileInfo.h,
-      p.x,
-      p.y,
-      w * this.scale,
-      h * this.scale
+      Math.floor(p.x),
+      Math.floor(p.y),
+      Math.floor(w * this.scale),
+      Math.floor(h * this.scale)
     )
   }
 
@@ -253,8 +253,8 @@ export class Canvas {
     const p2 = this.calculateAxisFlippedPosition(q2.x, q2.y)
 
     this.ctx.beginPath()
-    this.ctx.moveTo(p1.x, p1.y)
-    this.ctx.lineTo(p2.x, p2.y)
+    this.ctx.moveTo(Math.round(p1.x), Math.round(p1.y))
+    this.ctx.lineTo(Math.round(p2.x), Math.round(p2.y))
     this.ctx.stroke()
   }
 
