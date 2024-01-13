@@ -36,8 +36,6 @@ const logBlocks = (blocks: BlockContainer) => {
 }
 
 const subUpdateBlocks = (blocks: BlockContainer) => {
-  setGlobal('subtick', (GLOBALS.subtick.get() + 1) % 16)
-
   let anyBlocksUpdated = false
   const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
     const newBlock: Block = block.subupdate(v, blocks)
@@ -71,6 +69,7 @@ const updateBlocks = (blocks: BlockContainer) => {
 }
 
 const main = async () => {
+  setGlobal('tick', 0)
   const blocks = await loadChunksFromStorage()
 
   const canvas = new Canvas(
@@ -103,7 +102,7 @@ const main = async () => {
   let subUpdatesPerSecond: number = Number(subUpdatesPerSecondValue)
   let subUpdateTimeStep =
     subUpdatesPerSecond > 0 ? 1000 / subUpdatesPerSecond : 0
-  let canSubUpdate = false
+  let canSubUpdate = true
 
   const setSubUpdatesPerSecond = (x: number) => {
     subUpdatesPerSecond = Number(x)
@@ -113,26 +112,7 @@ const main = async () => {
 
   const game = new Game(Number(updatesPerSecondValue), () => {
     let lastUpdateTime = 0
-
-    let iteration = 0
-    // console.log('help', { canSubUpdate, subUpdateTimeStep })
-
-    if (subUpdateTimeStep < 10) {
-      // if subUpdateTimeStep very fast then just loop through subupdates
-      // as quickly as possible
-
-      for (let i = 0; i < 1000; ++i) {
-        if (!subUpdateBlocks(blocks)) {
-          // console.log('subupdates', i)
-          // if subupdates complete break out
-          break
-        }
-      }
-      updateBlocks(blocks)
-      updateCanvas()
-      game.setUpdateComplete()
-      return
-    }
+    let subtick = 0
 
     const runSubUpdate = (currentTime: number) => {
       let deltaTime = currentTime - lastUpdateTime
@@ -142,7 +122,7 @@ const main = async () => {
         (subUpdateTimeStep > 0 && deltaTime >= subUpdateTimeStep)
       ) {
         canSubUpdate = false
-        subUpdateBlocks(blocks)
+        const didSubUpdate = subUpdateBlocks(blocks)
 
         if (subUpdateTimeStep === 0) {
           // only update the canvas if we are viewing subupdates
@@ -153,15 +133,20 @@ const main = async () => {
           lastUpdateTime = 0
         }
 
-        iteration += 1
-        if (iteration < 16) {
-          // console.log('subupdate', iteration)
-        } else {
+        if (!didSubUpdate) {
+          // once subupdates complete process updates
           // console.log('update')
+          subtick = 0
+          setGlobal('subtick', subtick)
+
           updateBlocks(blocks)
           updateCanvas()
           game.setUpdateComplete()
           return
+        } else {
+          // console.log('subupdate')
+          setGlobal('subtick', subtick)
+          subtick += 1
         }
       }
       requestAnimationFrame(runSubUpdate)
@@ -193,13 +178,17 @@ const main = async () => {
     // updatesPerSecondInput.value = '0'
     game.setUpdatesPerSecond(0)
     game.allowTimeStep()
-    return `stepped tick to ${GLOBALS.subtick.get()}`
+    setSubUpdatesPerSecond(1000)
+    canSubUpdate = true
+    return `stepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
   })
   commandManager.createCommand('/step subtick', async () => {
     // subUpdatesPerSecondInput.value = '0'
+    game.setUpdatesPerSecond(0)
+    game.allowTimeStep()
     setSubUpdatesPerSecond(0)
     canSubUpdate = true
-    return `stepped subtick to ${GLOBALS.subtick.get()}`
+    return `substepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
   })
   commandManager.createCommand(
     '/set updates_per_second {ups:float}',

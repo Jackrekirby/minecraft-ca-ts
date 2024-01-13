@@ -1,4 +1,4 @@
-import { createState, zipArrays } from '../utils/general'
+import { createState, StateHandler, zipArrays } from '../utils/general'
 
 const commandLineElement = document.getElementById(
   'command-line'
@@ -22,8 +22,14 @@ type StringDict = { [key: string]: string }
 
 export class CommandManager {
   public commands: Command[] = []
-  public history: string[] = []
-  public outputs: string[] = []
+  public history: StateHandler<string[]> = createState(
+    [] as string[],
+    'command-history'
+  )
+  public outputs: StateHandler<string[]> = createState(
+    [] as string[],
+    'command-outputs'
+  )
 
   public createCommand (
     pattern: string,
@@ -33,10 +39,9 @@ export class CommandManager {
   }
 
   private addHistory (item: string) {
-    const newHistory = this.history.filter(command => command !== item)
-    this.history.length = 0
-    this.history.push(item)
-    this.history.push(...newHistory)
+    const newHistory = this.history.get().filter(command => command !== item)
+    this.history.set([item, ...newHistory.slice(0, 50)])
+    // only keep last 50 items in history
   }
 
   private ifCommandGetInputs (input: string, command: string) {
@@ -82,13 +87,14 @@ export class CommandManager {
   }
 
   public getNextHistoryItem (input: string): string {
-    if (this.history.length === 0) return ''
-    const currentCommandIndex = this.history.findIndex(item => item === input)
+    const history = this.history.get()
+    if (history.length === 0) return ''
+    const currentCommandIndex = history.findIndex(item => item === input)
     let newCommand: string
     if (currentCommandIndex > 0) {
-      newCommand = this.history[0]
+      newCommand = history[0]
     } else {
-      newCommand = this.history[(currentCommandIndex + 1) % this.history.length]
+      newCommand = history[(currentCommandIndex + 1) % history.length]
     }
 
     return newCommand
@@ -110,7 +116,7 @@ export class CommandManager {
       newCommand = viableCommands[0]
     } else {
       newCommand =
-        viableCommands[(currentCommandIndex + 1) % this.history.length]
+        viableCommands[(currentCommandIndex + 1) % this.history.get().length]
     }
 
     return replaceCommandPlaceholders(newCommand.pattern)
@@ -123,12 +129,16 @@ export class CommandManager {
       if (inputs) {
         this.addHistory(input)
         const output: string = await command.callback(inputs)
-        this.outputs.push(output)
+        this.outputs.set([...this.outputs.get(), output.slice(0, 50)])
+        // only store last 50 outputs
         return
       }
     }
 
-    this.outputs.push(`command '${input}' not recognised`)
+    this.outputs.set([
+      ...this.outputs.get(),
+      `command '${input}' not recognised`
+    ])
   }
 }
 
@@ -165,19 +175,23 @@ export const buildCommandSuggestions = (cm: CommandManager) => {
     }
     commandListElement.appendChild(commandItem)
   })
+
+  setTimeout(() => {
+    commandListElement.scrollTop = 0
+  }, 0)
 }
 
 const buildCommandHistory = (cm: CommandManager) => {
   commandListElement.innerHTML = ''
   commandListHeadingElement.textContent = 'HISTORY'
-
-  if (cm.history.length === 0) {
+  const history = cm.history.get()
+  if (history.length === 0) {
     const commandItem = document.createElement('div')
     commandItem.classList.add('command-item')
     commandItem.textContent = 'no history'
     commandListElement.appendChild(commandItem)
   } else {
-    cm.history.forEach(command => {
+    history.forEach(command => {
       const commandItem = document.createElement('div')
       commandItem.classList.add('command-item')
       commandItem.textContent = command
@@ -188,25 +202,32 @@ const buildCommandHistory = (cm: CommandManager) => {
       commandListElement.appendChild(commandItem)
     })
   }
+  setTimeout(() => {
+    commandListElement.scrollTop = commandListElement.scrollHeight
+  }, 0)
 }
 
 const buildCommandOutput = (cm: CommandManager) => {
   commandListHeadingElement.textContent = 'OUTPUT'
   commandListElement.innerHTML = ''
-
-  if (cm.outputs.length === 0) {
+  const outputs = cm.outputs.get()
+  if (outputs.length === 0) {
     const commandItem = document.createElement('div')
     commandItem.classList.add('command-item')
     commandItem.textContent = 'no outputs'
     commandListElement.appendChild(commandItem)
   } else {
-    cm.outputs.forEach(command => {
+    outputs.forEach(command => {
       const commandItem = document.createElement('div')
       commandItem.classList.add('command-item')
       commandItem.textContent = command
       commandListElement.appendChild(commandItem)
     })
   }
+
+  setTimeout(() => {
+    commandListElement.scrollTop = commandListElement.scrollHeight
+  }, 0)
 }
 
 export const initCommandLineEventListeners = (cm: CommandManager) => {
@@ -274,7 +295,7 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
       }
 
       setTimeout(() => {
-        if (commandLineElement.value === '' && cm.outputs.length > 0) {
+        if (commandLineElement.value === '' && cm.outputs.get().length > 0) {
           buildCommandOutput(cm)
         } else if (!['ArrowUp', 'Tab', 'Enter'].includes(event.key)) {
           buildCommandSuggestions(cm)
@@ -289,7 +310,7 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
   commandLineElement.onfocus = () => {
     clearTimeout(commandLineExitTimeout)
 
-    if (commandLineElement.value === '' && cm.outputs.length > 0) {
+    if (commandLineElement.value === '' && cm.outputs.get().length > 0) {
       buildCommandOutput(cm)
     } else {
       buildCommandSuggestions(cm)

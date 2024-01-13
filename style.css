@@ -120,7 +120,7 @@ canvas {
   margin: 8px;
   padding-top: 8px;
 
-  max-height: max(64px, 25%);
+  max-height: max(128px, 30vh);
   overflow-y: auto;
   overflow-x: hidden;
 }

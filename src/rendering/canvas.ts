@@ -244,8 +244,8 @@ export class Canvas {
     this.ctx.fillRect(
       Math.floor(p.x),
       Math.floor(p.y),
-      Math.ceil(w * this.scale.get()),
-      Math.ceil(h * this.scale.get())
+      Math.floor(w * this.scale.get() + (p.x - Math.floor(p.x))),
+      Math.floor(h * this.scale.get() + (p.y - Math.floor(p.y)))
     )
   }
 
@@ -266,6 +266,8 @@ export class Canvas {
     // console.log(imageName, tileInfo)
     const q1 = this.calculateWorldToScreenPosition(x, y)
     const p = this.calculateAxisFlippedPosition(q1.x, q1.y + this.scale.get())
+
+    // console.log({ x: p.x - Math.floor(p.x) })
     this.ctx.drawImage(
       image,
       tileInfo.x,
@@ -274,8 +276,8 @@ export class Canvas {
       tileInfo.h,
       Math.floor(p.x),
       Math.floor(p.y),
-      Math.ceil(w * this.scale.get()),
-      Math.ceil(h * this.scale.get())
+      Math.floor(w * this.scale.get() + (p.x - Math.floor(p.x))),
+      Math.floor(h * this.scale.get() + (p.y - Math.floor(p.y)))
     )
   }
 
@@ -287,8 +289,8 @@ export class Canvas {
     const p2 = this.calculateAxisFlippedPosition(q2.x, q2.y)
 
     this.ctx.beginPath()
-    this.ctx.moveTo(Math.floor(p1.x), Math.ceil(p1.y))
-    this.ctx.lineTo(Math.floor(p2.x), Math.ceil(p2.y))
+    this.ctx.moveTo(Math.floor(p1.x), Math.floor(p1.y))
+    this.ctx.lineTo(Math.ceil(p2.x), Math.ceil(p2.y))
     this.ctx.stroke()
   }
 

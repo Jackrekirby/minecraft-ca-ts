@@ -75,7 +75,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Convert blocks to use prototypes to improve efficiency / performance
 - [ ] Add touch support
 - [ ] Add controller support
-- [ ] Split index.ts into more files
+- [x] Split index.ts into more files
 - [x] Support Full Screen Canvas
 - [x] Add basic command line (history, hints, output)
 - [ ] Add bitmap font rendering
@@ -84,4 +84,9 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] If updates are faster than the frame rate then do not render (do not wait to render before processing next step)
 - [x] Fix panning freeze / jitter
 - [x] Make number of allowed subticks unlimited (until all processed)
-- [x] improve user input so place and delete events are easy to distinguish (single vs double click)
+- [x] Improve user input so place and delete events are easy to distinguish (single vs double click)
+- [ ] Add failing state to block movement once subupdate block movement implemented
+- [ ] Overhaul game loop - render at any time, rendering and logic should not be in same loop
+- [ ] History only toggles between two and disappears on click
+- [ ] Overhaul command line - list grouping so they both disappear correctly
+- [ ] Fix overlapping textures by flooring and ceiling together/seperate?
