@@ -42,7 +42,7 @@ canvas {
   height: 100%;
 }
 
-#debug-wrapper {
+#debug-panel {
   position: absolute;
   top: 0;
   left: 0;
@@ -50,28 +50,14 @@ canvas {
   min-width: 256px;
   max-width: 512px;
   margin: 32px;
-}
 
-#debug-button {
-  outline: none;
-  outline: 1px solid white;
-  border: none;
-  width: 50%;
-  background-color: rgb(18, 91, 167, 0.5);
-  color: white;
-  padding: 8px;
-  margin: 8px;
-}
-
-#debug-panel {
   outline: none;
   outline: 1px solid rgb(255, 255, 255, 0.2);
   border: none;
-  width: 100%;
+
   background-color: rgb(18, 91, 167, 0.5);
   color: white;
   padding: 8px;
-  margin: 8px;
   color: white;
 }
 

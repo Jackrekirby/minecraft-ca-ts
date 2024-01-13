@@ -85,7 +85,8 @@ const debounce = (callback: () => void, delay: number): (() => void) => {
 const GLOBALS: StringDict<GlobalValue<any>> = {
   build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
   tick: createGlobalValue('TICK', 0),
-  subtick: createGlobalValue('SUBTICK', 0)
+  subtick: createGlobalValue('SUBTICK', 0),
+  selectedBlock: createGlobalValue('PICKED', createBlock(BlockType.Air, {}))
 }
 
 const debouncedUpdateDebugInfo = debounce(() => {
@@ -96,6 +97,8 @@ const setGlobal = (name: string, value: any) => {
   GLOBALS[name].set(value)
   debouncedUpdateDebugInfo()
 }
+
+setTimeout(() => (debugPanel.style.display = ''), 1000)
 
 const updateDebugInfo = () => {
   debugPanel.innerHTML = ''
@@ -226,6 +229,7 @@ const main = async () => {
   }
 
   let selectedBlockType: BlockType = BlockType.Air
+
   let previousSelectedBlockType: BlockType = BlockType.Air
   const placeBlock = () => {
     const p = canvas.getMouseWorldPosition()
@@ -253,11 +257,11 @@ const main = async () => {
         previousSelectedBlockType = selectedBlockType
       }
       selectedBlockType = block.type
+
+      setGlobal('selectedBlock', block.type)
     }
-    // console.log(p, pi, block)
   }
   addClickHandlerWithDragCheck(canvasElement, placeBlock)
-  // canvasElement.addEventListener('click')
 
   canvasElement.addEventListener('dblclick', function (e: MouseEvent) {
     e.preventDefault()
