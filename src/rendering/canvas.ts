@@ -1,6 +1,7 @@
 import { Dict2D } from '../containers/array2d'
 import { Vec2, vec2Add, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { TileInfo, tilemap } from '../images/tilemap'
+import { createState, StateHandler } from '../utils/general'
 
 function roundToNearestPowerOf2 (number: number): number {
   // Check if the number is already a power of 2
@@ -31,9 +32,9 @@ export class Canvas {
   imageGrid: Dict2D<string>
 
   // panning and scaling
-  scale: number
+  scale: StateHandler<number>
   scaleFactor: number
-  offset: Vec2
+  offset: StateHandler<Vec2>
   mouse: Vec2
 
   constructor (
@@ -52,9 +53,9 @@ export class Canvas {
     this.images = images
     this.imageGrid = new Dict2D<string>()
 
-    this.scale = scale
+    this.scale = createState(scale, 'canvas-scale')
     this.scaleFactor = scaleFactor
-    this.offset = offset
+    this.offset = createState(offset, 'canvas-offset')
     this.mouse = { x: 0, y: 0 }
 
     this.handlePanning()
@@ -69,16 +70,16 @@ export class Canvas {
   // world to canvas
   calculateWorldToScreenPosition = (x: number, y: number) => {
     return {
-      x: x * this.scale + this.offset.x,
-      y: y * this.scale + this.offset.y
+      x: x * this.scale.get() + this.offset.get().x,
+      y: y * this.scale.get() + this.offset.get().y
     }
   }
 
   // canvas to world
   calculateScreenToWorldPosition = (x: number, y: number) => {
     return {
-      x: (x - this.offset.x) / this.scale,
-      y: (y - this.offset.y) / this.scale
+      x: (x - this.offset.get().x) / this.scale.get(),
+      y: (y - this.offset.get().y) / this.scale.get()
     }
   }
 
@@ -91,15 +92,28 @@ export class Canvas {
       axisFlippedPos.x,
       axisFlippedPos.y
     )
+    console.log(this.mouse, worldPos)
     return worldPos
   }
 
   handlePanning = () => {
     const canvas = this.canvas
     let lastMouse: Vec2 = { x: 0, y: 0 }
+    let lastOffset: Vec2 = { x: 0, y: 0 }
     let isPanning: boolean = false
     let hasMetMinimumMovementThreshold = false
     let movementThreshold = 8
+
+    const checkMovementThreshold = (offset: Vec2) => {
+      if (hasMetMinimumMovementThreshold) return
+      if (
+        offset.x * offset.x + offset.y * offset.y >
+        movementThreshold * movementThreshold
+      ) {
+        lastMouse = this.mouse
+        hasMetMinimumMovementThreshold = true
+      }
+    }
 
     const handleMouseMove = (event: MouseEvent): void => {
       this.mouse = { x: event.offsetX, y: event.offsetY }
@@ -107,29 +121,29 @@ export class Canvas {
       if (isPanning) {
         const mouseOffset = vec2Subtract(this.mouse, lastMouse)
 
-        if (
-          Math.abs(mouseOffset.x) > movementThreshold ||
-          Math.abs(mouseOffset.y) > movementThreshold
-        ) {
-          hasMetMinimumMovementThreshold = true
-          lastMouse = this.mouse
-        } else if (hasMetMinimumMovementThreshold) {
-          lastMouse = this.mouse
-
-          this.offset = vec2Add(this.offset, {
-            x: mouseOffset.x,
-            y: -mouseOffset.y
-          })
+        if (hasMetMinimumMovementThreshold) {
+          this.offset.set(
+            vec2Add(lastOffset, {
+              x: mouseOffset.x,
+              y: -mouseOffset.y
+            })
+          )
           this.render()
         }
+        checkMovementThreshold(mouseOffset)
       } else {
         hasMetMinimumMovementThreshold = false
         lastMouse = this.mouse
+        lastOffset = this.offset.get()
       }
     }
 
     canvas.addEventListener('mousemove', handleMouseMove)
-    canvas.addEventListener('mousedown', () => (isPanning = true))
+    canvas.addEventListener('mousedown', () => {
+      isPanning = true
+      lastMouse = this.mouse
+      lastOffset = this.offset.get()
+    })
     canvas.addEventListener('mouseup', () => (isPanning = false))
     canvas.addEventListener('mouseleave', () => (isPanning = false))
   }
@@ -151,9 +165,9 @@ export class Canvas {
       )
 
       if (event.deltaY > 0) {
-        this.scale /= this.scaleFactor
+        this.scale.set(this.scale.get() / this.scaleFactor)
       } else if (event.deltaY < 0) {
-        this.scale *= this.scaleFactor
+        this.scale.set(this.scale.get() * this.scaleFactor)
       }
 
       const postScaleScreenOrigin = this.calculateWorldToScreenPosition(
@@ -166,7 +180,7 @@ export class Canvas {
         postScaleScreenOrigin
       )
 
-      this.offset = vec2Add(this.offset, scaleOffset)
+      this.offset.set(vec2Add(this.offset.get(), scaleOffset))
 
       this.render()
     }
@@ -193,10 +207,7 @@ export class Canvas {
     const bottomLeft = this.calculateScreenToWorldPosition(0, 0)
     let numCellsWide = topRight.x - bottomLeft.x
 
-    const gridSize = Math.max(
-      1,
-      Math.floor(roundToNearestPowerOf2(numCellsWide / 10))
-    )
+    const gridSize = this.getGridSize()
 
     const screenCellWidth = this.canvas.width / (numCellsWide / gridSize)
 
@@ -209,10 +220,23 @@ export class Canvas {
     this.ctx.fillText(text, p.x + 3, p.y - 4, screenCellWidth)
   }
 
+  private getGridSize () {
+    const targetCellSize = 64
+
+    const topRight = this.calculateWorldToScreenPosition(1, 1)
+    const bottomLeft = this.calculateWorldToScreenPosition(0, 0)
+    const blockSizePixels = topRight.x - bottomLeft.x
+
+    return Math.max(
+      1,
+      Math.floor(roundToNearestPowerOf2(targetCellSize / blockSizePixels))
+    )
+  }
+
   drawRect = (x: number, y: number, w: number, h: number) => {
     const q1 = this.calculateWorldToScreenPosition(x, y)
     const p = this.calculateAxisFlippedPosition(q1.x, q1.y)
-    this.ctx.fillRect(p.x, p.y, w * this.scale, h * this.scale)
+    this.ctx.fillRect(p.x, p.y, w * this.scale.get(), h * this.scale.get())
   }
 
   drawImage = (
@@ -231,7 +255,7 @@ export class Canvas {
     if (!image) return
     // console.log(imageName, tileInfo)
     const q1 = this.calculateWorldToScreenPosition(x, y)
-    const p = this.calculateAxisFlippedPosition(q1.x, q1.y + this.scale)
+    const p = this.calculateAxisFlippedPosition(q1.x, q1.y + this.scale.get())
     this.ctx.drawImage(
       image,
       tileInfo.x,
@@ -240,8 +264,8 @@ export class Canvas {
       tileInfo.h,
       Math.floor(p.x),
       Math.floor(p.y),
-      Math.floor(w * this.scale),
-      Math.floor(h * this.scale)
+      Math.floor(w * this.scale.get()),
+      Math.floor(h * this.scale.get())
     )
   }
 
@@ -264,13 +288,7 @@ export class Canvas {
       this.canvas.height
     )
     const bottomLeft = this.calculateScreenToWorldPosition(0, 0)
-
-    let numCellsWide = topRight.x - bottomLeft.x
-
-    let gridSize = Math.max(
-      1,
-      Math.floor(roundToNearestPowerOf2(numCellsWide / 10))
-    )
+    const gridSize = this.getGridSize()
 
     const setLineStyle = (z: number) => {
       const isMajorLine = z % (gridSize * 4) === 0
