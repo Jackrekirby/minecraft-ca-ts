@@ -1,4 +1,4 @@
-import { Vec2 } from './containers/vec2'
+import { Vec2 } from '../containers/vec2'
 
 export enum Direction {
   Up = 'Up',

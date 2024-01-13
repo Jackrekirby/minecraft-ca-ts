@@ -1,13 +1,13 @@
-import { Block, BlockContainer, isDirectionalBlock } from '../block'
 import { Air } from '../blocks/air'
 import { Vec2, vec2Add } from '../containers/vec2'
+import { Block, BlockContainer, isDirectionalBlock } from '../core/block'
 import {
   Direction,
   directionToVec2,
   getAllDirections,
   getOppositeDirection,
   getRelativeDirection
-} from '../direction'
+} from '../core/direction'
 
 export const getNeighbourBlock = (
   position: Vec2,

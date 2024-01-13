@@ -1,3 +1,4 @@
+import { Vec2 } from '../containers/vec2'
 import {
   Block,
   BlockContainer,
@@ -5,15 +6,14 @@ import {
   BlockType,
   MoveableBlock,
   Movement
-} from '../block'
-import { Vec2 } from '../containers/vec2'
-import { Direction } from '../direction'
+} from '../core/block'
+import { Direction } from '../core/direction'
 import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
   updateMovement
-} from '../moveable_block'
+} from '../core/moveable_block'
 import { addCreateBlockFunction } from '../utils/create_block'
 
 export class GlassBlock implements MoveableBlock {

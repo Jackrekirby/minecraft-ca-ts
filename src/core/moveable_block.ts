@@ -1,3 +1,12 @@
+import { Air } from '../blocks/air'
+import { Piston } from '../blocks/piston'
+import { PistonHead } from '../blocks/piston_head'
+import { Vec2 } from '../containers/vec2'
+import {
+  getNeighbourBlock,
+  getOppositeRelativeDirection
+} from '../utils/block_fetching'
+import { createBlock } from '../utils/create_block'
 import {
   Block,
   BlockContainer,
@@ -7,16 +16,7 @@ import {
   MoveableBlock,
   Movement
 } from './block'
-import { Air } from './blocks/air'
-import { Piston } from './blocks/piston'
-import { PistonHead } from './blocks/piston_head'
-import { Vec2 } from './containers/vec2'
 import { Direction, getAllDirections, getOppositeDirection } from './direction'
-import {
-  getNeighbourBlock,
-  getOppositeRelativeDirection
-} from './utils/block_fetching'
-import { createBlock } from './utils/create_block'
 
 export enum MovementUpdateType {
   StateChange = 'StateChange',

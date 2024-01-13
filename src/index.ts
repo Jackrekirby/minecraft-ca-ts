@@ -1,238 +1,36 @@
-import { Block, BlockContainer, BlockType } from './block'
 import { Air } from './blocks/air'
 import { GlassBlock } from './blocks/glass_block'
 import { Piston } from './blocks/piston'
-import { PistonHead } from './blocks/piston_head'
 import { RedstoneBlock } from './blocks/redstone_block'
 import { RedstoneLamp } from './blocks/redstone_lamp'
 import { RedstoneTorch } from './blocks/redstone_torch'
 import { ChunkContainer, Dict2D, StringDict } from './containers/array2d'
 import { Vec2, vec2Apply, vec2Subtract, vec2Zero } from './containers/vec2'
-import { Direction } from './direction'
-import { Canvas } from './rendering/canvas'
-import { loadImages } from './rendering/image_loader'
+import { Block, BlockContainer, BlockType } from './core/block'
 import {
   CommandManager,
   initCommandLineEventListeners
-} from './utils/command_line'
+} from './core/command_line'
+import { Direction } from './core/direction'
+import { Canvas } from './rendering/canvas'
+import { loadImages } from './rendering/image_loader'
 import { createBlock } from './utils/create_block'
-import { zipArrays } from './utils/general'
 
 // dom
 
-// const debugButton = document.getElementById('debug-button') as HTMLButtonElement
-
 const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
-
-// debugButton.onclick = () => {
-//   debugPanel.style.display = debugPanel.style.display == 'none' ? '' : 'none'
-// }
-
-const commandLine = document.getElementById('command-line') as HTMLInputElement
-const commandList = document.getElementById('command-list') as HTMLDivElement
-
-interface Command {
-  pattern: string
-  callback: (inputs: StringDict<string>) => void
-}
-
-const createCommand = (
-  pattern: string,
-  callback: (inputs: StringDict<string>) => void
-) => {
-  return { pattern, callback }
-}
-
-function replacePlaceholders (input: string) {
-  return input.replace(/\{[^}]+\}/g, '?')
-}
-
-const commands: Command[] = []
-const commandHistory: string[] = []
-
-function parseCommand (input: string) {
-  for (const command of commands) {
-    const commandParts = command.pattern.split(' ')
-    const inputParts = input.split(' ')
-
-    const findCommandAndGetInputs = () => {
-      const inputs: StringDict<string> = {}
-      for (const [commandPart, inputPart] of zipArrays(
-        commandParts,
-        inputParts
-      )) {
-        if (commandPart[0] != '{') {
-          if (commandPart !== inputPart) {
-            return null
-          }
-        } else {
-          const input_name = commandPart.split(':')[0].slice(1)
-          const input_value = inputPart
-          inputs[input_name] = input_value
-        }
-      }
-      return inputs
-    }
-
-    const inputs = findCommandAndGetInputs()
-    if (inputs) {
-      console.log(command, inputs)
-      const newCommandHistory = commandHistory.filter(item => item !== input)
-      commandHistory.length = 0
-      commandHistory.push(input)
-      commandHistory.push(...newCommandHistory)
-      console.log(commandHistory)
-      command.callback(inputs)
-    }
-  }
-}
-
-function buildCommandItems () {
-  commandList.innerHTML = ''
-
-  const viableCommands = commands.filter(command => {
-    if (commandLine.value !== '') {
-      const commandParts = command.pattern.split(' ')
-      const inputParts = commandLine.value.split(' ')
-
-      for (let i = 0; i < inputParts.length - 1; i++) {
-        const commandPart = commandParts[i]
-        const inputPart = inputParts[i]
-        if (commandPart[0] != '{') {
-          if (commandPart !== inputPart) {
-            return false
-          }
-        }
-      }
-
-      const commandPart = commandParts[inputParts.length - 1]
-      const inputPart = inputParts[inputParts.length - 1]
-      if (commandPart[0] != '{') {
-        if (!commandPart.startsWith(inputPart)) {
-          return false
-        }
-      }
-    }
-    return true
-  })
-
-  // console.log('buildCommandItems', commandLine.value, viableCommands)
-
-  viableCommands.forEach(command => {
-    const commandItem = document.createElement('div')
-    commandItem.classList.add('command-item')
-    commandItem.textContent = command.pattern
-    commandItem.onclick = () => {
-      commandLine.value = replacePlaceholders(command.pattern)
-      // commandList.style.display = 'none'
-      commandLine.focus()
-      // Set cursor position at the end of the string
-      const inputValueLength = commandLine.value.length
-      commandLine.setSelectionRange(inputValueLength, inputValueLength)
-    }
-    commandList.appendChild(commandItem)
-  })
-}
-
-function buildCommandHistory () {
-  commandList.innerHTML = ''
-
-  commandHistory.forEach(command => {
-    const commandItem = document.createElement('div')
-    commandItem.classList.add('command-item')
-    commandItem.textContent = command
-    commandItem.onclick = () => {
-      commandLine.value = command
-      // commandList.style.display = 'none'
-      commandLine.focus()
-      // Set cursor position at the end of the string
-      const inputValueLength = commandLine.value.length
-      commandLine.setSelectionRange(inputValueLength, inputValueLength)
-    }
-    commandList.appendChild(commandItem)
-  })
-}
-
-commandLine.addEventListener('keydown', event => {
-  if (event.key === 'Enter') {
-    const command = commandLine.value
-    if (command === '' || command === '/') {
-      commandList.style.display = 'none'
-      commandLine.blur()
-    }
-    parseCommand(command)
-    commandLine.value = ''
-  } else if (event.key === 'Tab') {
-    ;(commandList.children[0] as HTMLButtonElement).click()
-    event.preventDefault()
-  }
-
-  if (event.key === 'ArrowUp') {
-    setTimeout(buildCommandHistory, 0)
-    const newCommand = commandHistory.find(item => item !== commandLine.value)
-    commandLine.value = newCommand ?? ''
-    setTimeout(() => {
-      // Set cursor position at the end of the string
-      const inputValueLength = commandLine.value.length
-      commandLine.setSelectionRange(inputValueLength, inputValueLength)
-    }, 0)
-  } else {
-    setTimeout(buildCommandItems, 0)
-  }
-})
-
-let commandLineExitTimeout: NodeJS.Timeout
-
-commandLine.onfocus = () => {
-  clearTimeout(commandLineExitTimeout)
-  buildCommandItems()
-  commandList.style.display = ''
-}
-
-commandLine.onblur = () => {
-  commandLineExitTimeout = setTimeout(() => {
-    if (commandLine !== document.activeElement) {
-      console.log('blurring')
-      commandList.style.display = 'none'
-    }
-  }, 100)
-}
-
-const tickStepButton = document.getElementById(
-  'tickStepButton'
-) as HTMLButtonElement
-
-const subTickStepButton = document.getElementById(
-  'subTickStepButton'
-) as HTMLButtonElement
-
-const resetButton = document.getElementById('reset-button') as HTMLButtonElement
-
-const loadDemoButton = document.getElementById('load-demo') as HTMLButtonElement
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
 const resizeCanvas = () => {
   const context = canvasElement.getContext('2d')!
-  // Adjust the canvas resolution
   const pixelRatio = window.devicePixelRatio || 1
   console.log(pixelRatio)
   canvasElement.width = canvasElement.clientWidth * pixelRatio
   canvasElement.height = canvasElement.clientHeight * pixelRatio
-
-  // // Scale the context to match the new resolution
-  // context.scale(pixelRatio, pixelRatio)
-
-  // Set imageSmoothingEnabled to false
   context.imageSmoothingEnabled = false
 }
 resizeCanvas()
-
-document.addEventListener('keydown', event => {
-  if (event.key === '/') {
-    commandLine.focus()
-  }
-})
 
 let resizeTimeout: NodeJS.Timeout
 window.addEventListener('resize', () => {
@@ -242,47 +40,80 @@ window.addEventListener('resize', () => {
   }, 200)
 })
 
-const updatesPerSecondInput = document.getElementById(
-  'updatesPerSecondInput'
-) as HTMLInputElement
-
-const subUpdatesPerSecondInput = document.getElementById(
-  'subUpdatesPerSecondInput'
-) as HTMLInputElement
-
-const builtTimeElement = document.getElementById(
-  'built-time'
-) as HTMLInputElement
-
-const TickInfoElement = document.getElementById('tick-info') as HTMLInputElement
-
-builtTimeElement.textContent = `BUILD ${process.env.BUILD_TIME?.replace(
-  ',',
-  ''
-)}`
 // main
 
-const GLOBALS = {
-  subtick: 0,
-  tick: 0
+interface GlobalValue<T> {
+  set: (value: T) => void
+  get: () => T
+  display: () => string
 }
 
-const setTickInfo = () => {
-  TickInfoElement.textContent = `TICK: ${GLOBALS.tick} SUBTICK ${GLOBALS.subtick}`
+const createGlobalValue = <T>(name: string, initialValue: T) => {
+  let currentValue: T = initialValue
+  const set = (value: T) => {
+    currentValue = value
+  }
+  const get = () => {
+    return currentValue
+  }
+  const display = () => `${name}: ${currentValue}`
+
+  const state: GlobalValue<T> = { get, set, display }
+  return state
+}
+
+const debounce = (callback: () => void, delay: number): (() => void) => {
+  let timeoutId: NodeJS.Timeout
+  let isPending = false
+
+  return function () {
+    if (isPending) {
+      return
+    }
+
+    clearTimeout(timeoutId)
+
+    isPending = true
+
+    timeoutId = setTimeout(() => {
+      callback()
+      isPending = false
+    }, delay)
+  }
+}
+
+const GLOBALS: StringDict<GlobalValue<any>> = {
+  build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
+  tick: createGlobalValue('TICK', 0),
+  subtick: createGlobalValue('SUBTICK', 0)
+}
+
+const debouncedUpdateDebugInfo = debounce(() => {
+  updateDebugInfo()
+}, 500)
+
+const setGlobal = (name: string, value: any) => {
+  GLOBALS[name].set(value)
+  debouncedUpdateDebugInfo()
+}
+
+const updateDebugInfo = () => {
+  debugPanel.innerHTML = ''
+
+  Object.values(GLOBALS).forEach(globalValue => {
+    const item = document.createElement('div')
+    item.textContent = globalValue.display()
+
+    debugPanel.appendChild(item)
+  })
 }
 
 const logBlocks = (blocks: BlockContainer) => {
-  // const x = blocks
-  //   .map(block => block.toString())
-  //   .toDictionary(block => block !== new Air({}).toString())
-  // const y = blocks.toFormattedString(block => block.toString().padEnd(4))
-  // console.log(Object.keys(blocks.chunks))
   console.log(blocks)
 }
 
 const subUpdateBlocks = (blocks: BlockContainer) => {
-  GLOBALS.subtick = (GLOBALS.subtick + 1) % 16
-  setTickInfo()
+  setGlobal('subtick', (GLOBALS.subtick.get() + 1) % 16)
   const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
     block.subupdate(v, blocks)
   )
@@ -290,9 +121,7 @@ const subUpdateBlocks = (blocks: BlockContainer) => {
 }
 
 const updateBlocks = (blocks: BlockContainer) => {
-  // console.log('update')
-  GLOBALS.tick += 1
-  setTickInfo()
+  setGlobal('tick', GLOBALS.tick.get() + 1)
   const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) =>
     block.update(v, blocks)
   )
@@ -451,11 +280,6 @@ const main = async () => {
 
   // Updates Per Second
 
-  // updatesPerSecondInput.addEventListener('change', () => {
-  //   processUpdatesPerSecondInput()
-  //   localStorage.setItem('updatesPerSecond', updatesPerSecondInput.value)
-  // })
-
   const processUpdatesPerSecondInput = (value: string) => {
     const speed = Number(value)
     game.setUpdatesPerSecond(speed)
@@ -466,14 +290,6 @@ const main = async () => {
   // Sub-Updates Per Second
   const subUpdatesPerSecondValue =
     localStorage.getItem('subUpdatesPerSecond') ?? 1000
-  // if (subUpdatesPerSecondValue) {
-  //   subUpdatesPerSecondInput.value = subUpdatesPerSecondValue
-  // }
-
-  // subUpdatesPerSecondInput.addEventListener('change', () => {
-  //   setSubUpdatesPerSecond(Number(subUpdatesPerSecondInput.value))
-  //   localStorage.setItem('subUpdatesPerSecond', subUpdatesPerSecondInput.value)
-  // })
 
   let subUpdatesPerSecond: number = Number(subUpdatesPerSecondValue)
   let subUpdateTimeStep =
@@ -540,35 +356,6 @@ const main = async () => {
     requestAnimationFrame(runSubUpdate)
   })
 
-  // manual tick stepping
-
-  tickStepButton.onclick = () => {
-    updatesPerSecondInput.value = '0'
-    game.setUpdatesPerSecond(0)
-    game.allowTimeStep()
-  }
-
-  subTickStepButton.onclick = () => {
-    // console.log('canSubUpdate')
-    subUpdatesPerSecondInput.value = '0'
-    setSubUpdatesPerSecond(0)
-    canSubUpdate = true
-  }
-
-  // processUpdatesPerSecondInput()
-
-  resetButton.addEventListener('click', async () => {
-    console.log('reset')
-    blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
-    updateCanvas()
-  })
-
-  loadDemoButton.addEventListener('click', async () => {
-    console.log('load demo')
-    blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
-    updateCanvas()
-  })
-
   logBlocks(blocks)
   updateCanvas()
 
@@ -577,38 +364,54 @@ const main = async () => {
   const commandManager = new CommandManager()
 
   commandManager.createCommand('/load_world {name:string}', async input => {
-    console.log('loading world', input)
     blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     updateCanvas()
+    return `loaded world ${input.name}`
   })
   commandManager.createCommand('/clear_world', async () => {
     blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
     updateCanvas()
+    return `cleared world`
   })
-  commandManager.createCommand('/step tick', () => {
-    updatesPerSecondInput.value = '0'
+  commandManager.createCommand('/step tick', async () => {
+    // updatesPerSecondInput.value = '0'
     game.setUpdatesPerSecond(0)
     game.allowTimeStep()
+    return `stepped tick to ${GLOBALS.subtick.get()}`
   })
-  commandManager.createCommand('/step subtick', () => {
-    subUpdatesPerSecondInput.value = '0'
+  commandManager.createCommand('/step subtick', async () => {
+    // subUpdatesPerSecondInput.value = '0'
     setSubUpdatesPerSecond(0)
     canSubUpdate = true
-  })
-  commandManager.createCommand('/set updates_per_second {ups:float}', input => {
-    processUpdatesPerSecondInput(input.ups)
+    return `stepped subtick to ${GLOBALS.subtick.get()}`
   })
   commandManager.createCommand(
+    '/set updates per second {ups:float}',
+    async input => {
+      processUpdatesPerSecondInput(input.ups)
+      return `set updates per second ${input.ups}`
+    }
+  )
+  commandManager.createCommand(
     '/set subupdates_per_second {sups:float}',
-    input => {
+    async input => {
       const sups = Number(input.sups)
       if (!isNaN(sups)) {
         setSubUpdatesPerSecond(sups)
+        return `set subupdates per second ${sups}`
+      } else {
+        return `subupdates per second was not a number`
       }
     }
   )
-  commandManager.createCommand('/toggle debug_window', input => {
-    debugPanel.style.display = debugPanel.style.display == 'none' ? '' : 'none'
+  commandManager.createCommand('/toggle debug_window', async input => {
+    if (debugPanel.style.display == 'none') {
+      debugPanel.style.display = ''
+      return 'debug window displayed'
+    } else {
+      debugPanel.style.display = 'none'
+      return 'debug window hidden'
+    }
   })
 
   initCommandLineEventListeners(commandManager)
@@ -642,56 +445,6 @@ const loadWorldSave = async () => {
   } catch (error) {
     console.error('Error fetching JSON:', error)
   }
-}
-
-const buildWorld = (blocks: BlockContainer) => {
-  blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
-  blocks.setValue(
-    { x: 0, y: 1 },
-    new RedstoneTorch({ direction: Direction.Up })
-  )
-
-  blocks.setValue({ x: 0, y: 2 }, new RedstoneLamp({}))
-
-  blocks.setValue(
-    { x: 2, y: 5 },
-    new Piston({
-      isBeingPowered: true,
-      direction: Direction.Right
-    })
-  )
-  blocks.setValue(
-    { x: 3, y: 5 },
-    new PistonHead({ direction: Direction.Right })
-  )
-  blocks.setValue({ x: 4, y: 5 }, new GlassBlock({}))
-  blocks.setValue({ x: 5, y: 5 }, new GlassBlock({}))
-
-  blocks.setValue({ x: 1, y: 7 }, new RedstoneBlock({}))
-  blocks.setValue(
-    { x: 2, y: 7 },
-    new Piston({
-      isBeingPowered: false,
-      direction: Direction.Right
-    })
-  )
-  blocks.setValue({ x: 3, y: 7 }, new GlassBlock({}))
-  blocks.setValue({ x: 4, y: 7 }, new GlassBlock({}))
-  blocks.setValue({ x: 5, y: 7 }, new GlassBlock({}))
-
-  blocks.setValue({ x: 9, y: 3 }, new RedstoneBlock({}))
-  blocks.setValue(
-    { x: 8, y: 3 },
-    new Piston({
-      isBeingPowered: false,
-      direction: Direction.Left
-    })
-  )
-  blocks.setValue({ x: 7, y: 3 }, new GlassBlock({}))
-  blocks.setValue({ x: 6, y: 3 }, new RedstoneBlock({}))
-  blocks.setValue({ x: 5, y: 3 }, new GlassBlock({}))
-  blocks.setValue({ x: 4, y: 3 }, new RedstoneBlock({}))
-  blocks.setValue({ x: 3, y: 3 }, new GlassBlock({}))
 }
 
 class Game {

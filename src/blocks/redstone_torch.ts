@@ -1,12 +1,12 @@
+import { Vec2 } from '../containers/vec2'
 import {
   Block,
   BlockContainer,
   BlockMovement,
   BlockType,
   DirectionalBlock
-} from '../block'
-import { Vec2 } from '../containers/vec2'
-import { Direction, getOppositeDirection } from '../direction'
+} from '../core/block'
+import { Direction, getOppositeDirection } from '../core/direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 

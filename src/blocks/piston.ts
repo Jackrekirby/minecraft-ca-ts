@@ -1,3 +1,4 @@
+import { Vec2 } from '../containers/vec2'
 import {
   Block,
   BlockContainer,
@@ -8,20 +9,20 @@ import {
   isMoveableBlock,
   MoveableBlock,
   Movement
-} from '../block'
-import { Vec2 } from '../containers/vec2'
+} from '../core/block'
 import {
   Direction,
   getOppositeDirection,
   getOtherDirections,
   getRelativeDirection
-} from '../direction'
+} from '../core/direction'
 import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
   updateMovement
-} from '../moveable_block'
+} from '../core/moveable_block'
+
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { zipArrays } from '../utils/general'

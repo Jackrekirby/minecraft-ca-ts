@@ -1,4 +1,4 @@
-import { Block, BlockType } from '../block'
+import { Block, BlockType } from '../core/block'
 
 const createBlockFunctions: { [key: string]: new (state: object) => Block } = {}
 

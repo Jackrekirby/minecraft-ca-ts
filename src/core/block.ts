@@ -1,5 +1,5 @@
-import { ChunkContainer } from './containers/array2d'
-import { Vec2 } from './containers/vec2'
+import { ChunkContainer } from '../containers/array2d'
+import { Vec2 } from '../containers/vec2'
 import { Direction } from './direction'
 
 export type BlockContainer = ChunkContainer<Block>
