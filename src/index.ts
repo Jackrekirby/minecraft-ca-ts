@@ -108,8 +108,8 @@ const main = async () => {
         canSubUpdate = false
         const didSubUpdate = subUpdateBlocks(blocks)
 
-        if (subUpdateTimeStep === 0) {
-          // only update the canvas if we are viewing subupdates
+        if (subUpdateTimeStep > 50 || subUpdateTimeStep === 0) {
+          // only update the canvas if timestep > 50ms per frame (20fps)
           updateCanvas()
         }
         lastUpdateTime = currentTime - (deltaTime % subUpdateTimeStep)
@@ -193,6 +193,26 @@ const main = async () => {
       `substepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
     )
   })
+
+  document.addEventListener('keydown', event => {
+    if (event.key === 'z') {
+      game.setUpdatesPerSecond(0)
+      game.allowTimeStep()
+      subupdatesPerSecondState.set(0)
+      canSubUpdate = true
+    } else if (event.key === 'x') {
+      game.setUpdatesPerSecond(0)
+      game.allowTimeStep()
+      subupdatesPerSecondState.set(1000)
+      canSubUpdate = true
+    } else if (event.key === 'c') {
+      game.setUpdatesPerSecond(5)
+      game.allowTimeStep()
+      subupdatesPerSecondState.set(1000)
+      canSubUpdate = true
+    }
+  })
+
   commandManager.createCommand(
     '/set updates_per_second {ups:float}',
     async input => {

@@ -34,7 +34,10 @@ To open the command window click on it on the bottom left corner or press `/`
 
 ### Keys
 
-- Press `e` to log a block to the console.
+- Press `e` to log a block to the (browser) console.
+- Press `z` to step a subtick.
+- Press `x` to step a tick.
+- Press `c` to set the tick and subtick speed back to default.
 
 ## Task List
 

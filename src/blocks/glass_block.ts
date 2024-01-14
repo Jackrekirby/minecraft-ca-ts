@@ -12,7 +12,8 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
-  updateMovement
+  updateMovement,
+  updateSubMovement
 } from '../core/moveable_block'
 import { addCreateBlockFunction } from '../utils/create_block'
 
@@ -48,7 +49,18 @@ export class GlassBlock implements MoveableBlock {
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
-    return new GlassBlock(this)
+    const movementUpdateChange: MovementUpdateChange = updateSubMovement(
+      position,
+      blocks,
+      this.movement,
+      this.movementDirection
+    )
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new GlassBlock(movementUpdateChange.state)
+    }
   }
 
   public toString (): string {
@@ -72,9 +84,7 @@ export class GlassBlock implements MoveableBlock {
   }
 
   public getMovementMethod (): BlockMovement {
-    return this.movement === Movement.None
-      ? BlockMovement.Moveable
-      : BlockMovement.Immovable
+    return BlockMovement.Moveable
   }
 }
 

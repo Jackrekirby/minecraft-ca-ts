@@ -10,6 +10,7 @@ import { createBlock } from '../utils/create_block'
 import {
   Block,
   BlockContainer,
+  BlockMovement,
   BlockType,
   isBlock,
   isMoveableBlock,
@@ -48,6 +49,18 @@ export type MovementUpdateChange =
   | MovementUpdateBlockChange
 
 export const updateMovement = (
+  _position: Vec2,
+  _blocks: BlockContainer,
+  _movement: Movement,
+  movementDirection: Direction
+): MovementUpdateChange => {
+  return createStateChange({
+    movement: Movement.None,
+    movementDirection
+  })
+}
+
+export const updateSubMovement = (
   position: Vec2,
   blocks: BlockContainer,
   movement: Movement,
@@ -73,6 +86,7 @@ export const updateMovement = (
         })
       } else if (
         isMoveableBlock(neighbour) &&
+        neighbour.getMovementMethod() === BlockMovement.Moveable &&
         neighbour.movement === Movement.Pending &&
         neighbour.movementDirection === oppositeDirection
       ) {
@@ -109,6 +123,7 @@ export const updateMovement = (
 
     if (
       isMoveableBlock(frontNeighbour) &&
+      frontNeighbour.getMovementMethod() === BlockMovement.Moveable &&
       frontNeighbour.movement === Movement.Complete &&
       frontNeighbour.movementDirection === movementDirection
     ) {
@@ -141,6 +156,16 @@ export const updateMovement = (
     }
   } else if (movement === Movement.RetractionPending) {
     return createBlockChange(new Air())
+  } else if (movement === Movement.Complete) {
+    return createStateChange({
+      movement: Movement.Complete,
+      movementDirection
+    })
+  } else if (movement === Movement.RetractionComplete) {
+    return createStateChange({
+      movement: Movement.RetractionComplete,
+      movementDirection
+    })
   }
 
   return createStateChange({

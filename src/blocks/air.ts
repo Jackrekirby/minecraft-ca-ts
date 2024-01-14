@@ -19,7 +19,7 @@ export class Air implements Block {
 
   constructor ({}: {} = {}) {}
 
-  public update (position: Vec2, blocks: BlockContainer): Block {
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
       const oppositeDirection = getOppositeDirection(direction)
@@ -34,6 +34,7 @@ export class Air implements Block {
         // TODO: check if instance of movable block
         // TODO: add movement direction
         isMoveableBlock(neighbour) &&
+        neighbour.getMovementMethod() === BlockMovement.Moveable &&
         neighbour.movementDirection === oppositeDirection &&
         neighbour.movement === Movement.Pending
       ) {
@@ -48,7 +49,7 @@ export class Air implements Block {
     return new Air()
   }
 
-  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+  public update (position: Vec2, blocks: BlockContainer): Block {
     return new Air(this)
   }
 

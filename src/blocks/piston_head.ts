@@ -31,7 +31,7 @@ export class PistonHead implements DirectionalBlock {
     this.direction = direction
   }
 
-  public update (position: Vec2, blocks: BlockContainer): Block {
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
     const backBlock: Block = getNeighbourBlock(position, blocks, Direction.Down)
     const frontBlock: Block = getNeighbourBlock(position, blocks, Direction.Up)
 
@@ -39,6 +39,7 @@ export class PistonHead implements DirectionalBlock {
       if (
         this.isRetracting &&
         isMoveableBlock(frontBlock) &&
+        frontBlock.getMovementMethod() === BlockMovement.Moveable &&
         frontBlock.movement === Movement.RetractionPending &&
         frontBlock.movementDirection === this.direction
       ) {
@@ -50,6 +51,7 @@ export class PistonHead implements DirectionalBlock {
       } else if (
         this.isRetracting &&
         isMoveableBlock(frontBlock) &&
+        frontBlock.getMovementMethod() === BlockMovement.Moveable &&
         frontBlock.movement === Movement.Pending &&
         frontBlock.movementDirection === getOppositeDirection(this.direction)
       ) {
@@ -76,7 +78,7 @@ export class PistonHead implements DirectionalBlock {
     }
   }
 
-  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+  public update (position: Vec2, blocks: BlockContainer): Block {
     return new PistonHead(this)
   }
 

@@ -24,7 +24,7 @@ export class RedstoneTorch implements DirectionalBlock {
     this.direction = direction
   }
 
-  public subupdate (position: Vec2, blocks: BlockContainer): Block {
+  public update (position: Vec2, blocks: BlockContainer): Block {
     const backBlock: Block = getNeighbourBlock(position, blocks, Direction.Down)
 
     const isBeingPowered = backBlock.isOutputtingPower(this.direction)
@@ -32,7 +32,7 @@ export class RedstoneTorch implements DirectionalBlock {
     return new RedstoneTorch({ isBeingPowered, direction: this.direction })
   }
 
-  public update (position: Vec2, blocks: BlockContainer): Block {
+  public subupdate (position: Vec2, blocks: BlockContainer): Block {
     return new RedstoneTorch(this)
   }
 

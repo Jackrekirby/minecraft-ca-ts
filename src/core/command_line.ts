@@ -277,7 +277,7 @@ const buildCommandOutput = (cm: CommandManager) => {
   commandListHeadingElement.textContent = 'OUTPUT'
   commandListElement.innerHTML = ''
   const outputs = cm.getVisibleOutputs()
-  console.log(outputs)
+
   if (outputs.length === 0) {
     // const commandItem = document.createElement('div')
     // commandItem.classList.add('command-item')
@@ -308,6 +308,7 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
         ['', '/'].includes(commandLineElement.value)
       ) {
         event.preventDefault()
+        commandLineElement.value = '/'
       }
 
       focusEndOfCommandLine()
@@ -317,6 +318,10 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
   let hintItemIndex = 0
 
   const selectCommandListItem = (doClick: boolean = true) => {
+    if (commandListElement.children.length === 0) {
+      return
+    }
+
     if (
       hintItemIndex < 0 ||
       hintItemIndex >= commandListElement.children.length
@@ -410,9 +415,9 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
         ) {
           buildCommandSuggestions(cm)
 
-          setTimeout(() => {
-            selectCommandListItem(false)
-          }, 0)
+          // setTimeout(() => {
+          //   selectCommandListItem(false)
+          // }, 0)
         }
       }, 0)
     }

@@ -17,7 +17,8 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
-  updateMovement
+  updateMovement,
+  updateSubMovement
 } from '../core/moveable_block'
 
 import { getNeighbourBlock } from '../utils/block_fetching'
@@ -76,7 +77,21 @@ export class RedstoneLamp implements MoveableBlock {
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
-    return new RedstoneLamp(this)
+    const movementUpdateChange: MovementUpdateChange = updateSubMovement(
+      position,
+      blocks,
+      this.movement,
+      this.movementDirection
+    )
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new RedstoneLamp({
+        ...movementUpdateChange.state,
+        isBeingPowered: this.isBeingPowered
+      })
+    }
   }
 
   public toString (): string {

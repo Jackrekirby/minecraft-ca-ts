@@ -12,7 +12,8 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
-  updateMovement
+  updateMovement,
+  updateSubMovement
 } from '../core/moveable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -49,7 +50,18 @@ export class RedstoneBlock implements MoveableBlock {
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
-    return new RedstoneBlock(this)
+    const movementUpdateChange: MovementUpdateChange = updateSubMovement(
+      position,
+      blocks,
+      this.movement,
+      this.movementDirection
+    )
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new RedstoneBlock(movementUpdateChange.state)
+    }
   }
 
   public toString (): string {

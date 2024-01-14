@@ -6,7 +6,6 @@ import {
   BlockType,
   DirectionalBlock,
   isBlock,
-  isMoveableBlock,
   MoveableBlock,
   Movement
 } from '../core/block'
@@ -20,7 +19,8 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
-  updateMovement
+  updateMovement,
+  updateSubMovement
 } from '../core/moveable_block'
 
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
@@ -31,22 +31,26 @@ import { PistonHead } from './piston_head'
 export class Piston implements DirectionalBlock, MoveableBlock {
   type: BlockType = BlockType.Piston
   isBeingPowered: boolean
+  isExtended: boolean
   direction: Direction
   movement: Movement
   movementDirection: Direction
 
   constructor ({
     isBeingPowered = false,
+    isExtended = false,
     direction = Direction.Up,
     movement = Movement.None,
     movementDirection = Direction.Up
   }: {
     isBeingPowered?: boolean
+    isExtended?: boolean
     direction?: Direction
     movement?: Movement
     movementDirection?: Direction
   } = {}) {
     this.isBeingPowered = isBeingPowered
+    this.isExtended = isExtended
     this.direction = direction
     this.movement = movement
     this.movementDirection = movementDirection
@@ -91,16 +95,54 @@ export class Piston implements DirectionalBlock, MoveableBlock {
           )
       )
 
+      const frontBlock: Block = getNeighbourBlock(
+        position,
+        blocks,
+        Direction.Up
+      )
+      const isExtended =
+        isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
+        frontBlock.direction === this.direction
+
       return new Piston({
         ...movementUpdateChange.state,
         isBeingPowered,
+        isExtended,
         direction: this.direction
       })
     }
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
-    return new Piston(this)
+    let movementUpdateChange: MovementUpdateChange
+
+    if (this.isExtended) {
+      movementUpdateChange = {
+        type: MovementUpdateType.StateChange,
+        state: {
+          movement: this.movement,
+          movementDirection: this.movementDirection
+        }
+      }
+    } else {
+      movementUpdateChange = updateSubMovement(
+        position,
+        blocks,
+        this.movement,
+        this.movementDirection
+      )
+    }
+
+    if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
+      return movementUpdateChange.block
+    } else {
+      return new Piston({
+        ...movementUpdateChange.state,
+        isBeingPowered: this.isBeingPowered,
+        isExtended: this.isExtended,
+        direction: this.direction
+      })
+    }
   }
 
   public toString (): string {
@@ -112,12 +154,14 @@ export class Piston implements DirectionalBlock, MoveableBlock {
     const isExtended =
       isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
       frontBlock.direction === this.direction
-    const isPowered =
-      this.isBeingPowered ||
-      (this.movement === Movement.None &&
-        isMoveableBlock(frontBlock) &&
-        frontBlock.movement === Movement.Pending &&
-        frontBlock.movementDirection === this.direction)
+    const isPowered = this.isBeingPowered
+    // previously block had to look powered while extending to know it could
+    // not be moved
+    // (this.movement === Movement.None &&
+    //   isMoveableBlock(frontBlock) &&
+    //   frontBlock.getMovementMethod() === BlockMovement.Moveable &&
+    //   frontBlock.movement === Movement.Pending &&
+    //   frontBlock.movementDirection === this.direction)
     const tex =
       `piston${
         isExtended ? '_extended' : isPowered ? '_on' : '_off'
@@ -131,9 +175,7 @@ export class Piston implements DirectionalBlock, MoveableBlock {
   }
 
   public getMovementMethod (): BlockMovement {
-    return this.isBeingPowered
-      ? BlockMovement.Immovable
-      : BlockMovement.Moveable
+    return this.isExtended ? BlockMovement.Immovable : BlockMovement.Moveable
   }
 }
 
