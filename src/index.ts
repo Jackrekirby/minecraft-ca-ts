@@ -2,8 +2,11 @@ import { Dict2D } from './containers/array2d'
 import { Vec2, vec2Zero } from './containers/vec2'
 import { Block, BlockContainer, BlockType } from './core/block'
 import {
+  commandFailure,
+  commandInfo,
   commandLineVisibilityState,
   CommandManager,
+  commandSuccess,
   initCommandLineEventListeners
 } from './core/command_line'
 import { debugPanelState, updateDebugInfo } from './core/debug_panel'
@@ -158,7 +161,7 @@ const main = async () => {
   updateCanvas()
 
   initBlockEventListeners(canvas, blocks, updateCanvas, setGlobal)
-  initCanvasResizeListener()
+  initCanvasResizeListener(updateCanvas)
 
   // load commands
 
@@ -167,12 +170,12 @@ const main = async () => {
   commandManager.createCommand('/world load {name:string}', async input => {
     blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     updateCanvas()
-    return `loaded world ${input.name}`
+    return commandSuccess(`loaded world ${input.name}`)
   })
   commandManager.createCommand('/world clear', async () => {
     blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
     updateCanvas()
-    return `cleared world`
+    return commandSuccess(`cleared world`)
   })
   commandManager.createCommand('/step tick', async () => {
     // updatesPerSecondInput.value = '0'
@@ -180,7 +183,9 @@ const main = async () => {
     game.allowTimeStep()
     setSubUpdatesPerSecond(1000)
     canSubUpdate = true
-    return `stepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
+    return commandSuccess(
+      `stepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
+    )
   })
   commandManager.createCommand('/step subtick', async () => {
     // subUpdatesPerSecondInput.value = '0'
@@ -188,13 +193,15 @@ const main = async () => {
     game.allowTimeStep()
     setSubUpdatesPerSecond(0)
     canSubUpdate = true
-    return `substepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
+    return commandSuccess(
+      `substepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
+    )
   })
   commandManager.createCommand(
     '/set updates_per_second {ups:float}',
     async input => {
       processUpdatesPerSecondInput(input.ups)
-      return `set updates per second ${input.ups}`
+      return commandSuccess(`set updates per second ${input.ups}`)
     }
   )
   commandManager.createCommand(
@@ -203,9 +210,9 @@ const main = async () => {
       const sups = Number(input.sups)
       if (!isNaN(sups)) {
         setSubUpdatesPerSecond(sups)
-        return `set subupdates per second ${sups}`
+        return commandSuccess(`set subupdates per second ${sups}`)
       } else {
-        return `subupdates per second was not a number`
+        return commandFailure(`subupdates per second was not a number`)
       }
     }
   )
@@ -213,10 +220,10 @@ const main = async () => {
   commandManager.createCommand('/toggle debug_window', async input => {
     if (debugPanelState.get()) {
       debugPanelState.set(false)
-      return 'debug window hidden'
+      return commandSuccess('debug window hidden')
     } else {
       debugPanelState.set(true)
-      return 'debug window revealed'
+      return commandSuccess('debug window revealed')
     }
   })
 
@@ -225,25 +232,43 @@ const main = async () => {
     async input => {
       if (commandLineVisibilityState.get()) {
         commandLineVisibilityState.set(false)
-        return 'command line hidden'
+        return commandSuccess('command line hidden')
       } else {
         commandLineVisibilityState.set(true)
-        return 'command line revealed'
+        return commandSuccess('command line revealed')
       }
     }
   )
 
+  commandManager.createCommand(
+    '/toggle output_command_success',
+    async input => {
+      if (commandManager.outputSuccessMessages.get()) {
+        commandManager.outputSuccessMessages.set(false)
+        return commandSuccess('command success messages hidden')
+      } else {
+        commandManager.outputSuccessMessages.set(true)
+        return commandSuccess('command success messages revealed')
+      }
+    }
+  )
+
+  commandManager.createCommand('/clear command_output', async input => {
+    commandManager.outputs.set([])
+    return commandSuccess('cleared command output history')
+  })
+
   commandManager.createCommand('/block list', async _ => {
     const blockList = (Object.values(BlockType) as String[]).join(', ')
-    return `blocks: ${blockList}`
+    return commandInfo(`blocks: ${blockList}`)
   })
 
   commandManager.createCommand('/block pick {type:string}', async input => {
     if (isEnum<BlockType>(input.type as BlockType, Object.values(BlockType))) {
       setGlobal('selectedBlock', input.type)
-      return `picked block '${input.type}'`
+      return commandSuccess(`picked block '${input.type}'`)
     } else {
-      return `cannot pick invalid block '${input.type}'`
+      return commandFailure(`cannot pick invalid block '${input.type}'`)
     }
   })
 

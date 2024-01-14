@@ -88,5 +88,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add failing state to block movement once subupdate block movement implemented
 - [ ] Overhaul game loop - render at any time, rendering and logic should not be in same loop
 - [ ] History only toggles between two and disappears on click
-- [ ] Overhaul command line - list grouping so they both disappear correctly
-- [ ] Fix overlapping textures by flooring and ceiling together/seperate?
+- [ ] Overhaul command line html/css - list grouping so they both disappear correctly
+- [x] Fix overlapping textures by flooring and ceiling together/seperate?
+- [x] Add hide command output command
+- [ ] Add commands for hiding fields in debug panel
+- [ ] Put ups and sups in state management

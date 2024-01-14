@@ -13,9 +13,51 @@ const commandListHeadingElement = document.getElementById(
   'command-list-heading'
 ) as HTMLDivElement
 
+enum CommandOutputType {
+  Success = 'Success',
+  Failure = 'Failure',
+  Info = 'Info'
+}
+export interface CommandOutput {
+  type: CommandOutputType
+  message: string
+}
+
+function mapCommandOutputToEmoji (outputType: CommandOutputType): string {
+  switch (outputType) {
+    case CommandOutputType.Success:
+      return '🟢'
+    case CommandOutputType.Failure:
+      return '🔴'
+    case CommandOutputType.Info:
+      return '🔵'
+  }
+}
+
 export interface Command {
   pattern: string
-  callback: (inputs: StringDict) => Promise<string>
+  callback: (inputs: StringDict) => Promise<CommandOutput>
+}
+
+export const commandInfo = (message: string) => {
+  return {
+    type: CommandOutputType.Info,
+    message
+  }
+}
+
+export const commandSuccess = (message: string) => {
+  return {
+    type: CommandOutputType.Success,
+    message
+  }
+}
+
+export const commandFailure = (message: string) => {
+  return {
+    type: CommandOutputType.Failure,
+    message
+  }
 }
 
 type StringDict = { [key: string]: string }
@@ -26,14 +68,19 @@ export class CommandManager {
     [] as string[],
     'command-history'
   )
-  public outputs: StateHandler<string[]> = createState(
-    [] as string[],
+  public outputs: StateHandler<CommandOutput[]> = createState(
+    [] as CommandOutput[],
     'command-outputs'
+  )
+
+  public outputSuccessMessages: StateHandler<boolean> = createState(
+    true,
+    'output-command-success-messages'
   )
 
   public createCommand (
     pattern: string,
-    callback: (inputs: StringDict) => Promise<string>
+    callback: (inputs: StringDict) => Promise<CommandOutput>
   ) {
     this.commands.push({ pattern, callback })
   }
@@ -63,6 +110,15 @@ export class CommandManager {
     return inputs
   }
 
+  public getVisibleOutputs () {
+    return [...this.outputs.get()].reverse().filter(command => {
+      return !(
+        command.type === CommandOutputType.Success &&
+        !this.outputSuccessMessages.get()
+      )
+    })
+  }
+
   public isCommandPartialMatch (input: string, command: string) {
     if (input === '') return true
     const commandParts = command.split(' ')
@@ -86,18 +142,16 @@ export class CommandManager {
     return true
   }
 
-  public getNextHistoryItem (input: string): string {
+  public getNextHistoryIndex (input: string): number {
     const history = this.history.get()
-    if (history.length === 0) return ''
+    if (history.length === 0) return 0
     const currentCommandIndex = history.findIndex(item => item === input)
     let newCommand: string
-    if (currentCommandIndex > 0) {
-      newCommand = history[0]
+    if (currentCommandIndex < 0) {
+      return 0
     } else {
-      newCommand = history[(currentCommandIndex + 1) % history.length]
+      return (currentCommandIndex + 1) % history.length
     }
-
-    return newCommand
   }
 
   public getNextHintItem (input: string): string {
@@ -122,23 +176,25 @@ export class CommandManager {
     return replaceCommandPlaceholders(newCommand.pattern)
   }
 
+  private addOutput (output: CommandOutput) {
+    // only store last 50 outputs
+    this.outputs.set([output, ...this.outputs.get().slice(0, 50)])
+  }
+
   public async ifCommandExecute (input: string) {
     for (const command of this.commands) {
       const inputs = this.ifCommandGetInputs(input, command.pattern)
       // console.log({ inputs, input, cmd: command.pattern })
       if (inputs) {
         this.addHistory(input)
-        const output: string = await command.callback(inputs)
-        this.outputs.set([...this.outputs.get(), output.slice(0, 50)])
-        // only store last 50 outputs
+        const output: CommandOutput = await command.callback(inputs)
+        this.addOutput(output)
+
         return
       }
     }
 
-    this.outputs.set([
-      ...this.outputs.get(),
-      `command '${input}' not recognised`
-    ])
+    this.addOutput(commandFailure(`command '${input}' not recognised`))
   }
 }
 
@@ -152,6 +208,14 @@ const focusEndOfCommandLine = () => {
   // Set cursor position at the end of the string
   const inputValueLength = commandLineElement.value.length
   commandLineElement.setSelectionRange(inputValueLength, inputValueLength)
+}
+
+const hideCommandListWrapperIfEmpty = () => {
+  if (commandListElement.childElementCount === 0) {
+    commandListWrapperElement.style.display = 'none'
+  } else {
+    commandListWrapperElement.style.display = ''
+  }
 }
 
 export const buildCommandSuggestions = (cm: CommandManager) => {
@@ -177,6 +241,7 @@ export const buildCommandSuggestions = (cm: CommandManager) => {
   })
 
   setTimeout(() => {
+    hideCommandListWrapperIfEmpty()
     commandListElement.scrollTop = 0
   }, 0)
 }
@@ -186,12 +251,12 @@ const buildCommandHistory = (cm: CommandManager) => {
   commandListHeadingElement.textContent = 'HISTORY'
   const history = cm.history.get()
   if (history.length === 0) {
-    const commandItem = document.createElement('div')
-    commandItem.classList.add('command-item')
-    commandItem.textContent = 'no history'
-    commandListElement.appendChild(commandItem)
+    // const commandItem = document.createElement('div')
+    // commandItem.classList.add('command-item')
+    // commandItem.textContent = 'no history'
+    // commandListElement.appendChild(commandItem)
   } else {
-    history.forEach(command => {
+    ;[...history].reverse().forEach(command => {
       const commandItem = document.createElement('div')
       commandItem.classList.add('command-item')
       commandItem.textContent = command
@@ -203,6 +268,7 @@ const buildCommandHistory = (cm: CommandManager) => {
     })
   }
   setTimeout(() => {
+    hideCommandListWrapperIfEmpty()
     commandListElement.scrollTop = commandListElement.scrollHeight
   }, 0)
 }
@@ -210,22 +276,26 @@ const buildCommandHistory = (cm: CommandManager) => {
 const buildCommandOutput = (cm: CommandManager) => {
   commandListHeadingElement.textContent = 'OUTPUT'
   commandListElement.innerHTML = ''
-  const outputs = cm.outputs.get()
+  const outputs = cm.getVisibleOutputs()
+  console.log(outputs)
   if (outputs.length === 0) {
-    const commandItem = document.createElement('div')
-    commandItem.classList.add('command-item')
-    commandItem.textContent = 'no outputs'
-    commandListElement.appendChild(commandItem)
+    // const commandItem = document.createElement('div')
+    // commandItem.classList.add('command-item')
+    // commandItem.textContent = 'no outputs'
+    // commandListElement.appendChild(commandItem)
   } else {
     outputs.forEach(command => {
       const commandItem = document.createElement('div')
       commandItem.classList.add('command-item')
-      commandItem.textContent = command
+      commandItem.textContent = `${mapCommandOutputToEmoji(command.type)} ${
+        command.message
+      }`
       commandListElement.appendChild(commandItem)
     })
   }
 
   setTimeout(() => {
+    hideCommandListWrapperIfEmpty()
     commandListElement.scrollTop = commandListElement.scrollHeight
   }, 0)
 }
@@ -246,6 +316,48 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
 
   let hintItemIndex = 0
 
+  const selectCommandListItem = (doClick: boolean = true) => {
+    if (
+      hintItemIndex < 0 ||
+      hintItemIndex >= commandListElement.children.length
+    ) {
+      hintItemIndex = 0
+    }
+
+    const selectedCommandItem = commandListElement.children[
+      hintItemIndex % commandListElement.children.length
+    ] as HTMLButtonElement
+
+    Array.from(commandListElement.children).forEach(item =>
+      item.classList.remove('selected')
+    )
+    selectedCommandItem.classList.add('selected')
+    if (doClick) selectedCommandItem.click()
+    selectedCommandItem.scrollIntoView()
+    return selectedCommandItem
+  }
+
+  const nextCommandListItem = (offset: number, isAbs: boolean) => {
+    if (isAbs) {
+      hintItemIndex += offset
+    } else if (commandListHeadingElement.textContent === 'HISTORY') {
+      hintItemIndex -= offset
+    } else {
+      hintItemIndex += offset
+    }
+
+    if (hintItemIndex < 0) {
+      hintItemIndex = commandListElement.children.length - 1
+    } else if (hintItemIndex >= commandListElement.children.length) {
+      hintItemIndex = 0
+    }
+
+    console.log(hintItemIndex, commandListElement.children.length)
+
+    selectCommandListItem()
+    setTimeout(() => focusEndOfCommandLine(), 0)
+  }
+
   commandLineElement.addEventListener(
     'keydown',
     async (event: KeyboardEvent) => {
@@ -261,44 +373,46 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
 
         commandLineElement.value = ''
       } else if (event.key === 'Tab') {
-        // on tab select the first suggested command
-        // TODO add tabbing through all options not just first
+        nextCommandListItem(1, false)
 
-        // commandLineElement.value = cm.getNextHintItem(commandBeforeTab)
-
-        const firstCommandItem = commandListElement.children[
-          hintItemIndex % commandListElement.children.length
-        ] as HTMLButtonElement
-
-        Array.from(commandListElement.children).forEach(item =>
-          item.classList.remove('selected')
-        )
-        firstCommandItem.classList.add('selected')
-
-        hintItemIndex += 1
-
-        firstCommandItem.click()
         event.preventDefault()
       } else if (event.key === 'ArrowUp') {
-        // on arrow up switch through commandHistory
-        commandLineElement.value = cm.getNextHistoryItem(
-          commandLineElement.value
-        )
-        setTimeout(() => {
-          buildCommandHistory(cm)
-          focusEndOfCommandLine()
-        }, 0)
+        if (
+          [''].includes(commandLineElement.value) &&
+          commandListHeadingElement.textContent !== 'HISTORY'
+        ) {
+          commandLineElement.value = cm.history.get()[0]
+          setTimeout(() => {
+            buildCommandHistory(cm)
+            focusEndOfCommandLine()
+            hintItemIndex = commandListElement.children.length - 1
+            selectCommandListItem()
+          }, 0)
+        } else {
+          nextCommandListItem(-1, true)
+        }
+      } else if (event.key === 'ArrowDown') {
+        nextCommandListItem(1, true)
+      } else if (event.key === 'Tab' && event.shiftKey) {
+        nextCommandListItem(-1, false)
+        event.preventDefault()
       }
 
-      if (event.key !== 'Tab') {
-        hintItemIndex = 0
+      if (!['ArrowUp', 'Tab', 'ArrowDown'].includes(event.key)) {
+        hintItemIndex = -1
       }
 
       setTimeout(() => {
         if (commandLineElement.value === '' && cm.outputs.get().length > 0) {
           buildCommandOutput(cm)
-        } else if (!['ArrowUp', 'Tab', 'Enter'].includes(event.key)) {
+        } else if (
+          !['ArrowUp', 'Tab', 'Enter', 'ArrowDown'].includes(event.key)
+        ) {
           buildCommandSuggestions(cm)
+
+          setTimeout(() => {
+            selectCommandListItem(false)
+          }, 0)
         }
       }, 0)
     }

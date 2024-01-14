@@ -9,13 +9,14 @@ import { GLOBALS } from './globals'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
-export const initCanvasResizeListener = () => {
+export const initCanvasResizeListener = (updateCanvas: () => void) => {
   const resizeCanvas = () => {
     const context = canvasElement.getContext('2d')!
     const pixelRatio = window.devicePixelRatio || 1
     canvasElement.width = canvasElement.clientWidth * pixelRatio
     canvasElement.height = canvasElement.clientHeight * pixelRatio
     context.imageSmoothingEnabled = false
+    updateCanvas()
   }
 
   let resizeTimeout: NodeJS.Timeout
