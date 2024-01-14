@@ -19,7 +19,7 @@ import {
 import { loadChunksFromStorage } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
-import { areObjectsEqual, debounce, isEnum } from './utils/general'
+import { areObjectsEqual, createState, debounce, isEnum } from './utils/general'
 
 // dom
 
@@ -91,29 +91,10 @@ const main = async () => {
     canvas.render()
   }
 
-  const processUpdatesPerSecondInput = (value: string) => {
-    const speed = Number(value)
-    game.setUpdatesPerSecond(speed)
-  }
-
-  const updatesPerSecondValue = localStorage.getItem('updatesPerSecond') ?? 5
-
-  // Sub-Updates Per Second
-  const subUpdatesPerSecondValue =
-    localStorage.getItem('subUpdatesPerSecond') ?? 1000
-
-  let subUpdatesPerSecond: number = Number(subUpdatesPerSecondValue)
-  let subUpdateTimeStep =
-    subUpdatesPerSecond > 0 ? 1000 / subUpdatesPerSecond : 0
+  let subUpdateTimeStep = 0
   let canSubUpdate = true
 
-  const setSubUpdatesPerSecond = (x: number) => {
-    subUpdatesPerSecond = Number(x)
-    subUpdateTimeStep = subUpdatesPerSecond > 0 ? 1000 / subUpdatesPerSecond : 0
-    localStorage.setItem('subUpdatesPerSecond', String(x))
-  }
-
-  const game = new Game(Number(updatesPerSecondValue), () => {
+  const game = new Game(0, () => {
     let lastUpdateTime = 0
     let subtick = 0
 
@@ -157,6 +138,22 @@ const main = async () => {
     requestAnimationFrame(runSubUpdate)
   })
 
+  const updatesPerSecondState = createState<number>(
+    5,
+    'updates-per-second',
+    (ups: number) => {
+      game.setUpdatesPerSecond(ups)
+    }
+  )
+
+  const subupdatesPerSecondState = createState<number>(
+    1000,
+    'subupdates-per-second',
+    (sups: number) => {
+      subUpdateTimeStep = sups > 0 ? 1000 / sups : 0
+    }
+  )
+
   logBlocks(blocks)
   updateCanvas()
 
@@ -178,20 +175,19 @@ const main = async () => {
     return commandSuccess(`cleared world`)
   })
   commandManager.createCommand('/step tick', async () => {
-    // updatesPerSecondInput.value = '0'
     game.setUpdatesPerSecond(0)
     game.allowTimeStep()
-    setSubUpdatesPerSecond(1000)
+
+    subupdatesPerSecondState.set(1000)
     canSubUpdate = true
     return commandSuccess(
       `stepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
     )
   })
   commandManager.createCommand('/step subtick', async () => {
-    // subUpdatesPerSecondInput.value = '0'
     game.setUpdatesPerSecond(0)
     game.allowTimeStep()
-    setSubUpdatesPerSecond(0)
+    subupdatesPerSecondState.set(0)
     canSubUpdate = true
     return commandSuccess(
       `substepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
@@ -200,7 +196,7 @@ const main = async () => {
   commandManager.createCommand(
     '/set updates_per_second {ups:float}',
     async input => {
-      processUpdatesPerSecondInput(input.ups)
+      updatesPerSecondState.set(Number(input.ups))
       return commandSuccess(`set updates per second ${input.ups}`)
     }
   )
@@ -209,7 +205,7 @@ const main = async () => {
     async input => {
       const sups = Number(input.sups)
       if (!isNaN(sups)) {
-        setSubUpdatesPerSecond(sups)
+        subupdatesPerSecondState.set(sups)
         return commandSuccess(`set subupdates per second ${sups}`)
       } else {
         return commandFailure(`subupdates per second was not a number`)

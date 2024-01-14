@@ -56,7 +56,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Make saveable state (to file so users can try them out)
 - [x] Test pistons pushing and facing eachother (they replicate infinitely!!!)
 - [x] Make blocks classes so they can use prototypes
-- [-] Add subticks
+- [x] Add subticks
 - [x] Add chunk system (infinite world)
 - [ ] Add moveable pistons
 - [ ] Make rendering block more efficient (chunking?)
@@ -87,9 +87,10 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Improve user input so place and delete events are easy to distinguish (single vs double click)
 - [ ] Add failing state to block movement once subupdate block movement implemented
 - [ ] Overhaul game loop - render at any time, rendering and logic should not be in same loop
-- [ ] History only toggles between two and disappears on click
+- [ ] Overhaul local storage save system (should not be saving multiple times per second)
+- [x] History only toggles between two
 - [ ] Overhaul command line html/css - list grouping so they both disappear correctly
 - [x] Fix overlapping textures by flooring and ceiling together/seperate?
 - [x] Add hide command output command
 - [ ] Add commands for hiding fields in debug panel
-- [ ] Put ups and sups in state management
+- [x] Put ups and sups in state management
