@@ -3,6 +3,7 @@ import { GlassBlock } from '../blocks/glass_block'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
+import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
 import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
@@ -35,6 +36,8 @@ const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 6, y: 0 }, new Piston({}))
 
   blocks.setValue({ x: 8, y: 0 }, new GlassBlock({}))
+
+  blocks.setValue({ x: 10, y: 0 }, new RedstoneRepeater({}))
 }
 
 export const loadChunksFromStorage = async (

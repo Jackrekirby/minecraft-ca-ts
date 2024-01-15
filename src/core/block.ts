@@ -17,7 +17,8 @@ export enum BlockType {
   Piston = 'Piston',
   PistonHead = 'PistonHead',
   GlassBlock = 'GlassBlock',
-  RedstoneLamp = 'RedstoneLamp'
+  RedstoneLamp = 'RedstoneLamp',
+  RedstoneRepeater = 'RedstoneRepeater'
 }
 
 export interface Block {

@@ -99,6 +99,26 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   }
 }
 
+const createRepeaterTextureNames = () => {
+  const texs: string[] = []
+  for (let i = 4; i > 0; i--) {
+    for (let j = 0; j <= i; j++) {
+      texs.push(`redstone_repeater_on_${i - j}_off_${j}`)
+      if (i - j > 0 && j > 0) {
+        texs.push(`redstone_repeater_on_${i - j}_off_${j}_powered`)
+      }
+    }
+  }
+  return texs
+}
+
+createRepeaterTextureNames().map(name => {
+  imageConfigs[name] = {
+    isDirectional: true,
+    isMoveable: false
+  }
+})
+
 enum RotationDirection {
   Up = 'up',
   Right = 'right',

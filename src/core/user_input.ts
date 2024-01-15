@@ -1,9 +1,10 @@
 import { Air } from '../blocks/air'
+import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { Vec2, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
-import { BlockContainer, BlockType } from './block'
+import { BlockContainer, BlockType, isBlock } from './block'
 import { Direction } from './direction'
 import { GLOBALS } from './globals'
 
@@ -61,6 +62,28 @@ export const initBlockEventListeners = (
     } else {
       console.log('selected block', block.type)
       setGlobal('selectedBlock', block.type)
+
+      if (isBlock<RedstoneRepeater>(block, BlockType.RedstoneRepeater)) {
+        let ticksOn = block.ticksOn,
+          ticksOff = block.ticksOff
+
+        if (block.isPowered) {
+          ticksOn = ((ticksOn + ticksOff) % 4) + 1
+          ticksOff = 0
+        } else {
+          ticksOff = ((ticksOn + ticksOff) % 4) + 1
+          ticksOn = 0
+        }
+
+        const newBlock = createBlock(GLOBALS.selectedBlock.get(), {
+          ...block,
+          ticksOn,
+          ticksOff
+        })
+        blocks.setValue(pi, newBlock)
+        blocks.setValue(pi, newBlock.update(pi, blocks))
+        updateCanvas()
+      }
     }
   }
 

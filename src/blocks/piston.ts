@@ -166,7 +166,7 @@ export class Piston implements DirectionalBlock, MoveableBlock {
       `piston${
         isExtended ? '_extended' : isPowered ? '_on' : '_off'
       }_${this.direction.toLowerCase()}` +
-      (isPowered || isExtended ? '' : getMovementTextureName(this))
+      (isExtended ? '' : getMovementTextureName(this))
     return tex
   }
 
