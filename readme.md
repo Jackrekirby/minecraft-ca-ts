@@ -31,6 +31,7 @@ To open the command window click on it on the bottom left corner or press `/`
 
 - `Left click` will place a block if the location is air, otherwise it will pick the block.
 - `Right click` will delete a block.
+- `Ctrl left click` will cycle the delay of a redstone repeater.
 
 ### Keys
 
@@ -46,7 +47,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Make texture atlas generator
 - [x] Add pistons, redstone block, moveable block
 - [x] Add redstone torch
-- [x] Make `isOutputtingPower` directional
+- [x] Make isOutputtingPower directional
 - [x] Make placement directional
 - [x] Convert all create block function to take state input
 - [x] World loading from local storage
@@ -97,3 +98,12 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add hide command output command
 - [ ] Add commands for hiding fields in debug panel
 - [x] Put ups and sups in state management
+- [x] Fix zoom of browser breaks panning/zooming
+- [x] Add powerable block type
+- [x] Fix repeater never turning on after being powered if power duration less than repeater delay
+- [ ] Add 1 tick sticky piston spit out block
+- [ ] Add non-sticky pistons
+- [ ] Add redstone dust
+- [ ] Fix pixel shifting when texture changes when zoomed out
+- [ ] Fix blocks like lamps should have their state ready when movement complete
+- [ ] Fix command history/hint on click makes command line disappear before execution
