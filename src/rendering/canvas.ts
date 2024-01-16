@@ -116,7 +116,11 @@ export class Canvas {
     }
 
     const handleMouseMove = (event: MouseEvent): void => {
-      this.mouse = { x: event.offsetX, y: event.offsetY }
+      const pixelRatio = window.devicePixelRatio || 1
+      this.mouse = {
+        x: event.offsetX * pixelRatio,
+        y: event.offsetY * pixelRatio
+      }
 
       if (isPanning) {
         const mouseOffset = vec2Subtract(this.mouse, lastMouse)

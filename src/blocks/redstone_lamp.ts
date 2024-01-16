@@ -7,11 +7,7 @@ import {
   MoveableBlock,
   Movement
 } from '../core/block'
-import {
-  Direction,
-  getAllDirections,
-  getOppositeDirection
-} from '../core/direction'
+import { Direction } from '../core/direction'
 
 import {
   getMovementTextureName,
@@ -20,31 +16,41 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
+import {
+  BinaryPower,
+  IsPoweredBlock,
+  OutputPowerBlock
+} from '../core/powerable_block'
 
-import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 
-export class RedstoneLamp implements MoveableBlock {
+export class RedstoneLamp
+  implements MoveableBlock, OutputPowerBlock.Traits, IsPoweredBlock.Traits {
   type: BlockType = BlockType.RedstoneLamp
-  isBeingPowered: boolean
   movement: Movement
   movementDirection: Direction
+  outputPower: BinaryPower
+  isPowered: boolean
 
   constructor ({
-    isBeingPowered = false,
     movement = Movement.None,
-    movementDirection = Direction.Up
+    movementDirection = Direction.Up,
+    outputPower = BinaryPower.None,
+    isPowered = false
   }: {
-    isBeingPowered?: boolean
     movement?: Movement
     movementDirection?: Direction
+    outputPower?: BinaryPower
+    isPowered?: boolean
   } = {}) {
-    this.isBeingPowered = isBeingPowered
     this.movement = movement
     this.movementDirection = movementDirection
+    this.outputPower = outputPower
+    this.isPowered = isPowered
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
+    let newState = { ...this }
     const movementUpdateChange: MovementUpdateChange = updateMovement(
       position,
       blocks,
@@ -55,28 +61,16 @@ export class RedstoneLamp implements MoveableBlock {
     if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
       return movementUpdateChange.block
     } else {
-      for (const direction of getAllDirections()) {
-        const neighbour: Block = getNeighbourBlock(position, blocks, direction)
+      Object.assign(newState, movementUpdateChange.state)
+      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
 
-        const isBeingPowered = neighbour.isOutputtingPower(
-          getOppositeDirection(direction)
-        )
-
-        if (isBeingPowered) {
-          return new RedstoneLamp({
-            ...movementUpdateChange.state,
-            isBeingPowered: true
-          })
-        }
-      }
-      return new RedstoneLamp({
-        ...movementUpdateChange.state,
-        isBeingPowered: false
-      })
+      return new RedstoneLamp(newState)
     }
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    let newState = { ...this }
     const movementUpdateChange: MovementUpdateChange = updateSubMovement(
       position,
       blocks,
@@ -87,10 +81,8 @@ export class RedstoneLamp implements MoveableBlock {
     if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
       return movementUpdateChange.block
     } else {
-      return new RedstoneLamp({
-        ...movementUpdateChange.state,
-        isBeingPowered: this.isBeingPowered
-      })
+      Object.assign(newState, movementUpdateChange.state)
+      return new RedstoneLamp(newState)
     }
   }
 
@@ -100,13 +92,13 @@ export class RedstoneLamp implements MoveableBlock {
 
   public getTextureName (): string {
     return (
-      `redstone_lamp_${this.isBeingPowered ? 'on' : 'off'}` +
+      `redstone_lamp_${this.isPowered ? 'on' : 'off'}` +
       getMovementTextureName(this)
     )
   }
 
   public isOutputtingPower (): boolean {
-    return false
+    return this.outputPower !== BinaryPower.None
   }
 
   public getMovementMethod (): BlockMovement {

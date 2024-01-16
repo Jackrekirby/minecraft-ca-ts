@@ -90,7 +90,7 @@ export const areObjectsEqual = (
   return true
 }
 
-type ClickCallback = () => void
+type ClickCallback = (event: MouseEvent) => void
 
 export const addClickHandlerWithDragCheck = (
   element: HTMLElement,
@@ -136,7 +136,7 @@ export const addClickHandlerWithDragCheck = (
 
       if (!isDragging) {
         // Invoke the callback for a regular click
-        clickCallback()
+        clickCallback(event)
       }
     }
 

@@ -16,6 +16,7 @@ export const initCanvasResizeListener = (updateCanvas: () => void) => {
     const pixelRatio = window.devicePixelRatio || 1
     canvasElement.width = canvasElement.clientWidth * pixelRatio
     canvasElement.height = canvasElement.clientHeight * pixelRatio
+
     context.imageSmoothingEnabled = false
     updateCanvas()
   }
@@ -37,7 +38,7 @@ export const initBlockEventListeners = (
   updateCanvas: () => void,
   setGlobal: (name: string, value: any) => void
 ) => {
-  const placeBlock = () => {
+  const placeBlock = (event: MouseEvent) => {
     console.log('place block')
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
@@ -61,9 +62,13 @@ export const initBlockEventListeners = (
       updateCanvas()
     } else {
       console.log('selected block', block.type)
-      setGlobal('selectedBlock', block.type)
 
-      if (isBlock<RedstoneRepeater>(block, BlockType.RedstoneRepeater)) {
+      if (
+        // TODO add interaction() to each block type
+        // OR on update check if any mouse events have been called on you
+        event.ctrlKey &&
+        isBlock<RedstoneRepeater>(block, BlockType.RedstoneRepeater)
+      ) {
         let ticksOn = block.ticksOn,
           ticksOff = block.ticksOff
 
@@ -75,7 +80,7 @@ export const initBlockEventListeners = (
           ticksOn = 0
         }
 
-        const newBlock = createBlock(GLOBALS.selectedBlock.get(), {
+        const newBlock = createBlock(block.type, {
           ...block,
           ticksOn,
           ticksOff
@@ -83,6 +88,8 @@ export const initBlockEventListeners = (
         blocks.setValue(pi, newBlock)
         blocks.setValue(pi, newBlock.update(pi, blocks))
         updateCanvas()
+      } else {
+        setGlobal('selectedBlock', block.type)
       }
     }
   }

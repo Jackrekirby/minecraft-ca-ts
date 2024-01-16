@@ -15,13 +15,15 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
+import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 
-export class RedstoneBlock implements MoveableBlock {
+export class RedstoneBlock implements MoveableBlock, OutputPowerBlock.Traits {
   type: BlockType = BlockType.RedstoneBlock
   movement: Movement
   movementDirection: Direction
+  outputPower: BinaryPower = BinaryPower.Strong
 
   constructor ({
     movement = Movement.None,

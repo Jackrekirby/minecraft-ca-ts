@@ -73,12 +73,15 @@ export class RedstoneRepeater implements DirectionalBlock {
       }
     } else {
       // increment cooldown
-      if (isBeingPowered && this.ticksOff > 0) {
-        ticksOn += 1
-        ticksOff -= 1
-      } else if (!isBeingPowered && this.ticksOn > 0) {
+      if (isPowered && !isBeingPowered && this.ticksOn > 0) {
         ticksOn -= 1
         ticksOff += 1
+      } else if (!isPowered && this.ticksOn > 0) {
+        ticksOn += 1
+        ticksOff -= 1
+      } else if (isBeingPowered && this.ticksOff > 0) {
+        ticksOn += 1
+        ticksOff -= 1
       }
 
       // change isPowered if cooldown reached
