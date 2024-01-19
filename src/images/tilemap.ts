@@ -8,1442 +8,2978 @@
 
       export const tilemap: { [key: string]: TileInfo } = {
   "glass": {
-    "x": 0,
-    "y": 0,
+    "x": 1,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_complete_down": {
-    "x": 16,
-    "y": 0,
+    "x": 35,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_complete_left": {
-    "x": 32,
-    "y": 0,
+    "x": 69,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_complete_right": {
-    "x": 48,
-    "y": 0,
+    "x": 103,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_complete_up": {
-    "x": 64,
-    "y": 0,
+    "x": 137,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_pending_down": {
-    "x": 80,
-    "y": 0,
+    "x": 171,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_pending_left": {
-    "x": 96,
-    "y": 0,
+    "x": 205,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_pending_right": {
-    "x": 112,
-    "y": 0,
+    "x": 239,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_extension_pending_up": {
-    "x": 128,
-    "y": 0,
+    "x": 273,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_complete_down": {
-    "x": 144,
-    "y": 0,
+    "x": 307,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_complete_left": {
-    "x": 160,
-    "y": 0,
+    "x": 341,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_complete_right": {
-    "x": 176,
-    "y": 0,
+    "x": 375,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_complete_up": {
-    "x": 192,
-    "y": 0,
+    "x": 409,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_pending_down": {
-    "x": 208,
-    "y": 0,
+    "x": 443,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_pending_left": {
-    "x": 224,
-    "y": 0,
+    "x": 477,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_pending_right": {
-    "x": 240,
-    "y": 0,
+    "x": 511,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "glass_retraction_pending_up": {
-    "x": 0,
-    "y": 16,
+    "x": 545,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_extended_down": {
-    "x": 16,
-    "y": 16,
+    "x": 579,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_extended_left": {
-    "x": 32,
-    "y": 16,
+    "x": 613,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_extended_right": {
-    "x": 48,
-    "y": 16,
+    "x": 647,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_extended_up": {
-    "x": 64,
-    "y": 16,
+    "x": 681,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_head_down": {
-    "x": 80,
-    "y": 16,
+    "x": 715,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_head_left": {
-    "x": 96,
-    "y": 16,
+    "x": 749,
+    "y": 1,
     "w": 16,
     "h": 16
   },
   "piston_head_retracting_down": {
-    "x": 112,
-    "y": 16,
+    "x": 1,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_head_retracting_left": {
-    "x": 128,
-    "y": 16,
+    "x": 35,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_head_retracting_right": {
-    "x": 144,
-    "y": 16,
+    "x": 69,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_head_retracting_up": {
-    "x": 160,
-    "y": 16,
+    "x": 103,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_head_right": {
-    "x": 176,
-    "y": 16,
+    "x": 137,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_head_up": {
-    "x": 192,
-    "y": 16,
+    "x": 171,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down": {
-    "x": 208,
-    "y": 16,
+    "x": 205,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_complete_down": {
-    "x": 224,
-    "y": 16,
+    "x": 239,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_complete_left": {
-    "x": 240,
-    "y": 16,
+    "x": 273,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_complete_right": {
-    "x": 0,
-    "y": 32,
+    "x": 307,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_complete_up": {
-    "x": 16,
-    "y": 32,
+    "x": 341,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_pending_down": {
-    "x": 32,
-    "y": 32,
+    "x": 375,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_pending_left": {
-    "x": 48,
-    "y": 32,
+    "x": 409,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_pending_right": {
-    "x": 64,
-    "y": 32,
+    "x": 443,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_extension_pending_up": {
-    "x": 80,
-    "y": 32,
+    "x": 477,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_complete_down": {
-    "x": 96,
-    "y": 32,
+    "x": 511,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_complete_left": {
-    "x": 112,
-    "y": 32,
+    "x": 545,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_complete_right": {
-    "x": 128,
-    "y": 32,
+    "x": 579,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_complete_up": {
-    "x": 144,
-    "y": 32,
+    "x": 613,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_pending_down": {
-    "x": 160,
-    "y": 32,
+    "x": 647,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_pending_left": {
-    "x": 176,
-    "y": 32,
+    "x": 681,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_pending_right": {
-    "x": 192,
-    "y": 32,
+    "x": 715,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_down_retraction_pending_up": {
-    "x": 208,
-    "y": 32,
+    "x": 749,
+    "y": 35,
     "w": 16,
     "h": 16
   },
   "piston_off_left": {
-    "x": 224,
-    "y": 32,
+    "x": 1,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_complete_down": {
-    "x": 240,
-    "y": 32,
+    "x": 35,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_complete_left": {
-    "x": 0,
-    "y": 48,
+    "x": 69,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_complete_right": {
-    "x": 16,
-    "y": 48,
+    "x": 103,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_complete_up": {
-    "x": 32,
-    "y": 48,
+    "x": 137,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_pending_down": {
-    "x": 48,
-    "y": 48,
+    "x": 171,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_pending_left": {
-    "x": 64,
-    "y": 48,
+    "x": 205,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_pending_right": {
-    "x": 80,
-    "y": 48,
+    "x": 239,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_extension_pending_up": {
-    "x": 96,
-    "y": 48,
+    "x": 273,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_complete_down": {
-    "x": 112,
-    "y": 48,
+    "x": 307,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_complete_left": {
-    "x": 128,
-    "y": 48,
+    "x": 341,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_complete_right": {
-    "x": 144,
-    "y": 48,
+    "x": 375,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_complete_up": {
-    "x": 160,
-    "y": 48,
+    "x": 409,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_pending_down": {
-    "x": 176,
-    "y": 48,
+    "x": 443,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_pending_left": {
-    "x": 192,
-    "y": 48,
+    "x": 477,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_pending_right": {
-    "x": 208,
-    "y": 48,
+    "x": 511,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_left_retraction_pending_up": {
-    "x": 224,
-    "y": 48,
+    "x": 545,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right": {
-    "x": 240,
-    "y": 48,
+    "x": 579,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_complete_down": {
-    "x": 0,
-    "y": 64,
+    "x": 613,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_complete_left": {
-    "x": 16,
-    "y": 64,
+    "x": 647,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_complete_right": {
-    "x": 32,
-    "y": 64,
+    "x": 681,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_complete_up": {
-    "x": 48,
-    "y": 64,
+    "x": 715,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_pending_down": {
-    "x": 64,
-    "y": 64,
+    "x": 749,
+    "y": 69,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_pending_left": {
-    "x": 80,
-    "y": 64,
+    "x": 1,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_pending_right": {
-    "x": 96,
-    "y": 64,
+    "x": 35,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_extension_pending_up": {
-    "x": 112,
-    "y": 64,
+    "x": 69,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_complete_down": {
-    "x": 128,
-    "y": 64,
+    "x": 103,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_complete_left": {
-    "x": 144,
-    "y": 64,
+    "x": 137,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_complete_right": {
-    "x": 160,
-    "y": 64,
+    "x": 171,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_complete_up": {
-    "x": 176,
-    "y": 64,
+    "x": 205,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_pending_down": {
-    "x": 192,
-    "y": 64,
+    "x": 239,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_pending_left": {
-    "x": 208,
-    "y": 64,
+    "x": 273,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_pending_right": {
-    "x": 224,
-    "y": 64,
+    "x": 307,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_right_retraction_pending_up": {
-    "x": 240,
-    "y": 64,
+    "x": 341,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up": {
-    "x": 0,
-    "y": 80,
+    "x": 375,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_complete_down": {
-    "x": 16,
-    "y": 80,
+    "x": 409,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_complete_left": {
-    "x": 32,
-    "y": 80,
+    "x": 443,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_complete_right": {
-    "x": 48,
-    "y": 80,
+    "x": 477,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_complete_up": {
-    "x": 64,
-    "y": 80,
+    "x": 511,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_pending_down": {
-    "x": 80,
-    "y": 80,
+    "x": 545,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_pending_left": {
-    "x": 96,
-    "y": 80,
+    "x": 579,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_pending_right": {
-    "x": 112,
-    "y": 80,
+    "x": 613,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_extension_pending_up": {
-    "x": 128,
-    "y": 80,
+    "x": 647,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_complete_down": {
-    "x": 144,
-    "y": 80,
+    "x": 681,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_complete_left": {
-    "x": 160,
-    "y": 80,
+    "x": 715,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_complete_right": {
-    "x": 176,
-    "y": 80,
+    "x": 749,
+    "y": 103,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_complete_up": {
-    "x": 192,
-    "y": 80,
+    "x": 1,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_pending_down": {
-    "x": 208,
-    "y": 80,
+    "x": 35,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_pending_left": {
-    "x": 224,
-    "y": 80,
+    "x": 69,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_pending_right": {
-    "x": 240,
-    "y": 80,
+    "x": 103,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_off_up_retraction_pending_up": {
-    "x": 0,
-    "y": 96,
+    "x": 137,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_on_down": {
-    "x": 16,
-    "y": 96,
+    "x": 171,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_on_left": {
-    "x": 32,
-    "y": 96,
+    "x": 205,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_on_right": {
-    "x": 48,
-    "y": 96,
+    "x": 239,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "piston_on_up": {
-    "x": 64,
-    "y": 96,
+    "x": 273,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block": {
-    "x": 80,
-    "y": 96,
+    "x": 307,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_complete_down": {
-    "x": 96,
-    "y": 96,
+    "x": 341,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_complete_left": {
-    "x": 112,
-    "y": 96,
+    "x": 375,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_complete_right": {
-    "x": 128,
-    "y": 96,
+    "x": 409,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_complete_up": {
-    "x": 144,
-    "y": 96,
+    "x": 443,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_pending_down": {
-    "x": 160,
-    "y": 96,
+    "x": 477,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_pending_left": {
-    "x": 176,
-    "y": 96,
+    "x": 511,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_pending_right": {
-    "x": 192,
-    "y": 96,
+    "x": 545,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_extension_pending_up": {
-    "x": 208,
-    "y": 96,
+    "x": 579,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_complete_down": {
-    "x": 224,
-    "y": 96,
+    "x": 613,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_complete_left": {
-    "x": 240,
-    "y": 96,
+    "x": 647,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_complete_right": {
-    "x": 0,
-    "y": 112,
+    "x": 681,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_complete_up": {
-    "x": 16,
-    "y": 112,
+    "x": 715,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_pending_down": {
-    "x": 32,
-    "y": 112,
+    "x": 749,
+    "y": 137,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_pending_left": {
-    "x": 48,
-    "y": 112,
+    "x": 1,
+    "y": 171,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_pending_right": {
-    "x": 64,
-    "y": 112,
+    "x": 35,
+    "y": 171,
     "w": 16,
     "h": 16
   },
   "redstone_block_retraction_pending_up": {
-    "x": 80,
-    "y": 112,
+    "x": 69,
+    "y": 171,
     "w": 16,
     "h": 16
   },
+  "redstone_dust_0": {
+    "x": 103,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_1": {
+    "x": 137,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_10": {
+    "x": 171,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_11": {
+    "x": 205,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_12": {
+    "x": 239,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_13": {
+    "x": 273,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_14": {
+    "x": 307,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_15": {
+    "x": 341,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_2": {
+    "x": 375,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_3": {
+    "x": 409,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_4": {
+    "x": 443,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_5": {
+    "x": 477,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_6": {
+    "x": 511,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_7": {
+    "x": 545,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_8": {
+    "x": 579,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_9": {
+    "x": 613,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_0": {
+    "x": 647,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_1": {
+    "x": 681,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_10": {
+    "x": 715,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_11": {
+    "x": 749,
+    "y": 171,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_12": {
+    "x": 1,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_13": {
+    "x": 35,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_14": {
+    "x": 69,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_15": {
+    "x": 103,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_2": {
+    "x": 137,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_3": {
+    "x": 171,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_4": {
+    "x": 205,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_5": {
+    "x": 239,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_6": {
+    "x": 273,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_7": {
+    "x": 307,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_8": {
+    "x": 341,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_9": {
+    "x": 375,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_0": {
+    "x": 409,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_1": {
+    "x": 443,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_10": {
+    "x": 477,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_11": {
+    "x": 511,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_12": {
+    "x": 545,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_13": {
+    "x": 579,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_14": {
+    "x": 613,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_15": {
+    "x": 647,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_2": {
+    "x": 681,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_3": {
+    "x": 715,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_4": {
+    "x": 749,
+    "y": 205,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_5": {
+    "x": 1,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_6": {
+    "x": 35,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_7": {
+    "x": 69,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_8": {
+    "x": 103,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_9": {
+    "x": 137,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_0": {
+    "x": 171,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_1": {
+    "x": 205,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_10": {
+    "x": 239,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_11": {
+    "x": 273,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_12": {
+    "x": 307,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_13": {
+    "x": 341,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_14": {
+    "x": 375,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_15": {
+    "x": 409,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_2": {
+    "x": 443,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_3": {
+    "x": 477,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_4": {
+    "x": 511,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_5": {
+    "x": 545,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_6": {
+    "x": 579,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_7": {
+    "x": 613,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_8": {
+    "x": 647,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_left_right_9": {
+    "x": 681,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_0": {
+    "x": 715,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_1": {
+    "x": 749,
+    "y": 239,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_10": {
+    "x": 1,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_11": {
+    "x": 35,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_12": {
+    "x": 69,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_13": {
+    "x": 103,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_14": {
+    "x": 137,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_15": {
+    "x": 171,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_2": {
+    "x": 205,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_3": {
+    "x": 239,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_4": {
+    "x": 273,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_5": {
+    "x": 307,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_6": {
+    "x": 341,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_7": {
+    "x": 375,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_8": {
+    "x": 409,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_down_right_9": {
+    "x": 443,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_0": {
+    "x": 477,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_1": {
+    "x": 511,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_10": {
+    "x": 545,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_11": {
+    "x": 579,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_12": {
+    "x": 613,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_13": {
+    "x": 647,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_14": {
+    "x": 681,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_15": {
+    "x": 715,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_2": {
+    "x": 749,
+    "y": 273,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_3": {
+    "x": 1,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_4": {
+    "x": 35,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_5": {
+    "x": 69,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_6": {
+    "x": 103,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_7": {
+    "x": 137,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_8": {
+    "x": 171,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_9": {
+    "x": 205,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_0": {
+    "x": 239,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_1": {
+    "x": 273,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_10": {
+    "x": 307,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_11": {
+    "x": 341,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_12": {
+    "x": 375,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_13": {
+    "x": 409,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_14": {
+    "x": 443,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_15": {
+    "x": 477,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_2": {
+    "x": 511,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_3": {
+    "x": 545,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_4": {
+    "x": 579,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_5": {
+    "x": 613,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_6": {
+    "x": 647,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_7": {
+    "x": 681,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_8": {
+    "x": 715,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_left_right_9": {
+    "x": 749,
+    "y": 307,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_0": {
+    "x": 1,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_1": {
+    "x": 35,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_10": {
+    "x": 69,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_11": {
+    "x": 103,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_12": {
+    "x": 137,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_13": {
+    "x": 171,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_14": {
+    "x": 205,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_15": {
+    "x": 239,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_2": {
+    "x": 273,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_3": {
+    "x": 307,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_4": {
+    "x": 341,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_5": {
+    "x": 375,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_6": {
+    "x": 409,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_7": {
+    "x": 443,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_8": {
+    "x": 477,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_right_9": {
+    "x": 511,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_0": {
+    "x": 545,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_1": {
+    "x": 579,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_10": {
+    "x": 613,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_11": {
+    "x": 647,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_12": {
+    "x": 681,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_13": {
+    "x": 715,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_14": {
+    "x": 749,
+    "y": 341,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_15": {
+    "x": 1,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_2": {
+    "x": 35,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_3": {
+    "x": 69,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_4": {
+    "x": 103,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_5": {
+    "x": 137,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_6": {
+    "x": 171,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_7": {
+    "x": 205,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_8": {
+    "x": 239,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_9": {
+    "x": 273,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_0": {
+    "x": 307,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_1": {
+    "x": 341,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_10": {
+    "x": 375,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_11": {
+    "x": 409,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_12": {
+    "x": 443,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_13": {
+    "x": 477,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_14": {
+    "x": 511,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_15": {
+    "x": 545,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_2": {
+    "x": 579,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_3": {
+    "x": 613,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_4": {
+    "x": 647,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_5": {
+    "x": 681,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_6": {
+    "x": 715,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_7": {
+    "x": 749,
+    "y": 375,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_8": {
+    "x": 1,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_9": {
+    "x": 35,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_0": {
+    "x": 69,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_1": {
+    "x": 103,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_10": {
+    "x": 137,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_11": {
+    "x": 171,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_12": {
+    "x": 205,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_13": {
+    "x": 239,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_14": {
+    "x": 273,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_15": {
+    "x": 307,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_2": {
+    "x": 341,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_3": {
+    "x": 375,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_4": {
+    "x": 409,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_5": {
+    "x": 443,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_6": {
+    "x": 477,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_7": {
+    "x": 511,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_8": {
+    "x": 545,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_9": {
+    "x": 579,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_0": {
+    "x": 613,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_1": {
+    "x": 647,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_10": {
+    "x": 681,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_11": {
+    "x": 715,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_12": {
+    "x": 749,
+    "y": 409,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_13": {
+    "x": 1,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_14": {
+    "x": 35,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_15": {
+    "x": 69,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_2": {
+    "x": 103,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_3": {
+    "x": 137,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_4": {
+    "x": 171,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_5": {
+    "x": 205,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_6": {
+    "x": 239,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_7": {
+    "x": 273,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_8": {
+    "x": 307,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_left_right_9": {
+    "x": 341,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_0": {
+    "x": 375,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_1": {
+    "x": 409,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_10": {
+    "x": 443,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_11": {
+    "x": 477,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_12": {
+    "x": 511,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_13": {
+    "x": 545,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_14": {
+    "x": 579,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_15": {
+    "x": 613,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_2": {
+    "x": 647,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_3": {
+    "x": 681,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_4": {
+    "x": 715,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_5": {
+    "x": 749,
+    "y": 443,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_6": {
+    "x": 1,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_7": {
+    "x": 35,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_8": {
+    "x": 69,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_down_right_9": {
+    "x": 103,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_0": {
+    "x": 137,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_1": {
+    "x": 171,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_10": {
+    "x": 205,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_11": {
+    "x": 239,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_12": {
+    "x": 273,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_13": {
+    "x": 307,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_14": {
+    "x": 341,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_15": {
+    "x": 375,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_2": {
+    "x": 409,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_3": {
+    "x": 443,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_4": {
+    "x": 477,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_5": {
+    "x": 511,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_6": {
+    "x": 545,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_7": {
+    "x": 579,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_8": {
+    "x": 613,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_9": {
+    "x": 647,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_0": {
+    "x": 681,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_1": {
+    "x": 715,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_10": {
+    "x": 749,
+    "y": 477,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_11": {
+    "x": 1,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_12": {
+    "x": 35,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_13": {
+    "x": 69,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_14": {
+    "x": 103,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_15": {
+    "x": 137,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_2": {
+    "x": 171,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_3": {
+    "x": 205,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_4": {
+    "x": 239,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_5": {
+    "x": 273,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_6": {
+    "x": 307,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_7": {
+    "x": 341,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_8": {
+    "x": 375,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_left_right_9": {
+    "x": 409,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_0": {
+    "x": 443,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_1": {
+    "x": 477,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_10": {
+    "x": 511,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_11": {
+    "x": 545,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_12": {
+    "x": 579,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_13": {
+    "x": 613,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_14": {
+    "x": 647,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_15": {
+    "x": 681,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_2": {
+    "x": 715,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_3": {
+    "x": 749,
+    "y": 511,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_4": {
+    "x": 1,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_5": {
+    "x": 35,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_6": {
+    "x": 69,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_7": {
+    "x": 103,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_8": {
+    "x": 137,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
+  "redstone_dust_up_right_9": {
+    "x": 171,
+    "y": 545,
+    "w": 32,
+    "h": 32
+  },
   "redstone_lamp_off": {
-    "x": 96,
-    "y": 112,
+    "x": 205,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_complete_down": {
-    "x": 112,
-    "y": 112,
+    "x": 239,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_complete_left": {
-    "x": 128,
-    "y": 112,
+    "x": 273,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_complete_right": {
-    "x": 144,
-    "y": 112,
+    "x": 307,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_complete_up": {
-    "x": 160,
-    "y": 112,
+    "x": 341,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_pending_down": {
-    "x": 176,
-    "y": 112,
+    "x": 375,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_pending_left": {
-    "x": 192,
-    "y": 112,
+    "x": 409,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_pending_right": {
-    "x": 208,
-    "y": 112,
+    "x": 443,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_extension_pending_up": {
-    "x": 224,
-    "y": 112,
+    "x": 477,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_complete_down": {
-    "x": 240,
-    "y": 112,
+    "x": 511,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_complete_left": {
-    "x": 0,
-    "y": 128,
+    "x": 545,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_complete_right": {
-    "x": 16,
-    "y": 128,
+    "x": 579,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_complete_up": {
-    "x": 32,
-    "y": 128,
+    "x": 613,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_pending_down": {
-    "x": 48,
-    "y": 128,
+    "x": 647,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_pending_left": {
-    "x": 64,
-    "y": 128,
+    "x": 681,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_pending_right": {
-    "x": 80,
-    "y": 128,
+    "x": 715,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_off_retraction_pending_up": {
-    "x": 96,
-    "y": 128,
+    "x": 749,
+    "y": 545,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on": {
-    "x": 112,
-    "y": 128,
+    "x": 1,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_complete_down": {
-    "x": 128,
-    "y": 128,
+    "x": 35,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_complete_left": {
-    "x": 144,
-    "y": 128,
+    "x": 69,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_complete_right": {
-    "x": 160,
-    "y": 128,
+    "x": 103,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_complete_up": {
-    "x": 176,
-    "y": 128,
+    "x": 137,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_pending_down": {
-    "x": 192,
-    "y": 128,
+    "x": 171,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_pending_left": {
-    "x": 208,
-    "y": 128,
+    "x": 205,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_pending_right": {
-    "x": 224,
-    "y": 128,
+    "x": 239,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_extension_pending_up": {
-    "x": 240,
-    "y": 128,
+    "x": 273,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_complete_down": {
-    "x": 0,
-    "y": 144,
+    "x": 307,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_complete_left": {
-    "x": 16,
-    "y": 144,
+    "x": 341,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_complete_right": {
-    "x": 32,
-    "y": 144,
+    "x": 375,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_complete_up": {
-    "x": 48,
-    "y": 144,
+    "x": 409,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_pending_down": {
-    "x": 64,
-    "y": 144,
+    "x": 443,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_pending_left": {
-    "x": 80,
-    "y": 144,
+    "x": 477,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_pending_right": {
-    "x": 96,
-    "y": 144,
+    "x": 511,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_lamp_on_retraction_pending_up": {
-    "x": 112,
-    "y": 144,
+    "x": 545,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_1_down": {
-    "x": 128,
-    "y": 144,
+    "x": 579,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_1_left": {
-    "x": 144,
-    "y": 144,
+    "x": 613,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_1_right": {
-    "x": 160,
-    "y": 144,
+    "x": 647,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_1_up": {
-    "x": 176,
-    "y": 144,
+    "x": 681,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_2_down": {
-    "x": 192,
-    "y": 144,
+    "x": 715,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_2_left": {
-    "x": 208,
-    "y": 144,
+    "x": 749,
+    "y": 579,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_2_right": {
-    "x": 224,
-    "y": 144,
+    "x": 1,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_2_up": {
-    "x": 240,
-    "y": 144,
+    "x": 35,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_3_down": {
-    "x": 0,
-    "y": 160,
+    "x": 69,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_3_left": {
-    "x": 16,
-    "y": 160,
+    "x": 103,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_3_right": {
-    "x": 32,
-    "y": 160,
+    "x": 137,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_3_up": {
-    "x": 48,
-    "y": 160,
+    "x": 171,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_4_down": {
-    "x": 64,
-    "y": 160,
+    "x": 205,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_4_left": {
-    "x": 80,
-    "y": 160,
+    "x": 239,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_4_right": {
-    "x": 96,
-    "y": 160,
+    "x": 273,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_0_off_4_up": {
-    "x": 112,
-    "y": 160,
+    "x": 307,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_0_down": {
-    "x": 128,
-    "y": 160,
+    "x": 341,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_0_left": {
-    "x": 144,
-    "y": 160,
+    "x": 375,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_0_right": {
-    "x": 160,
-    "y": 160,
+    "x": 409,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_0_up": {
-    "x": 176,
-    "y": 160,
+    "x": 443,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_down": {
-    "x": 192,
-    "y": 160,
+    "x": 477,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_left": {
-    "x": 208,
-    "y": 160,
+    "x": 511,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_powered_down": {
-    "x": 224,
-    "y": 160,
+    "x": 545,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_powered_left": {
-    "x": 240,
-    "y": 160,
+    "x": 579,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_powered_right": {
-    "x": 0,
-    "y": 176,
+    "x": 613,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_powered_up": {
-    "x": 16,
-    "y": 176,
+    "x": 647,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_right": {
-    "x": 32,
-    "y": 176,
+    "x": 681,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_1_up": {
-    "x": 48,
-    "y": 176,
+    "x": 715,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_down": {
-    "x": 64,
-    "y": 176,
+    "x": 749,
+    "y": 613,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_left": {
-    "x": 80,
-    "y": 176,
+    "x": 1,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_powered_down": {
-    "x": 96,
-    "y": 176,
+    "x": 35,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_powered_left": {
-    "x": 112,
-    "y": 176,
+    "x": 69,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_powered_right": {
-    "x": 128,
-    "y": 176,
+    "x": 103,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_powered_up": {
-    "x": 144,
-    "y": 176,
+    "x": 137,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_right": {
-    "x": 160,
-    "y": 176,
+    "x": 171,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_2_up": {
-    "x": 176,
-    "y": 176,
+    "x": 205,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_down": {
-    "x": 192,
-    "y": 176,
+    "x": 239,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_left": {
-    "x": 208,
-    "y": 176,
+    "x": 273,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_powered_down": {
-    "x": 224,
-    "y": 176,
+    "x": 307,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_powered_left": {
-    "x": 240,
-    "y": 176,
+    "x": 341,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_powered_right": {
-    "x": 0,
-    "y": 192,
+    "x": 375,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_powered_up": {
-    "x": 16,
-    "y": 192,
+    "x": 409,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_right": {
-    "x": 32,
-    "y": 192,
+    "x": 443,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_1_off_3_up": {
-    "x": 48,
-    "y": 192,
+    "x": 477,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_0_down": {
-    "x": 64,
-    "y": 192,
+    "x": 511,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_0_left": {
-    "x": 80,
-    "y": 192,
+    "x": 545,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_0_right": {
-    "x": 96,
-    "y": 192,
+    "x": 579,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_0_up": {
-    "x": 112,
-    "y": 192,
+    "x": 613,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_down": {
-    "x": 128,
-    "y": 192,
+    "x": 647,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_left": {
-    "x": 144,
-    "y": 192,
+    "x": 681,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_powered_down": {
-    "x": 160,
-    "y": 192,
+    "x": 715,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_powered_left": {
-    "x": 176,
-    "y": 192,
+    "x": 749,
+    "y": 647,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_powered_right": {
-    "x": 192,
-    "y": 192,
+    "x": 1,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_powered_up": {
-    "x": 208,
-    "y": 192,
+    "x": 35,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_right": {
-    "x": 224,
-    "y": 192,
+    "x": 69,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_1_up": {
-    "x": 240,
-    "y": 192,
+    "x": 103,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_down": {
-    "x": 0,
-    "y": 208,
+    "x": 137,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_left": {
-    "x": 16,
-    "y": 208,
+    "x": 171,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_powered_down": {
-    "x": 32,
-    "y": 208,
+    "x": 205,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_powered_left": {
-    "x": 48,
-    "y": 208,
+    "x": 239,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_powered_right": {
-    "x": 64,
-    "y": 208,
+    "x": 273,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_powered_up": {
-    "x": 80,
-    "y": 208,
+    "x": 307,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_right": {
-    "x": 96,
-    "y": 208,
+    "x": 341,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_2_off_2_up": {
-    "x": 112,
-    "y": 208,
+    "x": 375,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_0_down": {
-    "x": 128,
-    "y": 208,
+    "x": 409,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_0_left": {
-    "x": 144,
-    "y": 208,
+    "x": 443,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_0_right": {
-    "x": 160,
-    "y": 208,
+    "x": 477,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_0_up": {
-    "x": 176,
-    "y": 208,
+    "x": 511,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_down": {
-    "x": 192,
-    "y": 208,
+    "x": 545,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_left": {
-    "x": 208,
-    "y": 208,
+    "x": 579,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_powered_down": {
-    "x": 224,
-    "y": 208,
+    "x": 613,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_powered_left": {
-    "x": 240,
-    "y": 208,
+    "x": 647,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_powered_right": {
-    "x": 0,
-    "y": 224,
+    "x": 681,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_powered_up": {
-    "x": 16,
-    "y": 224,
+    "x": 715,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_right": {
-    "x": 32,
-    "y": 224,
+    "x": 749,
+    "y": 681,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_3_off_1_up": {
-    "x": 48,
-    "y": 224,
+    "x": 1,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_4_off_0_down": {
-    "x": 64,
-    "y": 224,
+    "x": 35,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_4_off_0_left": {
-    "x": 80,
-    "y": 224,
+    "x": 69,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_4_off_0_right": {
-    "x": 96,
-    "y": 224,
+    "x": 103,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_repeater_on_4_off_0_up": {
-    "x": 112,
-    "y": 224,
+    "x": 137,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_off_down": {
-    "x": 128,
-    "y": 224,
+    "x": 171,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_off_left": {
-    "x": 144,
-    "y": 224,
+    "x": 205,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_off_right": {
-    "x": 160,
-    "y": 224,
+    "x": 239,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_off_up": {
-    "x": 176,
-    "y": 224,
+    "x": 273,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_on_down": {
-    "x": 192,
-    "y": 224,
+    "x": 307,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_on_left": {
-    "x": 208,
-    "y": 224,
+    "x": 341,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_on_right": {
-    "x": 224,
-    "y": 224,
+    "x": 375,
+    "y": 715,
     "w": 16,
     "h": 16
   },
   "redstone_torch_on_up": {
-    "x": 240,
-    "y": 224,
+    "x": 409,
+    "y": 715,
     "w": 16,
     "h": 16
   }

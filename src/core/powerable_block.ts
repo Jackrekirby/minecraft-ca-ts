@@ -29,7 +29,7 @@ export namespace OutputPowerBlock {
 
       const isBeingPowered =
         neighbour.isOutputtingPower(getOppositeDirection(direction)) &&
-        !isBlock(neighbour)
+        !OutputPowerBlock.isBlock(neighbour)
 
       if (isBeingPowered) {
         outputPower = BinaryPower.Strong

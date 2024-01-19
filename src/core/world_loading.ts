@@ -2,6 +2,7 @@ import { Air } from '../blocks/air'
 import { GlassBlock } from '../blocks/glass_block'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
+import { RedstoneDust } from '../blocks/redstone_dust'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
@@ -38,6 +39,8 @@ const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 8, y: 0 }, new GlassBlock({}))
 
   blocks.setValue({ x: 10, y: 0 }, new RedstoneRepeater({}))
+
+  blocks.setValue({ x: 12, y: 0 }, new RedstoneDust({}))
 }
 
 export const loadChunksFromStorage = async (

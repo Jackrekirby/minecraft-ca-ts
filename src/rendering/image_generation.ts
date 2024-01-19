@@ -1,4 +1,5 @@
 import fs from 'fs'
+import Jimp from 'jimp'
 import path from 'path'
 import sharp from 'sharp'
 
@@ -23,7 +24,7 @@ async function deletePngFiles (directoryPath: string): Promise<void> {
 
     await Promise.all(deletionPromises)
 
-    console.log(`PNG files in '${directoryPath}' deleted successfully.`)
+    // console.log(`PNG files in '${directoryPath}' deleted successfully.`)
   } catch (error) {
     console.error('Error deleting PNG files:', error)
   }
@@ -182,6 +183,42 @@ async function combineImages (
   // })
 }
 
+async function combineImageList (imagePaths: string[]): Promise<sharp.Sharp> {
+  if (imagePaths.length === 0) {
+    throw new Error('no images to combine')
+  } else if (imagePaths.length === 1) {
+    return await sharp(imagePaths[0])
+  }
+
+  // Read the images
+  const images: Buffer[] = await Promise.all(
+    imagePaths.map(async path => await sharp(path).toBuffer())
+  )
+
+  const metadatas = await Promise.all(
+    images.map(async image => await sharp(image).metadata())
+  )
+
+  const metadata1 = metadatas[0]
+  const haveMatchingDimensions = metadatas.slice(1).every(metadata => {
+    return (
+      metadata.width === metadata1.width && metadata.height === metadata1.height
+    )
+  })
+
+  if (!haveMatchingDimensions) {
+    throw new Error(`Images must have the same dimensions. ${imagePaths}`)
+  }
+
+  const overlayOptions: sharp.OverlayOptions[] = images.slice(1).map(image => {
+    return { input: image, blend: 'over' }
+  })
+
+  const result = sharp(images[0]).composite(overlayOptions)
+
+  return result
+}
+
 async function rotateAndSaveImages (
   inputFolder: string,
   outputFolder: string,
@@ -247,7 +284,7 @@ async function handleOverlayImage (
       [originalFileName, rotationDirection].filter(x => x != null).join('_') +
       '.png'
     const underlayPath = path.join(outputFolder, underlayFileName)
-    console.log(underlayPath, overlayPath)
+    // console.log(underlayPath, overlayPath)
     const overlayRotatedImage = await combineImages(underlayPath, overlayPath)
 
     const outputFileName =
@@ -307,11 +344,14 @@ async function combineImagesInDirectory (
     const gridSize = Math.ceil(Math.sqrt(imageFiles.length))
 
     // Read the dimensions of one of the images to determine the size of the combined image
-    const sampleImage = await sharp(
-      path.join(directoryPath, imageFiles[0])
-    ).metadata()
-    const combinedWidth = sampleImage.width! * gridSize
-    const combinedHeight = sampleImage.height! * gridSize
+    // const sampleImage = await sharp(
+    //   path.join(directoryPath, imageFiles[0])
+    // ).metadata()
+
+    const OFFSET = 1
+    const LENGTH = 32 + OFFSET * 2
+    const combinedWidth = LENGTH * gridSize
+    const combinedHeight = LENGTH * gridSize
 
     // Initialize variables for the resulting image and tilemap
 
@@ -332,16 +372,18 @@ async function combineImagesInDirectory (
       // Add the image to the combined image at the appropriate position
       compositeOptions.push({
         input: imageBuffer,
-        left: col * sampleImage.width!,
-        top: row * sampleImage.height!
+        left: col * LENGTH + OFFSET,
+        top: row * LENGTH + OFFSET
       })
+
+      const imageMeta = await sharp(imagePath).metadata()
 
       // Add information to the tilemap
       tilemap[file.slice(0, -4)] = {
-        x: col * sampleImage.width!,
-        y: row * sampleImage.height!,
-        w: sampleImage.width!,
-        h: sampleImage.height!
+        x: col * LENGTH + OFFSET,
+        y: row * LENGTH + OFFSET,
+        w: imageMeta.width!,
+        h: imageMeta.height!
       }
     }
 
@@ -375,9 +417,9 @@ async function combineImagesInDirectory (
     `
     await fs.promises.writeFile(tilemapPath, tilemapString)
 
-    console.log(
-      `Images combined successfully. Resulting image and tilemap saved.`
-    )
+    // console.log(
+    //   `Images combined successfully. Resulting image and tilemap saved.`
+    // )
   } catch (error) {
     console.error('Error combining images:', error)
   }
@@ -412,11 +454,184 @@ async function saveImage (
   await image.toFile(outputPath)
 }
 
+// redstone dust
+
+async function resizeImage (
+  image: sharp.Sharp,
+  width: number,
+  height: number
+): Promise<sharp.Sharp> {
+  try {
+    const resizedImage = await image.resize(width, height, {
+      kernel: sharp.kernel.nearest
+    })
+
+    return resizedImage
+  } catch (error) {
+    console.error('Error resizing image:', error)
+    throw error
+  }
+}
+
+const processRedstoneDust = async () => {
+  const directions = ['up', 'down', 'left', 'right']
+  const imagePrefix = inputDirectory + '/redstone_dust'
+  const outDir = outputDirectory
+  let isOn = false
+  const buildImageName = (direction: string) => {
+    return imagePrefix + '_' + direction + '_' + (isOn ? 'on' : 'off') + '.png'
+  }
+
+  for (let i = 0; i < 16; i++) {
+    const inPath = path.join(
+      inputDirectory,
+      'redstone_dust_overlay_' + i + '.png'
+    )
+    const outPath = path.join(outputDirectory, '_number_' + i + '.png')
+    await shiftImagePixels(inPath, outPath, -1, -1)
+  }
+
+  for (let i = 0; i < 16; i++) {
+    isOn = i > 0
+    for (const isLeft of [false, true]) {
+      for (const isRight of [false, true]) {
+        for (const isUp of [false, true]) {
+          for (const isDown of [false, true]) {
+            let imageList = []
+            let imageOutName = '/redstone_dust'
+            if (isUp && isDown && !isLeft && !isRight) {
+              imageList.push(buildImageName('ver'))
+              imageOutName += '_up'
+              imageOutName += '_down'
+            } else if (!isUp && !isDown && isLeft && isRight) {
+              imageList.push(buildImageName('hor'))
+              imageOutName += '_left'
+              imageOutName += '_right'
+            } else {
+              imageList.push(buildImageName('dot'))
+              if (isUp) {
+                imageList.push(buildImageName('up'))
+                imageOutName += '_up'
+              }
+              if (isDown) {
+                imageList.push(buildImageName('down'))
+                imageOutName += '_down'
+              }
+              if (isLeft) {
+                imageList.push(buildImageName('left'))
+                imageOutName += '_left'
+              }
+              if (isRight) {
+                imageList.push(buildImageName('right'))
+                imageOutName += '_right'
+              }
+            }
+
+            imageOutName += '_' + i
+            imageOutName += '.png'
+
+            // console.log(imageList)
+            const combinedImage: sharp.Sharp = await combineImageList(imageList)
+            // const resizedImage = await resizeImageByMultiplier(combinedImage, 2)
+            const outPath = path.join(outDir, imageOutName)
+            await combinedImage.toFile(outPath)
+
+            await resizeImage2(outPath, outPath, 2)
+
+            const combinedImage2: sharp.Sharp = await combineImageList([
+              outPath,
+              path.join(outputDirectory, '_number_' + i + '.png')
+            ])
+            await combinedImage2.toFile(outPath)
+          }
+        }
+      }
+    }
+  }
+}
+
+async function shiftImagePixels (
+  inputPath: string,
+  outputPath: string,
+  offsetX: number,
+  offsetY: number
+): Promise<void> {
+  try {
+    // Read the input image
+    const image = await Jimp.read(inputPath)
+
+    // Get the original image dimensions
+    const width = image.getWidth()
+    const height = image.getHeight()
+
+    // Create a new Jimp image to store the shifted pixel data
+    const shiftedImage = new Jimp(width, height)
+
+    // Iterate through each pixel and shift its position
+    image.scan(0, 0, width, height, (x, y, idx) => {
+      const targetX = (x + offsetX + width) % width
+      const targetY = (y + offsetY + height) % height
+
+      // Get the pixel color at the original position
+      const color = image.getPixelColor(x, y)
+
+      // Set the pixel color at the shifted position
+      shiftedImage.setPixelColor(color, targetX, targetY)
+    })
+
+    // Save the shifted image to the specified output path
+    await shiftedImage.writeAsync(outputPath)
+  } catch (error) {
+    console.error('Error shifting image pixels:', error)
+  }
+}
+
+async function resizeImage2 (
+  inputPath: string,
+  outputPath: string,
+  multiplier: number
+): Promise<void> {
+  try {
+    // Read the input image
+    const image = await Jimp.read(inputPath)
+
+    // Get the original image dimensions
+    const width = image.getWidth()
+    const height = image.getHeight()
+
+    // Calculate the new dimensions based on the multiplier
+    const newWidth = Math.round(width * multiplier)
+    const newHeight = Math.round(height * multiplier)
+
+    // Create a new Jimp image with the new dimensions
+    const resizedImage = new Jimp(newWidth, newHeight)
+
+    // Perform nearest neighbor interpolation
+    for (let x = 0; x < newWidth; x++) {
+      for (let y = 0; y < newHeight; y++) {
+        const originalX = Math.round(x / multiplier)
+        const originalY = Math.round(y / multiplier)
+        const color = image.getPixelColor(originalX, originalY)
+        resizedImage.setPixelColor(color, x, y)
+      }
+    }
+
+    // Save the resized image to the specified output path
+    await resizedImage.writeAsync(outputPath)
+
+    // console.log('Image resized successfully!')
+  } catch (error) {
+    console.error('Error resizing image:', error)
+  }
+}
+
 // Example usage
 const inputDirectory = 'src/images/base'
 const outputDirectory = 'src/images/generated'
 
 const main = async () => {
+  console.log('processRedstoneDust')
+  await processRedstoneDust()
   console.log('processImagesInDirectory')
   await processImagesInDirectory(inputDirectory, outputDirectory)
   console.log('combineImagesInDirectory')
