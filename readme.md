@@ -107,3 +107,5 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Fix pixel shifting when texture changes when zoomed out
 - [ ] Fix blocks like lamps should have their state ready when movement complete
 - [ ] Fix command history/hint on click makes command line disappear before execution
+- [ ] Improve texture packer
+- [x] Design redstone textures and add to atlas
