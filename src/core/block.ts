@@ -30,7 +30,7 @@ export interface Block {
   getTextureName: (position: Vec2, blocks: BlockContainer) => string
   // TODO make power redstone interface
   // direction relative to the block you are requesting power from
-  isOutputtingPower: (direction: Direction) => boolean
+  // isOutputtingPower: (direction: Direction) => boolean
   // general traits
   getMovementMethod: () => BlockMovement
 }

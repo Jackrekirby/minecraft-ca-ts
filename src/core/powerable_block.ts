@@ -1,7 +1,7 @@
 import { Vec2 } from '../containers/vec2'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { Block, BlockContainer } from './block'
-import { getAllDirections, getOppositeDirection } from './direction'
+import { Direction, getAllDirections, getOppositeDirection } from './direction'
 
 export enum BinaryPower {
   None = 'None',
@@ -11,34 +11,51 @@ export enum BinaryPower {
 
 export namespace OutputPowerBlock {
   export interface Traits {
-    outputPower: BinaryPower
+    getOutputPower: (direction: Direction) => BinaryPower
+    transmitsBetweenSelf: () => boolean
   }
 
   export function isBlock (block: object): block is Traits {
-    return 'outputPower' in block
+    return 'getOutputPower' in block
   }
 
   export const update = (
-    _state: Traits,
+    state: Traits,
     position: Vec2,
     blocks: BlockContainer
-  ): Traits => {
+  ): object => {
     let outputPower = BinaryPower.None
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
 
-      const isBeingPowered =
-        neighbour.isOutputtingPower(getOppositeDirection(direction)) &&
-        !OutputPowerBlock.isBlock(neighbour)
+      let inputPower: BinaryPower = BinaryPower.None
 
-      if (isBeingPowered) {
+      if (OutputPowerBlock.isBlock(neighbour)) {
+        if (state.transmitsBetweenSelf() || neighbour.transmitsBetweenSelf()) {
+          inputPower = neighbour.getOutputPower(getOppositeDirection(direction))
+        }
+      }
+
+      if (inputPower === BinaryPower.Strong) {
         outputPower = BinaryPower.Strong
         break
+      } else if (
+        outputPower === BinaryPower.None &&
+        inputPower === BinaryPower.Weak
+      ) {
+        outputPower = BinaryPower.Weak
       }
-      // else if isBeingPowered && isBlock(neighbour, BlockType.RedstoneDust) then weak
     }
 
     return { outputPower }
+  }
+
+  export const isOutputtingPower = (block: Block, direction: Direction) => {
+    const isBeingPowered =
+      OutputPowerBlock.isBlock(block) &&
+      block.getOutputPower(direction) !== BinaryPower.None
+
+    return isBeingPowered
   }
 }
 
@@ -60,9 +77,10 @@ export namespace IsPoweredBlock {
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
 
-      const isBeingPowered = neighbour.isOutputtingPower(
-        getOppositeDirection(direction)
-      )
+      const isBeingPowered =
+        OutputPowerBlock.isBlock(neighbour) &&
+        neighbour.getOutputPower(getOppositeDirection(direction)) !==
+          BinaryPower.None
 
       if (isBeingPowered) {
         isPowered = true

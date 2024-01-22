@@ -7,14 +7,20 @@ import {
   DirectionalBlock,
   isBlock
 } from '../core/block'
-import { Direction } from '../core/direction'
+import { Direction, getOppositeDirection } from '../core/direction'
+import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 import {
   getNeighbourBlock,
   getOppositeRelativeDirection
 } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
+import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
-export class RedstoneRepeater implements DirectionalBlock {
+export class RedstoneRepeater
+  implements
+    DirectionalBlock,
+    ConnectsToRedstoneDustBlock.Traits,
+    OutputPowerBlock.Traits {
   type: BlockType = BlockType.RedstoneRepeater
   ticksOn: number
   ticksOff: number
@@ -50,14 +56,18 @@ export class RedstoneRepeater implements DirectionalBlock {
 
       const isLocking =
         isBlock<RedstoneRepeater>(neighbour, BlockType.RedstoneRepeater) &&
-        neighbour.isOutputtingPower(
+        OutputPowerBlock.isOutputtingPower(
+          neighbour,
           getOppositeRelativeDirection(position, blocks, direction)
         )
 
       return isLocking
     })
 
-    const isBeingPowered = backBlock.isOutputtingPower(this.direction)
+    const isBeingPowered = OutputPowerBlock.isOutputtingPower(
+      backBlock,
+      this.direction
+    )
 
     let ticksOn = this.ticksOn
     let ticksOff = this.ticksOff
@@ -111,12 +121,30 @@ export class RedstoneRepeater implements DirectionalBlock {
     }_${this.direction.toLowerCase()}`
   }
 
-  public isOutputtingPower (direction: Direction): boolean {
-    return this.isPowered && direction === this.direction
+  // public isOutputtingPower (direction: Direction): boolean {
+  //   return this.isPowered && direction === this.direction
+  // }
+
+  public getOutputPower (direction: Direction): BinaryPower {
+    if (this.isPowered && direction === this.direction) {
+      return BinaryPower.Strong
+    } else {
+      return BinaryPower.None
+    }
+  }
+  public transmitsBetweenSelf (): boolean {
+    return true
   }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable
+  }
+
+  public doesConnectToRedstoneDust (direction: Direction): boolean {
+    return (
+      direction === this.direction ||
+      direction === getOppositeDirection(this.direction)
+    )
   }
 }
 

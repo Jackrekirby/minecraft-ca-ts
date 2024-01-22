@@ -7,10 +7,16 @@ import {
   DirectionalBlock
 } from '../core/block'
 import { Direction, getOppositeDirection } from '../core/direction'
+import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
+import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
-export class RedstoneTorch implements DirectionalBlock {
+export class RedstoneTorch
+  implements
+    DirectionalBlock,
+    ConnectsToRedstoneDustBlock.Traits,
+    OutputPowerBlock.Traits {
   type: BlockType = BlockType.RedstoneTorch
   isBeingPowered: boolean
   direction: Direction
@@ -27,7 +33,10 @@ export class RedstoneTorch implements DirectionalBlock {
   public update (position: Vec2, blocks: BlockContainer): Block {
     const backBlock: Block = getNeighbourBlock(position, blocks, Direction.Down)
 
-    const isBeingPowered = backBlock.isOutputtingPower(this.direction)
+    const isBeingPowered = OutputPowerBlock.isOutputtingPower(
+      backBlock,
+      this.direction
+    )
 
     return new RedstoneTorch({ isBeingPowered, direction: this.direction })
   }
@@ -46,8 +55,19 @@ export class RedstoneTorch implements DirectionalBlock {
     }_${this.direction.toLowerCase()}`
   }
 
-  public isOutputtingPower (direction: Direction): boolean {
-    return direction !== getOppositeDirection(this.direction) && this.isOn()
+  // public isOutputtingPower (direction: Direction): boolean {
+  //   return direction !== getOppositeDirection(this.direction) && this.isOn()
+  // }
+
+  public getOutputPower (direction: Direction): BinaryPower {
+    if (this.isOn() && direction !== getOppositeDirection(this.direction)) {
+      return BinaryPower.Strong
+    } else {
+      return BinaryPower.None
+    }
+  }
+  public transmitsBetweenSelf (): boolean {
+    return false // TODO: rename powerDirectsIntoBlock
   }
 
   public getMovementMethod (): BlockMovement {
@@ -56,6 +76,10 @@ export class RedstoneTorch implements DirectionalBlock {
 
   private isOn () {
     return !this.isBeingPowered
+  }
+
+  public doesConnectToRedstoneDust (_direction: Direction): boolean {
+    return true
   }
 }
 

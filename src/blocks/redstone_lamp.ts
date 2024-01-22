@@ -97,12 +97,20 @@ export class RedstoneLamp
     )
   }
 
-  public isOutputtingPower (): boolean {
-    return this.outputPower !== BinaryPower.None
+  // public isOutputtingPower (): boolean {
+  //   return this.outputPower !== BinaryPower.None
+  // }
+
+  public getOutputPower (_direction: Direction): BinaryPower {
+    return this.outputPower
   }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Moveable
+  }
+
+  public transmitsBetweenSelf (): boolean {
+    return false
   }
 }
 

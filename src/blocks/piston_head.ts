@@ -92,9 +92,9 @@ export class PistonHead implements DirectionalBlock {
     }_${this.direction.toLowerCase()}`
   }
 
-  public isOutputtingPower (): boolean {
-    return false
-  }
+  // public isOutputtingPower (): boolean {
+  //   return false
+  // }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable

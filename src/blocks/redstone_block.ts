@@ -18,8 +18,13 @@ import {
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
+import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
-export class RedstoneBlock implements MoveableBlock, OutputPowerBlock.Traits {
+export class RedstoneBlock
+  implements
+    MoveableBlock,
+    OutputPowerBlock.Traits,
+    ConnectsToRedstoneDustBlock.Traits {
   type: BlockType = BlockType.RedstoneBlock
   movement: Movement
   movementDirection: Direction
@@ -34,6 +39,10 @@ export class RedstoneBlock implements MoveableBlock, OutputPowerBlock.Traits {
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
+  }
+
+  public transmitsBetweenSelf (): boolean {
+    return false
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -74,12 +83,20 @@ export class RedstoneBlock implements MoveableBlock, OutputPowerBlock.Traits {
     return `redstone_block` + getMovementTextureName(this)
   }
 
-  public isOutputtingPower (): boolean {
-    return true
+  // public isOutputtingPower (): boolean {
+  //   return true
+  // }
+
+  public getOutputPower (_direction: Direction): BinaryPower {
+    return BinaryPower.Strong
   }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Moveable
+  }
+
+  public doesConnectToRedstoneDust (_direction: Direction): boolean {
+    return true
   }
 }
 

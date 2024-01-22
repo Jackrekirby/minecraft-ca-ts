@@ -22,6 +22,7 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
+import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -87,12 +88,22 @@ export class Piston implements DirectionalBlock, MoveableBlock {
       )
 
       const isBeingPowered = zipArrays(nonFrontDirections, nonFrontBlocks).some(
-        ([neighbourDirection, block]: [Direction, Block]) =>
-          block.isOutputtingPower(
-            getOppositeDirection(
-              getRelativeDirection(neighbourDirection, this.direction)
-            )
+        ([neighbourDirection, block]: [Direction, Block]) => {
+          return (
+            OutputPowerBlock.isBlock(block) &&
+            block.getOutputPower(
+              getOppositeDirection(
+                getRelativeDirection(neighbourDirection, this.direction)
+              )
+            ) !== BinaryPower.None
           )
+
+          // return block.isOutputtingPower(
+          //   getOppositeDirection(
+          //     getRelativeDirection(neighbourDirection, this.direction)
+          //   )
+          // )
+        }
       )
 
       const frontBlock: Block = getNeighbourBlock(
@@ -170,9 +181,9 @@ export class Piston implements DirectionalBlock, MoveableBlock {
     return tex
   }
 
-  public isOutputtingPower (): boolean {
-    return false
-  }
+  // public isOutputtingPower (): boolean {
+  //   return false
+  // }
 
   public getMovementMethod (): BlockMovement {
     return this.isExtended ? BlockMovement.Immovable : BlockMovement.Moveable

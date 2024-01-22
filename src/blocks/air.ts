@@ -61,9 +61,9 @@ export class Air implements Block {
     return ''
   }
 
-  public isOutputtingPower (): boolean {
-    return false
-  }
+  // public isOutputtingPower (): boolean {
+  //   return false
+  // }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Breaks

@@ -79,9 +79,9 @@ export class GlassBlock implements MoveableBlock {
     return `glass` + getMovementTextureName(this)
   }
 
-  public isOutputtingPower (): boolean {
-    return false
-  }
+  // public isOutputtingPower (): boolean {
+  //   return false
+  // }
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Moveable
