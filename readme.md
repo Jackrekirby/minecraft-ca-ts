@@ -103,7 +103,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Fix zoom of browser breaks panning/zooming
 - [x] Add powerable block type
 - [x] Fix repeater never turning on after being powered if power duration less than repeater delay
-- [ ] Add 1 tick sticky piston spit out block
+- [x] Add 1 tick sticky piston spit out block
 - [ ] Add non-sticky pistons
 - [x] Add redstone dust
 - [x] Fix pixel shifting when texture changes when zoomed out
@@ -119,4 +119,5 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Fix bug with texture packer not waiting for all images to be generated before packing
 - [x] Add lever
 - [ ] Should block powering occur in subticks?
-- [ ] Enable block pick to support state
+- [x] Enable block pick to support state
+- [ ] Add drag selection copy paste

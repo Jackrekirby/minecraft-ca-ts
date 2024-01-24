@@ -2,6 +2,7 @@ import fs from 'fs'
 import Jimp from 'jimp'
 import path from 'path'
 import sharp from 'sharp'
+import { sleep } from '../utils/general'
 
 async function deletePngFiles (directoryPath: string): Promise<void> {
   try {
@@ -66,6 +67,10 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: false
   },
+  piston_head_extending: {
+    isDirectional: true,
+    isMoveable: false
+  },
   piston_on: {
     isDirectional: true,
     isMoveable: false
@@ -74,7 +79,11 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: true
   },
-  piston_extended: {
+  piston_off_extended: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  piston_on_extended: {
     isDirectional: true,
     isMoveable: false
   },
@@ -103,6 +112,14 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isMoveable: false
   },
   lever_off: {
+    isDirectional: false,
+    isMoveable: false
+  },
+  button_on: {
+    isDirectional: false,
+    isMoveable: false
+  },
+  button_off: {
     isDirectional: false,
     isMoveable: false
   }
@@ -665,12 +682,15 @@ const inputDirectory = 'src/images/base'
 const outputDirectory = 'src/images/generated'
 
 const main = async () => {
-  // console.log('processRedstoneDust')
-  // await processRedstoneDust()
-  // console.log('processImagesInDirectory')
-  // await processImagesInDirectory(inputDirectory, outputDirectory)
+  console.log('processRedstoneDust')
+  await processRedstoneDust()
+  console.log('processImagesInDirectory')
+  await processImagesInDirectory(inputDirectory, outputDirectory)
+  console.log('waiting for image files to be ready...')
+  await sleep(3)
   console.log('combineImagesInDirectory')
   await combineImagesInDirectory(outputDirectory, 'src/images')
+
   console.log('deletePngFiles')
   await deletePngFiles(outputDirectory)
 }

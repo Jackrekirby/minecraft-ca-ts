@@ -74,6 +74,16 @@ export const areObjectsEqual = (
     const value1 = obj1[key]
     const value2 = obj2[key]
 
+    if (
+      typeof value1 === 'object' &&
+      value1 !== null &&
+      typeof value2 === 'object' && value2 !== null
+    ) {
+      if (!areObjectsEqual(value1, value2)) {
+        return false
+      }
+    }
+
     // Ignore nested objects and functions
     if (
       (typeof value1 === 'object' && value1 !== null) ||
@@ -193,4 +203,10 @@ export const debounce = (callback: () => void, delay: number): (() => void) => {
       isPending = false
     }, delay)
   }
+}
+
+export const sleep = (seconds: number): Promise<void> => {
+  return new Promise(resolve => {
+    setTimeout(resolve, seconds * 1000)
+  })
 }

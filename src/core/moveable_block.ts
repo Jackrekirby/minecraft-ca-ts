@@ -1,6 +1,6 @@
 import { Air } from '../blocks/air'
 import { Piston } from '../blocks/piston'
-import { PistonHead } from '../blocks/piston_head'
+import { PistonHead, PistonHeadMotion } from '../blocks/piston_head'
 import { Vec2 } from '../containers/vec2'
 import {
   getNeighbourBlock,
@@ -96,7 +96,7 @@ export const updateSubMovement = (
         })
       } else if (
         isBlock<PistonHead>(neighbour, BlockType.PistonHead) &&
-        neighbour.isRetracting &&
+        neighbour.motion === PistonHeadMotion.Retracting &&
         neighbour.direction === oppositeDirection
       ) {
         // [piston head retracting] [block] [pending block]
@@ -133,7 +133,10 @@ export const updateSubMovement = (
         backNeighbour.movement === Movement.None
       ) {
         return createBlockChange(
-          new PistonHead({ direction: movementDirection })
+          new PistonHead({
+            direction: movementDirection,
+            motion: PistonHeadMotion.Extending
+          })
         )
       } else {
         return createBlockChange(

@@ -1,4 +1,5 @@
 import { Air } from '../blocks/air'
+import { Button } from '../blocks/button'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
 import { Piston } from '../blocks/piston'
@@ -32,19 +33,21 @@ const loadWorldSave = async () => {
 const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
 
-  blocks.setValue({ x: 2, y: 0 }, new RedstoneTorch({}))
+  blocks.setValue({ x: 1, y: 0 }, new RedstoneTorch({}))
 
-  blocks.setValue({ x: 4, y: 0 }, new RedstoneLamp({}))
+  blocks.setValue({ x: 2, y: 0 }, new GlassBlock({}))
 
-  blocks.setValue({ x: 6, y: 0 }, new Piston({}))
+  blocks.setValue({ x: 3, y: 0 }, new RedstoneLamp({}))
 
-  blocks.setValue({ x: 8, y: 0 }, new GlassBlock({}))
+  blocks.setValue({ x: 4, y: 0 }, new Piston({}))
 
-  blocks.setValue({ x: 10, y: 0 }, new RedstoneRepeater({}))
+  blocks.setValue({ x: 5, y: 0 }, new RedstoneRepeater({}))
 
-  blocks.setValue({ x: 12, y: 0 }, new RedstoneDust({}))
+  blocks.setValue({ x: 6, y: 0 }, new RedstoneDust({}))
 
-  blocks.setValue({ x: 14, y: 0 }, new Lever({}))
+  blocks.setValue({ x: 7, y: 0 }, new Lever({}))
+
+  blocks.setValue({ x: 8, y: 0 }, new Button({}))
 
   Object.values(Color).forEach((color: string, index: number) => {
     blocks.setValue(

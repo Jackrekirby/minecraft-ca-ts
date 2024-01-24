@@ -106,6 +106,8 @@ export class Piston implements DirectionalBlock, MoveableBlock {
         }
       )
 
+      // console.log({ isBeingPowered })
+
       const frontBlock: Block = getNeighbourBlock(
         position,
         blocks,
@@ -174,8 +176,8 @@ export class Piston implements DirectionalBlock, MoveableBlock {
     //   frontBlock.movement === Movement.Pending &&
     //   frontBlock.movementDirection === this.direction)
     const tex =
-      `piston${
-        isExtended ? '_extended' : isPowered ? '_on' : '_off'
+      `piston${isPowered ? '_on' : '_off'}${
+        isExtended ? '_extended' : ''
       }_${this.direction.toLowerCase()}` +
       (isExtended ? '' : getMovementTextureName(this))
     return tex

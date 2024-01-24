@@ -21,7 +21,8 @@ export enum BlockType {
   RedstoneRepeater = 'RedstoneRepeater',
   RedstoneDust = 'RedstoneDust',
   WoolBlock = 'WoolBlock',
-  Lever = 'Lever'
+  Lever = 'Lever',
+  Button = 'Button'
 }
 
 export interface BlockState {
