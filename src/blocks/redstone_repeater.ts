@@ -146,6 +146,21 @@ export class RedstoneRepeater
       direction === getOppositeDirection(this.direction)
     )
   }
+
+  public interact (): Block {
+    let ticksOn = this.ticksOn,
+      ticksOff = this.ticksOff
+
+    if (this.isPowered) {
+      ticksOn = ((ticksOn + ticksOff) % 4) + 1
+      ticksOff = 0
+    } else {
+      ticksOff = ((ticksOn + ticksOff) % 4) + 1
+      ticksOn = 0
+    }
+
+    return new RedstoneRepeater({ ...this, ticksOn, ticksOff })
+  }
 }
 
 addCreateBlockFunction(BlockType.RedstoneRepeater, RedstoneRepeater)

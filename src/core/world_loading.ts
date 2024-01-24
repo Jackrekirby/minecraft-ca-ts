@@ -1,11 +1,13 @@
 import { Air } from '../blocks/air'
 import { GlassBlock } from '../blocks/glass_block'
+import { Lever } from '../blocks/lever'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
 import { RedstoneDust } from '../blocks/redstone_dust'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
+import { Color, WoolBlock } from '../blocks/wool_block'
 import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { createBlock } from '../utils/create_block'
@@ -41,6 +43,15 @@ const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 10, y: 0 }, new RedstoneRepeater({}))
 
   blocks.setValue({ x: 12, y: 0 }, new RedstoneDust({}))
+
+  blocks.setValue({ x: 14, y: 0 }, new Lever({}))
+
+  Object.values(Color).forEach((color: string, index: number) => {
+    blocks.setValue(
+      { x: index, y: -1 },
+      new WoolBlock({ color: color as Color })
+    )
+  })
 }
 
 export const loadChunksFromStorage = async (

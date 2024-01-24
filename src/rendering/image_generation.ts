@@ -97,6 +97,14 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   redstone_torch_off: {
     isDirectional: true,
     isMoveable: false
+  },
+  lever_on: {
+    isDirectional: false,
+    isMoveable: false
+  },
+  lever_off: {
+    isDirectional: false,
+    isMoveable: false
   }
 }
 
@@ -117,6 +125,32 @@ createRepeaterTextureNames().map(name => {
   imageConfigs[name] = {
     isDirectional: true,
     isMoveable: false
+  }
+})
+
+const colors: string[] = [
+  'white',
+  'orange',
+  'magenta',
+  'light_blue',
+  'yellow',
+  'lime',
+  'pink',
+  'gray',
+  'light_gray',
+  'cyan',
+  'purple',
+  'blue',
+  'brown',
+  'green',
+  'red',
+  'black'
+]
+
+colors.map(color => {
+  imageConfigs[`${color}_wool`] = {
+    isDirectional: false,
+    isMoveable: true
   }
 })
 
@@ -143,6 +177,7 @@ async function processImagesInDirectory (
 
   // Process each image file
   for (const name of Object.keys(imageConfigs)) {
+    console.log(name, imageConfigs[name])
     // const inputImagePath = path.join(inputDirectory, file)
     await rotateAndSaveImages(inputDirectory, outputDirectory, name)
   }
@@ -630,10 +665,10 @@ const inputDirectory = 'src/images/base'
 const outputDirectory = 'src/images/generated'
 
 const main = async () => {
-  console.log('processRedstoneDust')
-  await processRedstoneDust()
-  console.log('processImagesInDirectory')
-  await processImagesInDirectory(inputDirectory, outputDirectory)
+  // console.log('processRedstoneDust')
+  // await processRedstoneDust()
+  // console.log('processImagesInDirectory')
+  // await processImagesInDirectory(inputDirectory, outputDirectory)
   console.log('combineImagesInDirectory')
   await combineImagesInDirectory(outputDirectory, 'src/images')
   console.log('deletePngFiles')

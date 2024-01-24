@@ -19,11 +19,16 @@ export enum BlockType {
   GlassBlock = 'GlassBlock',
   RedstoneLamp = 'RedstoneLamp',
   RedstoneRepeater = 'RedstoneRepeater',
-  RedstoneDust = 'RedstoneDust'
+  RedstoneDust = 'RedstoneDust',
+  WoolBlock = 'WoolBlock',
+  Lever = 'Lever'
 }
 
-export interface Block {
+export interface BlockState {
   type: BlockType
+}
+
+export interface Block extends BlockState {
   update: (position: Vec2, blocks: BlockContainer) => Block
   subupdate: (position: Vec2, blocks: BlockContainer) => Block
   toString: () => string
@@ -33,6 +38,8 @@ export interface Block {
   // isOutputtingPower: (direction: Direction) => boolean
   // general traits
   getMovementMethod: () => BlockMovement
+  copy?: () => BlockState
+  interact?: () => Block
 }
 
 export function isBlock<T extends Block> (

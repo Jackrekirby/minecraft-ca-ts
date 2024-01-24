@@ -24,6 +24,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - Press `tab` to switch between command suggestions
 - Press `up` to switch between commands in your history
 
+**Use the world clear and load commands to load the latest demo world!**
+
 ### Mouse
 
 - Pan around the world map by clicking and dragging the mouse.
@@ -31,7 +33,7 @@ To open the command window click on it on the bottom left corner or press `/`
 
 - `Left click` will place a block if the location is air, otherwise it will pick the block.
 - `Right click` will delete a block.
-- `Ctrl left click` will cycle the delay of a redstone repeater.
+- `Ctrl left click` will interact with a block, such as cycle the delay of a redstone repeater or toggle a lever.
 
 ### Keys
 
@@ -103,9 +105,18 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Fix repeater never turning on after being powered if power duration less than repeater delay
 - [ ] Add 1 tick sticky piston spit out block
 - [ ] Add non-sticky pistons
-- [ ] Add redstone dust
-- [ ] Fix pixel shifting when texture changes when zoomed out
+- [x] Add redstone dust
+- [x] Fix pixel shifting when texture changes when zoomed out
 - [ ] Fix blocks like lamps should have their state ready when movement complete
 - [ ] Fix command history/hint on click makes command line disappear before execution
-- [ ] Improve texture packer
+- [ ] Improve texture packer to handle different texture sizes
 - [x] Design redstone textures and add to atlas
+- [x] Add wool blocks
+- [x] Add generic user interact function to blocks
+- [x] Add ability to pick block with state, not just block type
+- [ ] Add command / structure blocks
+- [ ] Add clone command
+- [ ] Fix bug with texture packer not waiting for all images to be generated before packing
+- [x] Add lever
+- [ ] Should block powering occur in subticks?
+- [ ] Enable block pick to support state

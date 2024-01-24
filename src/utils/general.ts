@@ -153,7 +153,11 @@ export interface GlobalValue<T> {
   display: () => string
 }
 
-export const createGlobalValue = <T>(name: string, initialValue: T) => {
+export const createGlobalValue = <T>(
+  name: string,
+  initialValue: T,
+  formatter: (value: T) => string = (value: T) => String(value)
+) => {
   let currentValue: T =
     localStorage.getItem(name) !== null
       ? JSON.parse(localStorage.getItem(name)!)
@@ -165,7 +169,7 @@ export const createGlobalValue = <T>(name: string, initialValue: T) => {
   const get = () => {
     return currentValue
   }
-  const display = () => `${name}: ${currentValue}`
+  const display = () => `${name}: ${formatter(get())}`
 
   const state: GlobalValue<T> = { get, set, display }
   return state

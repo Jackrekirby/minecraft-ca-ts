@@ -1,10 +1,9 @@
 import { Air } from '../blocks/air'
-import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { Vec2, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
-import { BlockContainer, BlockType, isBlock } from './block'
+import { Block, BlockContainer, BlockState, BlockType } from './block'
 import { Direction } from './direction'
 import { GLOBALS } from './globals'
 
@@ -56,7 +55,12 @@ export const initBlockEventListeners = (
     const block = blocks.getValue(pi)
 
     if (block.type === BlockType.Air) {
-      const newBlock = createBlock(GLOBALS.selectedBlock.get(), { direction })
+      const copyState = GLOBALS.selectedBlock.get() as Block
+
+      const newBlock = createBlock(copyState.type, {
+        direction,
+        ...copyState
+      })
       blocks.setValue(pi, newBlock)
       blocks.setValue(pi, newBlock.update(pi, blocks))
       updateCanvas()
@@ -67,29 +71,18 @@ export const initBlockEventListeners = (
         // TODO add interaction() to each block type
         // OR on update check if any mouse events have been called on you
         event.ctrlKey &&
-        isBlock<RedstoneRepeater>(block, BlockType.RedstoneRepeater)
+        block.interact
       ) {
-        let ticksOn = block.ticksOn,
-          ticksOff = block.ticksOff
-
-        if (block.isPowered) {
-          ticksOn = ((ticksOn + ticksOff) % 4) + 1
-          ticksOff = 0
-        } else {
-          ticksOff = ((ticksOn + ticksOff) % 4) + 1
-          ticksOn = 0
-        }
-
-        const newBlock = createBlock(block.type, {
-          ...block,
-          ticksOn,
-          ticksOff
-        })
+        const newBlock = block.interact()
         blocks.setValue(pi, newBlock)
         blocks.setValue(pi, newBlock.update(pi, blocks))
         updateCanvas()
       } else {
-        setGlobal('selectedBlock', block.type)
+        const copyState: BlockState = block.copy
+          ? block.copy()
+          : { type: block.type }
+
+        setGlobal('selectedBlock', copyState)
       }
     }
   }
