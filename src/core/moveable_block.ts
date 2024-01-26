@@ -100,10 +100,17 @@ export const updateSubMovement = (
         neighbour.direction === oppositeDirection
       ) {
         // [piston head retracting] [block] [pending block]
-        return createStateChange({
-          movement: Movement.RetractionPending,
-          movementDirection: oppositeDirection
-        })
+        if (neighbour.isSticky) {
+          return createStateChange({
+            movement: Movement.RetractionPending,
+            movementDirection: oppositeDirection
+          })
+        } else {
+          return createStateChange({
+            movement: Movement.None,
+            movementDirection
+          })
+        }
       }
     }
   } else if (movement === Movement.Pending) {
@@ -135,7 +142,8 @@ export const updateSubMovement = (
         return createBlockChange(
           new PistonHead({
             direction: movementDirection,
-            motion: PistonHeadMotion.Extending
+            motion: PistonHeadMotion.Extending,
+            isSticky: backNeighbour.isSticky
           })
         )
       } else {

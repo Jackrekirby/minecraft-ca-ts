@@ -87,6 +87,34 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: false
   },
+  sticky_piston_head: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  sticky_piston_head_retracting: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  sticky_piston_head_extending: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  sticky_piston_on: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  sticky_piston_off: {
+    isDirectional: true,
+    isMoveable: true
+  },
+  sticky_piston_off_extended: {
+    isDirectional: true,
+    isMoveable: false
+  },
+  sticky_piston_on_extended: {
+    isDirectional: true,
+    isMoveable: false
+  },
   redstone_block: {
     isDirectional: false,
     isMoveable: true

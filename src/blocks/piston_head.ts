@@ -3,6 +3,7 @@ import {
   Block,
   BlockContainer,
   BlockMovement,
+  BlockState,
   BlockType,
   DirectionalBlock,
   isBlock,
@@ -28,19 +29,23 @@ export class PistonHead implements DirectionalBlock {
   // isRetracting: boolean
   direction: Direction
   motion: PistonHeadMotion
+  isSticky: boolean
 
   constructor ({
     // isRetracting = false,
     direction = Direction.Up,
-    motion = PistonHeadMotion.Extended
+    motion = PistonHeadMotion.Extended,
+    isSticky = false
   }: {
     // isRetracting?: boolean
     direction?: Direction
     motion?: PistonHeadMotion
+    isSticky?: boolean
   } = {}) {
     // this.isRetracting = isRetracting
     this.direction = direction
     this.motion = motion
+    this.isSticky = isSticky
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
@@ -114,7 +119,8 @@ export class PistonHead implements DirectionalBlock {
         return new PistonHead({
           // isRetracting: !backBlock.isBeingPowered,
           direction: this.direction,
-          motion
+          motion,
+          isSticky: this.isSticky
         })
       }
     } else {
@@ -135,7 +141,11 @@ export class PistonHead implements DirectionalBlock {
         }
         // console.log(this.motion, motion)
       } else {
-        motion = PistonHeadMotion.RetractingMidExtension
+        if (this.isSticky) {
+          motion = PistonHeadMotion.RetractingMidExtension
+        } else {
+          return new Air()
+        }
       }
       return new PistonHead({ ...this, motion })
     } else {
@@ -164,7 +174,9 @@ export class PistonHead implements DirectionalBlock {
         break
     }
 
-    return `piston_head${motionTex}_${this.direction.toLowerCase()}`
+    const sticky = this.isSticky ? 'sticky_' : ''
+
+    return `${sticky}piston_head${motionTex}_${this.direction.toLowerCase()}`
   }
 
   // public isOutputtingPower (): boolean {
@@ -173,6 +185,10 @@ export class PistonHead implements DirectionalBlock {
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable
+  }
+
+  public copy (): BlockState {
+    return { type: this.type, isSticky: this.isSticky } as BlockState
   }
 }
 

@@ -104,7 +104,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add powerable block type
 - [x] Fix repeater never turning on after being powered if power duration less than repeater delay
 - [x] Add 1 tick sticky piston spit out block
-- [ ] Add non-sticky pistons
+- [x] Add non-sticky pistons
 - [x] Add redstone dust
 - [x] Fix pixel shifting when texture changes when zoomed out
 - [ ] Fix blocks like lamps should have their state ready when movement complete
@@ -124,3 +124,4 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add drag selection copy paste
 - [x] Add button block
 - [x] Add force clear of local storage when version bumped
+- [ ] Blocks should not output power whilst moving

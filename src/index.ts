@@ -142,6 +142,8 @@ const main = async () => {
 
   const blocks = blockStorage.get()
 
+  placeAllBlocks(blocks)
+
   const canvas = new Canvas(
     canvasElement,
     await loadImages(),

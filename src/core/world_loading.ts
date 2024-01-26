@@ -48,6 +48,8 @@ export const placeAllBlocks = (blocks: BlockContainer) => {
 
   blocks.setValue({ x: 8, y: 0 }, new Button({}))
 
+  blocks.setValue({ x: 9, y: 0 }, new Piston({ isSticky: true }))
+
   Object.values(Color).forEach((color: string, index: number) => {
     blocks.setValue(
       { x: index, y: -1 },

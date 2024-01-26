@@ -3,6 +3,7 @@ import {
   Block,
   BlockContainer,
   BlockMovement,
+  BlockState,
   BlockType,
   DirectionalBlock,
   isBlock,
@@ -36,25 +37,29 @@ export class Piston implements DirectionalBlock, MoveableBlock {
   direction: Direction
   movement: Movement
   movementDirection: Direction
+  isSticky: boolean
 
   constructor ({
     isBeingPowered = false,
     isExtended = false,
     direction = Direction.Up,
     movement = Movement.None,
-    movementDirection = Direction.Up
+    movementDirection = Direction.Up,
+    isSticky = false
   }: {
     isBeingPowered?: boolean
     isExtended?: boolean
     direction?: Direction
     movement?: Movement
     movementDirection?: Direction
+    isSticky?: boolean
   } = {}) {
     this.isBeingPowered = isBeingPowered
     this.isExtended = isExtended
     this.direction = direction
     this.movement = movement
     this.movementDirection = movementDirection
+    this.isSticky = isSticky
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -121,7 +126,8 @@ export class Piston implements DirectionalBlock, MoveableBlock {
         ...movementUpdateChange.state,
         isBeingPowered,
         isExtended,
-        direction: this.direction
+        direction: this.direction,
+        isSticky: this.isSticky
       })
     }
   }
@@ -153,7 +159,8 @@ export class Piston implements DirectionalBlock, MoveableBlock {
         ...movementUpdateChange.state,
         isBeingPowered: this.isBeingPowered,
         isExtended: this.isExtended,
-        direction: this.direction
+        direction: this.direction,
+        isSticky: this.isSticky
       })
     }
   }
@@ -175,8 +182,10 @@ export class Piston implements DirectionalBlock, MoveableBlock {
     //   frontBlock.getMovementMethod() === BlockMovement.Moveable &&
     //   frontBlock.movement === Movement.Pending &&
     //   frontBlock.movementDirection === this.direction)
+
+    const sticky = this.isSticky ? 'sticky_' : ''
     const tex =
-      `piston${isPowered ? '_on' : '_off'}${
+      `${sticky}piston${isPowered ? '_on' : '_off'}${
         isExtended ? '_extended' : ''
       }_${this.direction.toLowerCase()}` +
       (isExtended ? '' : getMovementTextureName(this))
@@ -189,6 +198,10 @@ export class Piston implements DirectionalBlock, MoveableBlock {
 
   public getMovementMethod (): BlockMovement {
     return this.isExtended ? BlockMovement.Immovable : BlockMovement.Moveable
+  }
+
+  public copy (): BlockState {
+    return { type: this.type, isSticky: this.isSticky } as BlockState
   }
 }
 

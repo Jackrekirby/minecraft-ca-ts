@@ -29,7 +29,10 @@ export class Air implements Block {
         neighbour.direction === oppositeDirection &&
         neighbour.isBeingPowered
       ) {
-        return new PistonHead({ direction: neighbour.direction })
+        return new PistonHead({
+          direction: neighbour.direction,
+          isSticky: neighbour.isSticky
+        })
       } else if (
         // TODO: check if instance of movable block
         // TODO: add movement direction
