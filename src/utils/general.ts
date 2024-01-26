@@ -26,7 +26,7 @@ export type StateHandler<T> = {
   set: (value: T) => void
 }
 
-export const createState = <T>(
+export const _createState = <T>(
   defaultValue: T,
   localStorageKey: string,
   setCallback: (value: T) => void = () => {}
@@ -77,7 +77,8 @@ export const areObjectsEqual = (
     if (
       typeof value1 === 'object' &&
       value1 !== null &&
-      typeof value2 === 'object' && value2 !== null
+      typeof value2 === 'object' &&
+      value2 !== null
     ) {
       if (!areObjectsEqual(value1, value2)) {
         return false
@@ -163,18 +164,44 @@ export interface GlobalValue<T> {
   display: () => string
 }
 
+export const createStoredGlobalValue = <T>(
+  name: string,
+  initialValue: T,
+  formatter: (value: T) => string = (value: T) => String(value)
+) => {
+  let currentValue: T = initialValue
+  // const valueStorage = new LocalStorageVariable({
+  //   defaultValue: initialValue,
+  //   localStorageKey: name
+  // })
+  // const display = () => `${name}: ${formatter(valueStorage.get())}`
+
+  const set = (value: T) => {
+    currentValue = value
+    localStorage.setItem(name, JSON.stringify(value))
+  }
+  const get = () => {
+    return currentValue
+  }
+  const display = () => `${name}: ${formatter(get())}`
+
+  const state: GlobalValue<T> = {
+    get,
+    set,
+    display
+  }
+  return state
+}
+
 export const createGlobalValue = <T>(
   name: string,
   initialValue: T,
   formatter: (value: T) => string = (value: T) => String(value)
 ) => {
-  let currentValue: T =
-    localStorage.getItem(name) !== null
-      ? JSON.parse(localStorage.getItem(name)!)
-      : initialValue
+  let currentValue: T = initialValue
   const set = (value: T) => {
     currentValue = value
-    localStorage.setItem(name, JSON.stringify(value))
+    // localStorage.setItem(name, JSON.stringify(value))
   }
   const get = () => {
     return currentValue
@@ -209,4 +236,13 @@ export const sleep = (seconds: number): Promise<void> => {
   return new Promise(resolve => {
     setTimeout(resolve, seconds * 1000)
   })
+}
+
+export const hasKey = (obj: any, key: string) => {
+  // Check if the value is an object
+  if (typeof obj === 'object' && obj !== null) {
+    // Check if the key exists in the object
+    return key in obj
+  }
+  return false
 }

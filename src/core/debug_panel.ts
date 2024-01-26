@@ -1,15 +1,16 @@
-import { createState } from '../utils/general'
+import { LocalStorageVariable } from '../utils/save'
 import { GLOBALS } from './globals'
 
 const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
 
-export const debugPanelState = createState<boolean>(
-  true,
-  'show-debug-panel',
-  (showDebugPanel: boolean) => {
+export const debugPanelState = new LocalStorageVariable<boolean>({
+  defaultValue: true,
+  localStorageKey: 'show-debug-panel',
+  saveInterval: 0,
+  setCallback: (showDebugPanel: boolean) => {
     debugPanel.style.display = showDebugPanel ? '' : 'none'
   }
-)
+})
 
 export const updateDebugInfo = () => {
   debugPanel.innerHTML = ''

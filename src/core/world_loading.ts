@@ -1,4 +1,3 @@
-import { Air } from '../blocks/air'
 import { Button } from '../blocks/button'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
@@ -9,12 +8,12 @@ import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
 import { Color, WoolBlock } from '../blocks/wool_block'
-import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
+import { Dict2D, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { createBlock } from '../utils/create_block'
-import { Block, BlockContainer, BlockType } from './block'
+import { Block, BlockContainer } from './block'
 
-const loadWorldSave = async () => {
+export const loadWorldSave = async () => {
   try {
     const response = await fetch('saves/world1.json')
 
@@ -30,7 +29,7 @@ const loadWorldSave = async () => {
   }
 }
 
-const placeAllBlocks = (blocks: BlockContainer) => {
+export const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
 
   blocks.setValue({ x: 1, y: 0 }, new RedstoneTorch({}))
@@ -56,40 +55,42 @@ const placeAllBlocks = (blocks: BlockContainer) => {
     )
   })
 }
-
-export const loadChunksFromStorage = async (
-  allowLocalStorage: boolean = true,
-  allowWorldDemos: boolean = true
+export const loadChunks = (
+  chunks: StringDict<Block>,
+  blocks: BlockContainer
 ) => {
-  const chunksRaw = localStorage.getItem('chunks')
+  const chunkDict = new Dict2D(chunks)
+  // console.log(chunkDict)
 
-  const blocks: BlockContainer = new ChunkContainer<Block>(
-    16,
-    () => new Air({}),
-    (block: Block) => block.type === BlockType.Air,
-    true
-  )
-
-  // console.log('chunksRaw', chunksRaw)
-
-  const loadChunks = (chunks: StringDict<Block>) => {
-    const chunkDict = new Dict2D(chunks)
-    // console.log(chunkDict)
-
-    chunkDict.map((block: Block, v: Vec2) => {
-      blocks.setValue(v, createBlock(block.type, block))
-    })
-  }
-
-  if (chunksRaw && allowLocalStorage) {
-    const chunks = JSON.parse(chunksRaw) as StringDict<Block>
-    loadChunks(chunks)
-  } else if (allowWorldDemos) {
-    const chunks = (await loadWorldSave()) as StringDict<Block>
-    loadChunks(chunks)
-  }
-
-  placeAllBlocks(blocks)
-
-  return blocks
+  chunkDict.map((block: Block, v: Vec2) => {
+    blocks.setValue(v, createBlock(block.type, block))
+  })
 }
+
+// export const loadChunksFromStorage = async (
+//   allowLocalStorage: boolean = true,
+//   allowWorldDemos: boolean = true
+// ) => {
+//   const chunksRaw = localStorage.getItem('chunks')
+
+//   const blocks: BlockContainer = new ChunkContainer<Block>(
+//     16,
+//     () => new Air({}),
+//     (block: Block) => block.type === BlockType.Air,
+//     true
+//   )
+
+//   // console.log('chunksRaw', chunksRaw)
+
+//   if (chunksRaw && allowLocalStorage) {
+//     const chunks = JSON.parse(chunksRaw) as StringDict<Block>
+//     loadChunks(chunks, blocks)
+//   } else if (allowWorldDemos) {
+//     const chunks = (await loadWorldSave()) as StringDict<Block>
+//     loadChunks(chunks, blocks)
+//   }
+
+//   placeAllBlocks(blocks)
+
+//   return blocks
+// }

@@ -13,6 +13,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@types/pako": "^2.0.3",
     "@types/webpack-env": "^1.18.4",
     "file-loader": "^6.2.0",
     "loader-utils": "^3.2.1",
@@ -23,6 +24,7 @@
   },
   "dependencies": {
     "jimp": "^0.22.10",
+    "pako": "^2.1.0",
     "sharp": "^0.33.1"
   }
 }

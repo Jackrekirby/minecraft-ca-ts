@@ -1,7 +1,8 @@
 import { Dict2D } from '../containers/array2d'
 import { Vec2, vec2Add, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { TileInfo, tilemap } from '../images/tilemap'
-import { createState, StateHandler } from '../utils/general'
+import { StateHandler } from '../utils/general'
+import { LocalStorageVariable } from '../utils/save'
 
 function roundToNearestPowerOf2 (number: number): number {
   // Check if the number is already a power of 2
@@ -53,9 +54,19 @@ export class Canvas {
     this.images = images
     this.imageGrid = new Dict2D<string>()
 
-    this.scale = createState(scale, 'canvas-scale')
+    // this.scale = createState(scale, 'canvas-scale')
+    this.scale = new LocalStorageVariable({
+      localStorageKey: 'canvas-scale',
+      defaultValue: scale,
+      saveInterval: 1000
+    })
     this.scaleFactor = scaleFactor
-    this.offset = createState(offset, 'canvas-offset')
+    // this.offset = createState(offset, 'canvas-offset')
+    this.offset = new LocalStorageVariable({
+      localStorageKey: 'canvas-offset',
+      defaultValue: offset,
+      saveInterval: 1000
+    })
     this.mouse = { x: 0, y: 0 }
 
     this.handlePanning()

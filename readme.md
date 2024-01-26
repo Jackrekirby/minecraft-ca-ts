@@ -53,18 +53,18 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Make placement directional
 - [x] Convert all create block function to take state input
 - [x] World loading from local storage
-- [ ] Pull out powerable block interface
+- [x] Pull out powerable block interface
 - [x] Make generic moveable block function
 - [x] Make piston powered texture
 - [x] Add redstone lamp
 - [x] Piston will not retract if pending block
-- [ ] Side blocks disappear on complete movement block
+- [-] Side blocks disappear on complete movement block
 - [x] Make saveable state (to file so users can try them out)
 - [x] Test pistons pushing and facing eachother (they replicate infinitely!!!)
 - [x] Make blocks classes so they can use prototypes
 - [x] Add subticks
 - [x] Add chunk system (infinite world)
-- [ ] Add moveable pistons
+- [x] Add moveable pistons
 - [ ] Make rendering block more efficient (chunking?)
 - [ ] Make block picker
 - [ ] Make world selection system
@@ -72,10 +72,10 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Make minor and major grid lines
 - [x] Make world panning have minimum threshold
 - [x] Negate the single click select block function on double click delete block
-- [ ] Cannot just check if block is of moveable type. A moveable type can be temporarily immovable. Must check movement method
+- [x] Cannot just check if block is of moveable type. A moveable type can be temporarily immovable. Must check movement method
 - [ ] Reconsider movement method function on block interface
 - [x] Save world location and scale
-- [ ] Auto-position camera at largest mass of blocks?
+- [-] Auto-position camera at largest mass of blocks?
 - [ ] Fix duplicate pistons in double piston extender when powered incorrectly
 - [ ] Remove defaults from blocks (maybe have explicit default function)
 - [x] Convert blocks to use prototypes to improve efficiency / performance
@@ -85,7 +85,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Support Full Screen Canvas
 - [x] Add basic command line (history, hints, output)
 - [ ] Add bitmap font rendering
-- [ ] Prevent texture bleeding on atlas
+- [x] Prevent texture bleeding on atlas
 - [x] Grid size should be based on pixel width of block, large screens should remain at unit grid size longer
 - [ ] If updates are faster than the frame rate then do not render (do not wait to render before processing next step)
 - [x] Fix panning freeze / jitter
@@ -93,7 +93,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Improve user input so place and delete events are easy to distinguish (single vs double click)
 - [ ] Add failing state to block movement once subupdate block movement implemented
 - [ ] Overhaul game loop - render at any time, rendering and logic should not be in same loop
-- [ ] Overhaul local storage save system (should not be saving multiple times per second)
+- [x] Overhaul local storage save system (should not be saving multiple times per second)
 - [x] History only toggles between two
 - [ ] Overhaul command line html/css - list grouping so they both disappear correctly
 - [x] Fix overlapping textures by flooring and ceiling together/seperate?
@@ -114,10 +114,12 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add wool blocks
 - [x] Add generic user interact function to blocks
 - [x] Add ability to pick block with state, not just block type
+- [x] Add ability to use pick block command with state, not just block type
 - [ ] Add command / structure blocks
 - [ ] Add clone command
 - [ ] Fix bug with texture packer not waiting for all images to be generated before packing
-- [x] Add lever
+- [x] Add lever block
 - [ ] Should block powering occur in subticks?
 - [x] Enable block pick to support state
 - [ ] Add drag selection copy paste
+- [x] Add button block

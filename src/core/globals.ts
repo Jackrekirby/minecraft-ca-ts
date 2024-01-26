@@ -1,10 +1,34 @@
 // TODO: put globals in a class and pass it around
 
 import { StringDict } from '../containers/array2d'
-import { createGlobalValue, GlobalValue } from '../utils/general'
+import {
+  createGlobalValue,
+  createStoredGlobalValue,
+  GlobalValue
+} from '../utils/general'
 import { BlockState, BlockType } from './block'
 
-const convertObjectToString = (obj: Record<string, string>): string => {
+export const convertStringToObject = (
+  input: string
+): Record<string, string> => {
+  const parts = input.replace(/\[|\]/g, '').split(/\s+/)
+  console.log({ parts })
+
+  const type = parts[0]
+  const obj: Record<string, string> = { type }
+
+  if (parts.length > 1) {
+    const props = parts.slice(1)
+    props.forEach(prop => {
+      const [key, value] = prop.split('=')
+      obj[key] = value
+    })
+  }
+
+  return obj
+}
+
+export const convertObjectToString = (obj: Record<string, string>): string => {
   let output = `${obj.type}`
   const props: string[] = Object.entries(obj)
     .filter(([key, value]) => key !== 'type')
@@ -22,7 +46,7 @@ export const GLOBALS: StringDict<GlobalValue<any>> = {
   build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
   tick: createGlobalValue('TICK', 0),
   subtick: createGlobalValue('SUBTICK', 0),
-  selectedBlock: createGlobalValue<BlockState>(
+  selectedBlock: createStoredGlobalValue<BlockState>(
     'PICKED',
     { type: BlockType.Air },
     (blockState: BlockState) =>

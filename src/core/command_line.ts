@@ -1,4 +1,5 @@
-import { createState, StateHandler, zipArrays } from '../utils/general'
+import { StateHandler, zipArrays } from '../utils/general'
+import { LocalStorageVariable } from '../utils/save'
 
 const commandLineElement = document.getElementById(
   'command-line'
@@ -64,19 +65,24 @@ type StringDict = { [key: string]: string }
 
 export class CommandManager {
   public commands: Command[] = []
-  public history: StateHandler<string[]> = createState(
-    [] as string[],
-    'command-history'
-  )
-  public outputs: StateHandler<CommandOutput[]> = createState(
-    [] as CommandOutput[],
-    'command-outputs'
-  )
+  public history: StateHandler<string[]> = new LocalStorageVariable({
+    defaultValue: [] as string[],
+    localStorageKey: 'command-history',
+    saveInterval: 0
+  })
+  public outputs: StateHandler<CommandOutput[]> = new LocalStorageVariable({
+    defaultValue: [] as CommandOutput[],
+    localStorageKey: 'command-outputs',
+    saveInterval: 0
+  })
 
-  public outputSuccessMessages: StateHandler<boolean> = createState(
-    true,
-    'output-command-success-messages'
-  )
+  public outputSuccessMessages: StateHandler<
+    boolean
+  > = new LocalStorageVariable({
+    defaultValue: true,
+    localStorageKey: 'output-command-success-messages',
+    saveInterval: 0
+  })
 
   public createCommand (
     pattern: string,
@@ -95,6 +101,9 @@ export class CommandManager {
     const inputs: StringDict = {}
     const commandParts = command.split(' ')
     const inputParts = input.split(' ')
+    if (commandParts.length !== inputParts.length) {
+      return null
+    }
     for (const [commandPart, inputPart] of zipArrays(
       commandParts,
       inputParts
@@ -123,6 +132,9 @@ export class CommandManager {
     if (input === '') return true
     const commandParts = command.split(' ')
     const inputParts = input.split(' ')
+    if (inputParts.length > commandParts.length) {
+      return false
+    }
     const n = inputParts.length
 
     for (let i = 0; i < n - 1; i++) {
@@ -448,14 +460,15 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
   }
 }
 
-export const commandLineVisibilityState = createState<boolean>(
-  true,
-  'show-command-line',
-  (isCommandLineVisible: boolean) => {
+export const commandLineVisibilityState = new LocalStorageVariable<boolean>({
+  defaultValue: true,
+  localStorageKey: 'show-command-line',
+  saveInterval: 0,
+  setCallback: (isCommandLineVisible: boolean) => {
     if (isCommandLineVisible) {
       commandLineElement.classList.remove('invisible-on-blur')
     } else {
       commandLineElement.classList.add('invisible-on-blur')
     }
   }
-)
+})

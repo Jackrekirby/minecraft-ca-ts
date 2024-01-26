@@ -1,6 +1,7 @@
-import { Dict2D } from './containers/array2d'
+import { Air } from './blocks/air'
+import { ChunkContainer, Dict2D, StringDict } from './containers/array2d'
 import { Vec2, vec2Zero } from './containers/vec2'
-import { Block, BlockContainer, BlockType } from './core/block'
+import { Block, BlockContainer, BlockState, BlockType } from './core/block'
 import {
   commandFailure,
   commandInfo,
@@ -11,15 +12,24 @@ import {
 } from './core/command_line'
 import { debugPanelState, updateDebugInfo } from './core/debug_panel'
 import { Game } from './core/game_loop'
-import { GLOBALS } from './core/globals'
+import {
+  convertObjectToString,
+  convertStringToObject,
+  GLOBALS
+} from './core/globals'
 import {
   initBlockEventListeners,
   initCanvasResizeListener
 } from './core/user_input'
-import { loadChunksFromStorage } from './core/world_loading'
+import { loadChunks, loadWorldSave, placeAllBlocks } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
-import { areObjectsEqual, createState, debounce, isEnum } from './utils/general'
+import { areObjectsEqual, debounce, isEnum } from './utils/general'
+import {
+  compressObject,
+  decompressObject,
+  LocalStorageVariable
+} from './utils/save'
 
 // dom
 
@@ -62,18 +72,75 @@ const updateBlocks = (blocks: BlockContainer) => {
   })
 
   blocks.clone(newBlocks)
-  const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
-    (block: Block, v: Vec2) => {
-      return block
-    }
-  )
-  localStorage.setItem('chunks', JSON.stringify(blocksForStorage.items))
+  // const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+  //   (block: Block, v: Vec2) => {
+  //     return block
+  //   }
+  // )
+  // localStorage.setItem('chunks', JSON.stringify(blocksForStorage.items))
   // logBlocks(blocks)
+}
+
+const createEmptyBlockContainer = () => {
+  const blocks: BlockContainer = new ChunkContainer<Block>(
+    16,
+    () => new Air({}),
+    (block: Block) => block.type === BlockType.Air,
+    true
+  )
+  return blocks
 }
 
 const main = async () => {
   setGlobal('tick', 0)
-  const blocks = await loadChunksFromStorage()
+  // const blocks = await loadChunksFromStorage()
+
+  const createDemoWorld = async () => {
+    const blocks: BlockContainer = createEmptyBlockContainer()
+    const chunks = (await loadWorldSave()) as StringDict<Block>
+    loadChunks(chunks, blocks)
+
+    placeAllBlocks(blocks)
+    return blocks
+  }
+
+  const createEmptyWorld = async () => {
+    const blocks: BlockContainer = createEmptyBlockContainer()
+    placeAllBlocks(blocks)
+    return blocks
+  }
+
+  const blockStorage = new LocalStorageVariable<BlockContainer>({
+    localStorageKey: 'world',
+    defaultValue: await createDemoWorld(),
+    valueToStorage: (blocks: BlockContainer) => {
+      const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+        (block: Block, v: Vec2) => {
+          return block
+        }
+      )
+
+      return compressObject(blocksForStorage.items)
+    },
+    storageToValue: (storage: string) => {
+      const blocks: BlockContainer = createEmptyBlockContainer()
+      const chunks = decompressObject(storage) as StringDict<Block>
+      loadChunks(chunks, blocks)
+      return blocks
+    }
+    // saveCallback: (value, storedValue) => {
+    //   const valueMemory = JSON.stringify(value).length
+    //   const storageMemory = storedValue.length
+    //   console.log('saved chunks', {
+    //     value,
+    //     valueMemory: `${valueMemory / 1000} KB`,
+    //     storageMemory: `${storageMemory / 1000} KB`,
+    //     compression: `${Math.round((storageMemory / valueMemory) * 1000) / 10}%`
+    //   })
+    // }
+  })
+
+  const blocks = blockStorage.get()
 
   const canvas = new Canvas(
     canvasElement,
@@ -138,21 +205,39 @@ const main = async () => {
     requestAnimationFrame(runSubUpdate)
   })
 
-  const updatesPerSecondState = createState<number>(
-    5,
-    'updates-per-second',
-    (ups: number) => {
+  const updatesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 5,
+    localStorageKey: 'updates-per-second',
+    saveInterval: 0,
+    setCallback: (ups: number) => {
       game.setUpdatesPerSecond(ups)
     }
-  )
+  })
 
-  const subupdatesPerSecondState = createState<number>(
-    1000,
-    'subupdates-per-second',
-    (sups: number) => {
+  // const updatesPerSecondState = createState<number>(
+  //   5,
+  //   'updates-per-second',
+  //   (ups: number) => {
+  //     game.setUpdatesPerSecond(ups)
+  //   }
+  // )
+
+  const subupdatesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 100,
+    localStorageKey: 'subupdates-per-second',
+    saveInterval: 0,
+    setCallback: (sups: number) => {
       subUpdateTimeStep = sups > 0 ? 1000 / sups : 0
     }
-  )
+  })
+
+  // const subupdatesPerSecondState = createState<number>(
+  //   1000,
+  //   'subupdates-per-second',
+  //   (sups: number) => {
+  //     subUpdateTimeStep = sups > 0 ? 1000 / sups : 0
+  //   }
+  // )
 
   logBlocks(blocks)
   updateCanvas()
@@ -165,12 +250,14 @@ const main = async () => {
   const commandManager = new CommandManager()
 
   commandManager.createCommand('/world load {name:string}', async input => {
-    blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
+    blocks.clone(await createDemoWorld())
+    // blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     updateCanvas()
     return commandSuccess(`loaded world ${input.name}`)
   })
   commandManager.createCommand('/world clear', async () => {
-    blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
+    // blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
+    blocks.clone(await createEmptyWorld())
     updateCanvas()
     return commandSuccess(`cleared world`)
   })
@@ -280,13 +367,48 @@ const main = async () => {
   })
 
   commandManager.createCommand('/block pick {type:string}', async input => {
-    if (isEnum<BlockType>(input.type as BlockType, Object.values(BlockType))) {
-      setGlobal('selectedBlock', input.type)
-      return commandSuccess(`picked block '${input.type}'`)
+    const block = (convertStringToObject(input.type) as unknown) as BlockState
+    if (isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))) {
+      setGlobal('selectedBlock', block)
+      return commandSuccess(
+        `picked block ${convertObjectToString(
+          (block as unknown) as Record<string, string>
+        )}`
+      )
     } else {
-      return commandFailure(`cannot pick invalid block '${input.type}'`)
+      return commandFailure(
+        `cannot pick invalid block ${convertObjectToString(
+          (block as unknown) as Record<string, string>
+        )}`
+      )
     }
   })
+
+  commandManager.createCommand(
+    '/block pick {type:string} {meta:string}',
+    async input => {
+      const block = (convertStringToObject(
+        `${input.type} ${input.meta}`
+      ) as unknown) as BlockState
+      console.log(block)
+      if (
+        isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))
+      ) {
+        setGlobal('selectedBlock', block)
+        return commandSuccess(
+          `picked block ${convertObjectToString(
+            (block as unknown) as Record<string, string>
+          )}`
+        )
+      } else {
+        return commandFailure(
+          `cannot pick invalid block ${convertObjectToString(
+            (block as unknown) as Record<string, string>
+          )}`
+        )
+      }
+    }
+  )
 
   initCommandLineEventListeners(commandManager)
 
