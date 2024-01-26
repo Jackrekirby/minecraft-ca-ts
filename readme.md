@@ -123,3 +123,4 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Enable block pick to support state
 - [ ] Add drag selection copy paste
 - [x] Add button block
+- [x] Add force clear of local storage when version bumped

@@ -170,6 +170,12 @@ export const createStoredGlobalValue = <T>(
   formatter: (value: T) => string = (value: T) => String(value)
 ) => {
   let currentValue: T = initialValue
+  try {
+    const storage = localStorage.getItem(name)
+    if (storage) {
+      currentValue = JSON.parse(storage)
+    }
+  } catch (error) {}
   // const valueStorage = new LocalStorageVariable({
   //   defaultValue: initialValue,
   //   localStorageKey: name

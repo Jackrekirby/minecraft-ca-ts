@@ -415,4 +415,18 @@ const main = async () => {
   game.startGameLoop()
 }
 
+const clearStorageOnVersionIncrease = () => {
+  const latestVersion = 1
+  const savedVersion = Number(localStorage.getItem('version'))
+
+  if (isNaN(savedVersion) || savedVersion !== latestVersion) {
+    console.log('cleared local storage', { latestVersion, savedVersion })
+    localStorage.clear()
+  }
+
+  localStorage.setItem('version', JSON.stringify(latestVersion))
+}
+
+clearStorageOnVersionIncrease()
+
 main()
