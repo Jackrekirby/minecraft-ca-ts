@@ -4,10 +4,15 @@ import { Direction } from '../core/direction'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
+import { createObjectSubset } from '../utils/general'
+import { ObserverFilter } from './observer_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
 export class Button
-  implements OutputPowerBlock.Traits, ConnectsToRedstoneDustBlock.Traits {
+  implements
+    OutputPowerBlock.Traits,
+    ConnectsToRedstoneDustBlock.Traits,
+    ObserverFilter {
   type: BlockType = BlockType.Button
   isOn: boolean
   delay: number
@@ -61,6 +66,14 @@ export class Button
   public interact (): Block {
     // 5 delay = 4 1 tick repeaters on
     return new Button({ ...this, isOn: !this.isOn, delay: 5 })
+  }
+
+  public filteredState (): Record<string, any> {
+    return createObjectSubset(this, [
+      'type',
+      'isOn'
+      // not delay
+    ])
   }
 }
 

@@ -14,13 +14,16 @@ import {
   getOppositeRelativeDirection
 } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
+import { createObjectSubset } from '../utils/general'
+import { ObserverFilter } from './observer_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
 export class RedstoneRepeater
   implements
     DirectionalBlock,
     ConnectsToRedstoneDustBlock.Traits,
-    OutputPowerBlock.Traits {
+    OutputPowerBlock.Traits,
+    ObserverFilter {
   type: BlockType = BlockType.RedstoneRepeater
   ticksOn: number
   ticksOff: number
@@ -160,6 +163,15 @@ export class RedstoneRepeater
     }
 
     return new RedstoneRepeater({ ...this, ticksOn, ticksOff })
+  }
+
+  public filteredState (): Record<string, any> {
+    return createObjectSubset(this, [
+      'type',
+      'isPowered',
+      'direction'
+      // not ticksOn / ticksOff
+    ])
   }
 }
 

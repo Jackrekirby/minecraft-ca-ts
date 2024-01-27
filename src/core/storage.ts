@@ -13,7 +13,7 @@ import {
 } from './world_loading'
 
 export const clearStorageOnVersionIncrease = () => {
-  const latestVersion = 2
+  const latestVersion = 3
   const savedVersion = Number(localStorage.getItem('version'))
 
   if (isNaN(savedVersion) || savedVersion !== latestVersion) {
@@ -25,7 +25,7 @@ export const clearStorageOnVersionIncrease = () => {
 }
 
 export const framesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 30,
+  defaultValue: 100,
   localStorageKey: 'frames-per-second',
   saveInterval: 0
 })
@@ -52,6 +52,8 @@ export const blockStorage = new LocalStorageVariable<BlockContainer>({
       }
     )
 
+    // console.log('save', blocksForStorage.items)
+
     return compressObject(blocksForStorage.items)
   },
   storageToValue: (storage: string) => {
@@ -76,6 +78,18 @@ export const selectedBlockState = new LocalStorageVariable<BlockState>({
   defaultValue: { type: BlockType.Air },
   localStorageKey: 'selected-block',
   saveInterval: 0
+})
+
+export const actualTicksPerSecondState = new LocalStorageVariable<number>({
+  defaultValue: 0
+})
+
+export const actualSubticksPerSecondState = new LocalStorageVariable<number>({
+  defaultValue: 0
+})
+
+export const actualFramesPerSecondState = new LocalStorageVariable<number>({
+  defaultValue: 0
 })
 
 // build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),

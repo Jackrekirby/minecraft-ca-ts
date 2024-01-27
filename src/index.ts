@@ -7,6 +7,7 @@ import {
 import { updateDebugInfo } from './core/debug_panel'
 import { createLogicLoop, ProcessLoop, RenderLoop } from './core/game_loop'
 import {
+  actualFramesPerSecondState,
   blockStorage,
   clearStorageOnVersionIncrease,
   framesPerSecondState,
@@ -60,8 +61,14 @@ const main = async () => {
 
   // initialise render and processing loop
 
+  let elapsedFramesInSecond = 0
+  setInterval(() => {
+    actualFramesPerSecondState.set(elapsedFramesInSecond)
+    elapsedFramesInSecond = 0
+  }, 1000)
   const renderLoop = new RenderLoop(framesPerSecondState.get(), () => {
     canvas.render()
+    elapsedFramesInSecond += 1
   })
 
   const runLogicLoop = createLogicLoop(blocks, canvas)

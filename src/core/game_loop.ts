@@ -2,7 +2,13 @@ import { Vec2 } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { areObjectsEqual, sleep } from '../utils/general'
 import { Block, BlockContainer } from './block'
-import { subtickState, tickState, viewSubTicksState } from './storage'
+import {
+  actualSubticksPerSecondState,
+  actualTicksPerSecondState,
+  subtickState,
+  tickState,
+  viewSubTicksState
+} from './storage'
 
 export class Game {
   private lastUpdateTime: number = 0
@@ -221,6 +227,8 @@ export const updateBlocks = (blocks: BlockContainer) => {
 export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   let subtick = 0
   let tick = 0
+  let elapsedTicksInSecond = 0
+  let elapsedSubticksInSecond = 0
   let didSubUpdate = true
   const updateCanvasBlocks = () => {
     const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
@@ -229,6 +237,13 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     canvas.setGridImages(gridImages)
   }
 
+  setInterval(() => {
+    actualTicksPerSecondState.set(elapsedTicksInSecond)
+    actualSubticksPerSecondState.set(elapsedSubticksInSecond)
+    elapsedTicksInSecond = 0
+    elapsedSubticksInSecond = 0
+  }, 1000)
+
   const processLogic = () => {
     if (viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
@@ -236,10 +251,12 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
         // while there are subticks process them
         didSubUpdate = subUpdateBlocks(blocks)
         subtick += 1
+        elapsedSubticksInSecond += 1
         subtickState.set(subtick)
       } else {
         updateBlocks(blocks)
         didSubUpdate = true
+        elapsedTicksInSecond += 1
         tick += 1
         tickState.set(tick)
         subtick = 0
@@ -247,9 +264,12 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     } else {
       // process all subticks without updating canvas
       let didSubUpdate = subUpdateBlocks(blocks)
+      subtick += 1
+      elapsedSubticksInSecond += 1
       while (didSubUpdate) {
         didSubUpdate = subUpdateBlocks(blocks)
         subtick += 1
+        elapsedSubticksInSecond += 1
       }
 
       subtickState.set(subtick)
@@ -259,6 +279,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
       subtick = 0
       tick += 1
+      elapsedTicksInSecond += 1
     }
 
     updateCanvasBlocks()

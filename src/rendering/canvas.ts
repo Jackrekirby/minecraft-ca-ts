@@ -227,7 +227,7 @@ export class Canvas {
     const screenCellWidth = this.canvas.width / (numCellsWide / gridSize)
 
     this.ctx.fillStyle = 'white'
-    this.ctx.font = `${screenCellWidth / 4}px Sora`
+    this.ctx.font = `${screenCellWidth / 4}px Roboto Mono`
 
     // this.ctx.strokeStyle = 'white'
     // this.ctx.lineWidth = 1

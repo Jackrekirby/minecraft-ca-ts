@@ -1,6 +1,14 @@
+import { invisibleRightPad } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
 import { convertObjectToString } from './globals'
-import { selectedBlockState, subtickState, tickState } from './storage'
+import {
+  actualFramesPerSecondState,
+  actualSubticksPerSecondState,
+  actualTicksPerSecondState,
+  selectedBlockState,
+  subtickState,
+  tickState
+} from './storage'
 // import { GLOBALS } from './globals'
 
 const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
@@ -14,15 +22,29 @@ export const debugPanelState = new LocalStorageVariable<boolean>({
   }
 })
 const BUILD = process.env.BUILD_TIME?.replace(',', '')
+
 export const updateDebugInfo = () => {
   debugPanel.innerHTML = ''
+  const varWidth = 20
   const variables = [
-    `Build: ${BUILD}`,
-    `Selected: ${convertObjectToString(
+    `${invisibleRightPad('Build', varWidth)} ${BUILD}`,
+    `${invisibleRightPad('Selected', varWidth - 2)} ${convertObjectToString(
       (selectedBlockState.get() as unknown) as Record<string, string>
     )}`,
-    `Tick: ${tickState.get()}`,
-    `Subticks: ${subtickState.get()}`
+    `${invisibleRightPad('Tick', varWidth + 2)} ${tickState.get()} `,
+    `${invisibleRightPad('Subtick', varWidth - 2)} ${subtickState.get()}`,
+    `${invisibleRightPad(
+      'Ticks/s',
+      varWidth - 1
+    )} ${actualTicksPerSecondState.get()}`,
+    `${invisibleRightPad(
+      'Subicks/s',
+      varWidth - 3
+    )} ${actualSubticksPerSecondState.get()}`,
+    `${invisibleRightPad(
+      'Frames/s',
+      varWidth - 3
+    )} ${actualFramesPerSecondState.get()}`
   ]
 
   variables.forEach(value => {

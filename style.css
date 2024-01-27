@@ -1,14 +1,16 @@
 @import url('https://fonts.googleapis.com/css2?family=Sora:wght@100;200;300;400;500;600;700;800&display=swap');
 
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;1,100;1,200;1,300;1,400;1,500;1,600;1,700&display=swap');
+
 * {
-  font-family: 'Sora';
+  font-family: 'Roboto Mono';
   user-select: none;
-  font-smooth: none;
+  /* font-smooth: none;
   -webkit-font-smoothing: none;
-  -moz-osx-font-smoothing: grayscale;
-  font-weight: 400;
+  -moz-osx-font-smoothing: grayscale; */
+  font-weight: normal;
   box-sizing: border-box;
-  font-size: 12px;
+  font-size: 14px;
 }
 
 body {

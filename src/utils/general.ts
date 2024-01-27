@@ -252,3 +252,26 @@ export const hasKey = (obj: any, key: string) => {
   }
   return false
 }
+
+export const zeroPad = (value: number, width: number): string => {
+  return value.toString().padStart(width, '0')
+}
+
+export const invisibleRightPad = (value: string, width: number): string => {
+  return value.padEnd(width, '‎ ')
+}
+
+export const createObjectSubset = (
+  value: Record<string, any>,
+  keys: string[]
+): Record<string, any> => {
+  const subset: Record<string, any> = {}
+
+  keys.forEach(key => {
+    if (value.hasOwnProperty(key)) {
+      subset[key] = value[key]
+    }
+  })
+
+  return subset
+}

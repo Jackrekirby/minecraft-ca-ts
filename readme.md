@@ -139,5 +139,5 @@ updatesPerSecondState.set(100)
 - [x] Add force clear of local storage when version bumped
 - [x] Blocks should not output power whilst moving (quick fix with subtick power processing)
 - [x] Add world download
-- [ ] Allow blocks to filter states visible to observers
-- [ ] Add performance metric to debug panel (tps, stps, fps)
+- [x] Allow blocks to filter states visible to observers
+- [x] Add performance metric to debug panel (tps, stps, fps)

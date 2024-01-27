@@ -21,18 +21,30 @@ import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
-import { areObjectsEqual } from '../utils/general'
+import { areObjectsEqual, createObjectSubset } from '../utils/general'
 import { Air } from './air'
 
+export interface ObserverFilter {
+  filteredState: () => Record<string, any>
+}
+
+export const hasObserverFilter = (block: object): block is ObserverFilter => {
+  return 'filteredState' in block
+}
+
 export class ObserverBlock
-  implements MoveableBlock, DirectionalBlock, OutputPowerBlock.Traits {
+  implements
+    MoveableBlock,
+    DirectionalBlock,
+    OutputPowerBlock.Traits,
+    ObserverFilter {
   type: BlockType = BlockType.ObserverBlock
 
   movement: Movement
   movementDirection: Direction
   direction: Direction
 
-  lastObservation: Block
+  lastObservation: Record<string, any>
   hasObservedChange: boolean
 
   constructor ({
@@ -45,7 +57,7 @@ export class ObserverBlock
     direction?: Direction
     movement?: Movement
     movementDirection?: Direction
-    lastObservation?: Block
+    lastObservation?: Record<string, any>
     hasObservedChange?: boolean
   } = {}) {
     this.direction = direction
@@ -68,23 +80,30 @@ export class ObserverBlock
       return movementUpdateChange.block
     } else {
       Object.assign(newState, movementUpdateChange.state)
-      const currentObservation: Block = getNeighbourBlock(
+      const neighbour: Block = getNeighbourBlock(
         position,
         blocks,
         Direction.Down
       )
-
-      if (this.hasObservedChange) {
-        newState.hasObservedChange = false
-      } else if (
-        [Movement.Complete, Movement.RetractionComplete].includes(this.movement)
-      ) {
-        newState.hasObservedChange = true
-      } else if (!areObjectsEqual(currentObservation, this.lastObservation)) {
-        newState.hasObservedChange = true
-      } else {
-        newState.hasObservedChange = false
+      let currentObservation: Record<string, any> = neighbour
+      if (hasObserverFilter(neighbour)) {
+        currentObservation = neighbour.filteredState()
       }
+
+      if (currentObservation)
+        if (this.hasObservedChange) {
+          newState.hasObservedChange = false
+        } else if (
+          [Movement.Complete, Movement.RetractionComplete].includes(
+            this.movement
+          )
+        ) {
+          newState.hasObservedChange = true
+        } else if (!areObjectsEqual(currentObservation, this.lastObservation)) {
+          newState.hasObservedChange = true
+        } else {
+          newState.hasObservedChange = false
+        }
       newState.lastObservation = currentObservation
 
       return new ObserverBlock(newState)
@@ -134,6 +153,17 @@ export class ObserverBlock
 
   public transmitsBetweenSelf (): boolean {
     return true
+  }
+
+  public filteredState (): Record<string, any> {
+    return createObjectSubset(this, [
+      'type',
+      'hasObservedChange',
+      'direction',
+      'movement',
+      'movementDirection'
+      // not lastObservation
+    ])
   }
 }
 

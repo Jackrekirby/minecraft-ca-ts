@@ -14,11 +14,16 @@ import { debugPanelState } from './debug_panel'
 import { convertObjectToString, convertStringToObject } from './globals'
 import {
   downloadFile,
+  framesPerSecondState,
   selectedBlockState,
   updatesPerSecondState,
   viewSubTicksState
 } from './storage'
-import { createDemoWorld, createEmptyWorld } from './world_loading'
+import {
+  createDemoWorld,
+  createEmptyWorld,
+  placeAllBlocks
+} from './world_loading'
 
 export const initialiseCommands = (
   commandManager: CommandManager,
@@ -33,6 +38,7 @@ export const initialiseCommands = (
   commandManager.createCommand('/world clear', async () => {
     // blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
     blocks.clone(await createEmptyWorld())
+    placeAllBlocks(blocks)
     // updateCanvas()
     return commandSuccess(`cleared world`)
   })
@@ -81,6 +87,19 @@ export const initialiseCommands = (
         return commandSuccess(`set updates per second ${ups}`)
       } else {
         return commandFailure(`updates per second was not a number`)
+      }
+    }
+  )
+
+  commandManager.createCommand(
+    '/set frames_per_second {fps:float}',
+    async input => {
+      const ups = Number(input.fps)
+      if (!isNaN(ups)) {
+        framesPerSecondState.set(ups)
+        return commandSuccess(`set frames per second ${ups}`)
+      } else {
+        return commandFailure(`frames per second was not a number`)
       }
     }
   )

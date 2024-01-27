@@ -117,7 +117,7 @@ export class LocalStorageVariable<T> {
       this.set(defaultValue)
     }
 
-    if (saveInterval > 0) {
+    if (localStorageKey && saveInterval > 0) {
       this.intervalId = setInterval(() => {
         this.save()
       }, saveInterval)

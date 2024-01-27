@@ -35,7 +35,7 @@ export const initBlockEventListeners = (
   blocks: BlockContainer
 ) => {
   const placeBlock = (event: MouseEvent) => {
-    console.log('place block')
+    // console.log('place block')
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
 
@@ -85,7 +85,7 @@ export const initBlockEventListeners = (
   }
 
   const deleteBlock = () => {
-    console.log('delete block')
+    // console.log('delete block')
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
     blocks.setValue(pi, new Air({}))
