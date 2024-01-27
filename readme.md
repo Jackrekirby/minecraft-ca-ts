@@ -79,7 +79,7 @@ updatesPerSecondState.set(100)
 - [x] Add chunk system (infinite world)
 - [x] Add moveable pistons
 - [ ] Make rendering block more efficient (chunking?)
-- [ ] Make block picker
+- [ ] Make block picker (inventory)
 - [ ] Make world selection system
 - [ ] Make world snap to grid
 - [x] Make minor and major grid lines
@@ -138,4 +138,4 @@ updatesPerSecondState.set(100)
 - [x] Add button block
 - [x] Add force clear of local storage when version bumped
 - [ ] Blocks should not output power whilst moving
-- [ ] Add world download
+- [x] Add world download
