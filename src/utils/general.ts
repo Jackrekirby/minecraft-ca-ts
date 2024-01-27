@@ -238,9 +238,9 @@ export const debounce = (callback: () => void, delay: number): (() => void) => {
   }
 }
 
-export const sleep = (seconds: number): Promise<void> => {
+export const sleep = (milliseconds: number): Promise<void> => {
   return new Promise(resolve => {
-    setTimeout(resolve, seconds * 1000)
+    setTimeout(resolve, milliseconds)
   })
 }
 

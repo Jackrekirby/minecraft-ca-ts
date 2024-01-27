@@ -715,7 +715,7 @@ const main = async () => {
   console.log('processImagesInDirectory')
   await processImagesInDirectory(inputDirectory, outputDirectory)
   console.log('waiting for image files to be ready...')
-  await sleep(3)
+  await sleep(3000)
   console.log('combineImagesInDirectory')
   await combineImagesInDirectory(outputDirectory, 'src/images')
 

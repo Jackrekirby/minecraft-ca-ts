@@ -5,11 +5,11 @@ import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import { Direction } from './direction'
-import { GLOBALS } from './globals'
+import { selectedBlockState } from './storage'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
-export const initCanvasResizeListener = (updateCanvas: () => void) => {
+export const initCanvasResizeListener = () => {
   const resizeCanvas = () => {
     const context = canvasElement.getContext('2d')!
     const pixelRatio = window.devicePixelRatio || 1
@@ -17,7 +17,6 @@ export const initCanvasResizeListener = (updateCanvas: () => void) => {
     canvasElement.height = canvasElement.clientHeight * pixelRatio
 
     context.imageSmoothingEnabled = false
-    updateCanvas()
   }
 
   let resizeTimeout: NodeJS.Timeout
@@ -33,9 +32,7 @@ export const initCanvasResizeListener = (updateCanvas: () => void) => {
 
 export const initBlockEventListeners = (
   canvas: Canvas,
-  blocks: BlockContainer,
-  updateCanvas: () => void,
-  setGlobal: (name: string, value: any) => void
+  blocks: BlockContainer
 ) => {
   const placeBlock = (event: MouseEvent) => {
     console.log('place block')
@@ -55,7 +52,7 @@ export const initBlockEventListeners = (
     const block = blocks.getValue(pi)
 
     if (block.type === BlockType.Air) {
-      const copyState = GLOBALS.selectedBlock.get() as Block
+      const copyState = selectedBlockState.get() as Block
 
       const newBlock = createBlock(copyState.type, {
         direction,
@@ -63,7 +60,7 @@ export const initBlockEventListeners = (
       })
       blocks.setValue(pi, newBlock)
       blocks.setValue(pi, newBlock.update(pi, blocks))
-      updateCanvas()
+      // updateCanvas()
     } else {
       console.log('selected block', block.type)
 
@@ -76,13 +73,13 @@ export const initBlockEventListeners = (
         const newBlock = block.interact()
         blocks.setValue(pi, newBlock)
         blocks.setValue(pi, newBlock.update(pi, blocks))
-        updateCanvas()
+        // updateCanvas()
       } else {
         const copyState: BlockState = block.copy
           ? block.copy()
           : { type: block.type }
 
-        setGlobal('selectedBlock', copyState)
+        selectedBlockState.set(copyState)
       }
     }
   }
@@ -92,7 +89,7 @@ export const initBlockEventListeners = (
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
     blocks.setValue(pi, new Air({}))
-    updateCanvas()
+    // updateCanvas()
   }
 
   canvasElement.addEventListener('contextmenu', function (event) {

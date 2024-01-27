@@ -28,7 +28,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": false
     },
     "5 0": {
         "type": "RedstoneRepeater",
@@ -60,15 +61,24 @@
         "isOn": false,
         "delay": 0
     },
+    "9 0": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Up",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
     "7 7": {
         "type": "Lever",
         "isOn": false
     },
     "12 7": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down"
     },
     "0 8": {
@@ -101,9 +111,9 @@
     },
     "7 8": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "None",
         "inputPowerStrength": {
-            "Up": 15,
+            "Up": 0,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -115,9 +125,9 @@
     },
     "12 8": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down"
     },
     "1 9": {
@@ -138,21 +148,21 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Strong",
-        "isPowered": true
+        "outputPower": "None",
+        "isPowered": false
     },
     "8 9": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Left"
     },
     "9 9": {
         "type": "RedstoneRepeater",
-        "ticksOn": 4,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 2,
+        "ticksOff": 2,
+        "isPowered": false,
         "direction": "Left"
     },
     "10 9": {
@@ -192,7 +202,7 @@
     },
     "7 10": {
         "type": "RedstoneTorch",
-        "isBeingPowered": true,
+        "isBeingPowered": false,
         "direction": "Up"
     },
     "8 10": {
@@ -225,9 +235,9 @@
     },
     "12 10": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Down"
     },
     "14 10": {
@@ -281,9 +291,9 @@
     },
     "12 11": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Down"
     },
     "14 11": {
@@ -337,9 +347,9 @@
     },
     "12 12": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 4,
-        "isPowered": false,
+        "ticksOn": 2,
+        "ticksOff": 2,
+        "isPowered": true,
         "direction": "Down"
     },
     "14 12": {
@@ -381,7 +391,8 @@
     "3 13": {
         "type": "PistonHead",
         "direction": "Down",
-        "motion": "extended"
+        "motion": "extended",
+        "isSticky": true
     },
     "4 13": {
         "type": "RedstoneDust",
@@ -533,7 +544,8 @@
         "isExtended": true,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "4 14": {
         "type": "RedstoneRepeater",
@@ -880,7 +892,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": false
     },
     "-2 8": {
         "type": "RedstoneDust",
@@ -1264,7 +1277,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Left",
+        "isSticky": true
     },
     "17 12": {
         "type": "Piston",
@@ -1272,13 +1286,20 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "18 12": {
         "type": "Piston",
         "isBeingPowered": false,
         "isExtended": false,
         "direction": "Up",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "17 13": {
+        "type": "GlassBlock",
         "movement": "None",
         "movementDirection": "Up"
     },
@@ -1287,15 +1308,10 @@
         "movement": "None",
         "movementDirection": "Up"
     },
-    "16 14": {
+    "16 15": {
         "type": "GlassBlock",
         "movement": "None",
-        "movementDirection": "Up"
-    },
-    "17 14": {
-        "type": "GlassBlock",
-        "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Down"
     },
     "1 16": {
         "type": "RedstoneDust",
@@ -1700,7 +1716,8 @@
     "0 22": {
         "type": "PistonHead",
         "direction": "Left",
-        "motion": "extended"
+        "motion": "extended",
+        "isSticky": true
     },
     "1 22": {
         "type": "Piston",
@@ -1708,7 +1725,8 @@
         "isExtended": true,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "6 22": {
         "type": "RedstoneDust",
@@ -2349,12 +2367,14 @@
         "isExtended": true,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-24 3": {
         "type": "PistonHead",
         "direction": "Right",
-        "motion": "extended"
+        "motion": "extended",
+        "isSticky": true
     },
     "-23 3": {
         "type": "RedstoneLamp",
@@ -2376,7 +2396,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-17 3": {
         "type": "RedstoneRepeater",
@@ -2521,7 +2542,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-20 5": {
         "type": "RedstoneRepeater",
@@ -2572,7 +2594,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-20 6": {
         "type": "RedstoneLamp",
@@ -2665,7 +2688,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-26 8": {
         "type": "RedstoneDust",
@@ -2694,7 +2718,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-23 8": {
         "type": "WoolBlock",
@@ -2716,7 +2741,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-17 8": {
         "type": "RedstoneRepeater",
@@ -2753,7 +2779,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-23 9": {
         "type": "WoolBlock",
@@ -2775,7 +2802,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-17 9": {
         "type": "RedstoneRepeater",
@@ -2812,7 +2840,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-23 10": {
         "type": "WoolBlock",
@@ -2834,7 +2863,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-17 10": {
         "type": "RedstoneRepeater",
@@ -2982,7 +3012,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-19 12": {
         "type": "RedstoneDust",
@@ -3074,7 +3105,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": false
     },
     "-2 18": {
         "type": "RedstoneDust",
@@ -3148,7 +3180,8 @@
     "-2 22": {
         "type": "PistonHead",
         "direction": "Left",
-        "motion": "extended"
+        "motion": "extended",
+        "isSticky": true
     },
     "-1 22": {
         "type": "Piston",
@@ -3156,7 +3189,8 @@
         "isExtended": true,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Left"
+        "movementDirection": "Left",
+        "isSticky": true
     },
     "16 16": {
         "type": "Piston",
@@ -3164,7 +3198,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-21 -2": {
         "type": "Piston",
@@ -3172,7 +3207,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-20 -2": {
         "type": "RedstoneDust",
@@ -3226,7 +3262,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "-18 -1": {
         "type": "RedstoneRepeater",
@@ -3276,7 +3313,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "43 0": {
         "type": "RedstoneDust",
@@ -3380,7 +3418,8 @@
     "43 2": {
         "type": "PistonHead",
         "direction": "Left",
-        "motion": "extended"
+        "motion": "extended",
+        "isSticky": true
     },
     "44 2": {
         "type": "Piston",
@@ -3388,7 +3427,8 @@
         "isExtended": true,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "37 3": {
         "type": "RedstoneRepeater",
@@ -3561,7 +3601,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "41 5": {
         "type": "RedstoneRepeater",
@@ -3657,7 +3698,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "41 6": {
         "type": "RedstoneRepeater",
@@ -3709,7 +3751,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "39 7": {
         "type": "GlassBlock",
@@ -3777,7 +3820,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "38 8": {
         "type": "GlassBlock",
@@ -3795,7 +3839,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "44 8": {
         "type": "RedstoneRepeater",
@@ -3846,7 +3891,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "38 9": {
         "type": "GlassBlock",
@@ -3864,7 +3910,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "44 9": {
         "type": "RedstoneRepeater",
@@ -3916,7 +3963,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "38 10": {
         "type": "GlassBlock",
@@ -3934,7 +3982,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "44 10": {
         "type": "RedstoneRepeater",
@@ -4014,7 +4063,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "45 12": {
         "type": "RedstoneDust",
@@ -4456,7 +4506,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "61 9": {
         "type": "RedstoneDust",
@@ -4478,7 +4529,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "61 10": {
         "type": "RedstoneDust",
@@ -4867,7 +4919,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "67 5": {
         "type": "Piston",
@@ -4875,7 +4928,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "68 5": {
         "type": "Piston",
@@ -4883,7 +4937,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "69 5": {
         "type": "Piston",
@@ -4891,7 +4946,8 @@
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "70 5": {
         "type": "RedstoneDust",
@@ -5097,7 +5153,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Right"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "65 8": {
         "type": "GlassBlock",
@@ -5115,7 +5172,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Left"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "72 8": {
         "type": "Piston",
@@ -5123,7 +5181,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "74 8": {
         "type": "RedstoneDust",
@@ -5145,7 +5204,8 @@
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
-        "movementDirection": "Right"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "65 9": {
         "type": "GlassBlock",
@@ -5163,7 +5223,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Left"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "72 9": {
         "type": "Piston",
@@ -5171,7 +5232,8 @@
         "isExtended": false,
         "direction": "Left",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "74 9": {
         "type": "RedstoneDust",
@@ -5347,7 +5409,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "67 12": {
         "type": "Piston",
@@ -5355,7 +5418,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "68 12": {
         "type": "Piston",
@@ -5363,7 +5427,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "69 12": {
         "type": "Piston",
@@ -5371,7 +5436,8 @@
         "isExtended": false,
         "direction": "Down",
         "movement": "None",
-        "movementDirection": "Up"
+        "movementDirection": "Up",
+        "isSticky": true
     },
     "70 12": {
         "type": "RedstoneDust",

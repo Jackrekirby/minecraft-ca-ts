@@ -1,3 +1,4 @@
+import { Air } from '../blocks/air'
 import { Button } from '../blocks/button'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
@@ -8,10 +9,10 @@ import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
 import { Color, WoolBlock } from '../blocks/wool_block'
-import { Dict2D, StringDict } from '../containers/array2d'
+import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { createBlock } from '../utils/create_block'
-import { Block, BlockContainer } from './block'
+import { Block, BlockContainer, BlockType } from './block'
 
 export const loadWorldSave = async () => {
   try {
@@ -96,3 +97,27 @@ export const loadChunks = (
 
 //   return blocks
 // }
+
+export const createEmptyBlockContainer = () => {
+  const blocks: BlockContainer = new ChunkContainer<Block>(
+    16,
+    () => new Air({}),
+    (block: Block) => block.type === BlockType.Air,
+    true
+  )
+  return blocks
+}
+
+export const createDemoWorld = async () => {
+  const blocks: BlockContainer = createEmptyBlockContainer()
+  const chunks = (await loadWorldSave()) as StringDict<Block>
+  loadChunks(chunks, blocks)
+
+  placeAllBlocks(blocks)
+  return blocks
+}
+
+export const createEmptyWorld = () => {
+  const blocks: BlockContainer = createEmptyBlockContainer()
+  return blocks
+}

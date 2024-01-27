@@ -58,16 +58,16 @@ export function decompressObject<T> (base64: string): T {
 
 export class LocalStorageVariable<T> {
   private value: T
-  private localStorageKey: string
+  private localStorageKey?: string
   private saveInterval: number
   private intervalId: NodeJS.Timeout | undefined
-  private setCallback: (value: T) => void
+  public setCallback: (value: T) => void
   private valueToStorage: (value: T) => string
-  private saveCallback: (value: T, storedValue: string) => void
+  public saveCallback: (value: T, storedValue: string) => void
 
   constructor ({
-    localStorageKey,
     defaultValue,
+    localStorageKey,
     saveInterval = 5000,
     validator = value => value !== undefined,
     valueToStorage = JSON.stringify,
@@ -75,8 +75,8 @@ export class LocalStorageVariable<T> {
     setCallback = () => {},
     saveCallback = () => {}
   }: {
-    localStorageKey: string
     defaultValue: T
+    localStorageKey?: string
     saveInterval?: number
     validator?: (value: T) => boolean
     valueToStorage?: (value: T) => string
@@ -93,9 +93,9 @@ export class LocalStorageVariable<T> {
 
     let usedLocalStorage = false
     try {
-      const rawStorageValue: string | null = localStorage.getItem(
-        localStorageKey
-      )
+      const rawStorageValue: string | null = localStorageKey
+        ? localStorage.getItem(localStorageKey)
+        : null
       if (rawStorageValue !== null) {
         const storageValue: T = storageToValue(rawStorageValue)
         if (validator(storageValue)) {
@@ -126,7 +126,9 @@ export class LocalStorageVariable<T> {
 
   public save () {
     const storedValue: string = this.valueToStorage(this.value)
-    localStorage.setItem(this.localStorageKey, storedValue)
+    if (this.localStorageKey) {
+      localStorage.setItem(this.localStorageKey, storedValue)
+    }
     this.saveCallback(this.value, storedValue)
   }
 

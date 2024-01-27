@@ -1,5 +1,7 @@
 import { LocalStorageVariable } from '../utils/save'
-import { GLOBALS } from './globals'
+import { convertObjectToString } from './globals'
+import { selectedBlockState, subtickState, tickState } from './storage'
+// import { GLOBALS } from './globals'
 
 const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
 
@@ -11,14 +13,21 @@ export const debugPanelState = new LocalStorageVariable<boolean>({
     debugPanel.style.display = showDebugPanel ? '' : 'none'
   }
 })
-
+const BUILD = process.env.BUILD_TIME?.replace(',', '')
 export const updateDebugInfo = () => {
   debugPanel.innerHTML = ''
+  const variables = [
+    `Build: ${BUILD}`,
+    `Selected: ${convertObjectToString(
+      (selectedBlockState.get() as unknown) as Record<string, string>
+    )}`,
+    `Tick: ${tickState.get()}`,
+    `Subticks: ${subtickState.get()}`
+  ]
 
-  Object.values(GLOBALS).forEach(globalValue => {
+  variables.forEach(value => {
     const item = document.createElement('div')
-    item.textContent = globalValue.display()
-
+    item.textContent = String(value)
     debugPanel.appendChild(item)
   })
 }

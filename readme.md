@@ -35,12 +35,25 @@ To open the command window click on it on the bottom left corner or press `/`
 - `Right click` will delete a block.
 - `Ctrl left click` will interact with a block, such as cycle the delay of a redstone repeater or toggle a lever.
 
+document.addEventListener('keydown', event => {
+if (event.key === 'z') {
+viewSubTicksState.set(!viewSubTicksState.get())
+} else if (event.key === 'x') {
+logicLoop.stop()
+runLogicLoop()
+} else if (event.key === 'c') {
+updatesPerSecondState.set(5)
+} else if (event.key === 'v') {
+updatesPerSecondState.set(100)
+}
+
 ### Keys
 
 - Press `e` to log a block to the (browser) console.
-- Press `z` to step a subtick.
+- Press `z` to toggle between viewing ticks or subticks.
 - Press `x` to step a tick.
-- Press `c` to set the tick and subtick speed back to default.
+- Press `c` to set the tick speed back to default.
+- Press `v` to set the tick speed to as fast as possible.
 
 ## Task List
 
@@ -87,12 +100,12 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add bitmap font rendering
 - [x] Prevent texture bleeding on atlas
 - [x] Grid size should be based on pixel width of block, large screens should remain at unit grid size longer
-- [ ] If updates are faster than the frame rate then do not render (do not wait to render before processing next step)
+- [-] If updates are faster than the frame rate then do not render (do not wait to render before processing next step)
 - [x] Fix panning freeze / jitter
 - [x] Make number of allowed subticks unlimited (until all processed)
 - [x] Improve user input so place and delete events are easy to distinguish (single vs double click)
 - [ ] Add failing state to block movement once subupdate block movement implemented
-- [ ] Overhaul game loop - render at any time, rendering and logic should not be in same loop
+- [x] Overhaul game loop - render at any time, rendering and logic should not be in same loop
 - [x] Overhaul local storage save system (should not be saving multiple times per second)
 - [x] History only toggles between two
 - [ ] Overhaul command line html/css - list grouping so they both disappear correctly
@@ -125,3 +138,4 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add button block
 - [x] Add force clear of local storage when version bumped
 - [ ] Blocks should not output power whilst moving
+- [ ] Add world download

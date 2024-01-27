@@ -1,13 +1,5 @@
 // TODO: put globals in a class and pass it around
 
-import { StringDict } from '../containers/array2d'
-import {
-  createGlobalValue,
-  createStoredGlobalValue,
-  GlobalValue
-} from '../utils/general'
-import { BlockState, BlockType } from './block'
-
 export const convertStringToObject = (
   input: string
 ): Record<string, string> => {
@@ -42,14 +34,19 @@ export const convertObjectToString = (obj: Record<string, string>): string => {
   return output
 }
 
-export const GLOBALS: StringDict<GlobalValue<any>> = {
-  build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
-  tick: createGlobalValue('TICK', 0),
-  subtick: createGlobalValue('SUBTICK', 0),
-  selectedBlock: createStoredGlobalValue<BlockState>(
-    'PICKED',
-    { type: BlockType.Air },
-    (blockState: BlockState) =>
-      convertObjectToString((blockState as unknown) as Record<string, string>)
-  )
-}
+// export const GLOBALS: StringDict<GlobalValue<any>> = {
+//   build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
+//   tick: createGlobalValue('TICK', 0),
+//   subtick: createGlobalValue('SUBTICK', 0),
+//   selectedBlock: createStoredGlobalValue<BlockState>(
+//     'PICKED',
+//     { type: BlockType.Air },
+//     (blockState: BlockState) =>
+//       convertObjectToString((blockState as unknown) as Record<string, string>)
+//   )
+// }
+
+// export const setGlobal = (name: string, value: any) => {
+//   GLOBALS[name].set(value)
+//   debouncedUpdateDebugInfo()
+// }
