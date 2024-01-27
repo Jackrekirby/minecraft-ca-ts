@@ -224,18 +224,19 @@ export const updateBlocks = (blocks: BlockContainer) => {
   blocks.clone(newBlocks)
 }
 
+export const updateCanvasBlocks = (blocks: BlockContainer, canvas: Canvas) => {
+  const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
+    return block.getTextureName(v, blocks)
+  })
+  canvas.setGridImages(gridImages)
+}
+
 export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   let subtick = 0
   let tick = 0
   let elapsedTicksInSecond = 0
   let elapsedSubticksInSecond = 0
   let didSubUpdate = true
-  const updateCanvasBlocks = () => {
-    const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
-      return block.getTextureName(v, blocks)
-    })
-    canvas.setGridImages(gridImages)
-  }
 
   setInterval(() => {
     actualTicksPerSecondState.set(elapsedTicksInSecond)
@@ -282,7 +283,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       elapsedTicksInSecond += 1
     }
 
-    updateCanvasBlocks()
+    updateCanvasBlocks(blocks, canvas)
   }
   return processLogic
 }

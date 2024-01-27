@@ -5,6 +5,7 @@ import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import { Direction } from './direction'
+import { updateCanvasBlocks } from './game_loop'
 import { selectedBlockState } from './storage'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
@@ -61,6 +62,7 @@ export const initBlockEventListeners = (
       blocks.setValue(pi, newBlock)
       blocks.setValue(pi, newBlock.update(pi, blocks))
       // updateCanvas()
+      updateCanvasBlocks(blocks, canvas)
     } else {
       console.log('selected block', block.type)
 
@@ -81,6 +83,8 @@ export const initBlockEventListeners = (
 
         selectedBlockState.set(copyState)
       }
+
+      updateCanvasBlocks(blocks, canvas)
     }
   }
 
@@ -89,6 +93,7 @@ export const initBlockEventListeners = (
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
     blocks.setValue(pi, new Air({}))
+    updateCanvasBlocks(blocks, canvas)
     // updateCanvas()
   }
 

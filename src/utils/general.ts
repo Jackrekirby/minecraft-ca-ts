@@ -142,8 +142,8 @@ export const addClickHandlerWithDragCheck = (
 
     const mouseUpHandler = (event: MouseEvent) => {
       if (event.button !== 0) return // handle left click only
-      document.removeEventListener('mousemove', mouseMoveHandler)
-      document.removeEventListener('mouseup', mouseUpHandler)
+      document.removeEventListener('pointermove', mouseMoveHandler)
+      document.removeEventListener('pointerup', mouseUpHandler)
 
       if (!isDragging) {
         // Invoke the callback for a regular click
@@ -151,11 +151,11 @@ export const addClickHandlerWithDragCheck = (
       }
     }
 
-    document.addEventListener('mousemove', mouseMoveHandler)
-    document.addEventListener('mouseup', mouseUpHandler)
+    document.addEventListener('pointermove', mouseMoveHandler)
+    document.addEventListener('pointerup', mouseUpHandler)
   }
 
-  element.addEventListener('mousedown', mouseDownHandler)
+  element.addEventListener('pointerdown', mouseDownHandler)
 }
 
 export interface GlobalValue<T> {

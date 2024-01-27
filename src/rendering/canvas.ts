@@ -153,14 +153,14 @@ export class Canvas {
       }
     }
 
-    canvas.addEventListener('mousemove', handleMouseMove)
-    canvas.addEventListener('mousedown', () => {
+    canvas.addEventListener('pointermove', handleMouseMove)
+    canvas.addEventListener('pointerdown', () => {
       isPanning = true
       lastMouse = this.mouse
       lastOffset = this.offset.get()
     })
-    canvas.addEventListener('mouseup', () => (isPanning = false))
-    canvas.addEventListener('mouseleave', () => (isPanning = false))
+    canvas.addEventListener('pointerup', () => (isPanning = false))
+    canvas.addEventListener('pointerleave', () => (isPanning = false))
   }
 
   handleScaling = () => {

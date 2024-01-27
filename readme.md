@@ -35,18 +35,6 @@ To open the command window click on it on the bottom left corner or press `/`
 - `Right click` will delete a block.
 - `Ctrl left click` will interact with a block, such as cycle the delay of a redstone repeater or toggle a lever.
 
-document.addEventListener('keydown', event => {
-if (event.key === 'z') {
-viewSubTicksState.set(!viewSubTicksState.get())
-} else if (event.key === 'x') {
-logicLoop.stop()
-runLogicLoop()
-} else if (event.key === 'c') {
-updatesPerSecondState.set(5)
-} else if (event.key === 'v') {
-updatesPerSecondState.set(100)
-}
-
 ### Keys
 
 - Press `e` to log a block to the (browser) console.
@@ -141,3 +129,5 @@ updatesPerSecondState.set(100)
 - [x] Add world download
 - [x] Allow blocks to filter states visible to observers
 - [x] Add performance metric to debug panel (tps, stps, fps)
+- [x] User block placement/deletion/interaction should update blocks on canvas on next frame instead of logic tick
+- [x] Paused logical ticks should be remembered on reload and blocks should render on load

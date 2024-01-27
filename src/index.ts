@@ -5,7 +5,12 @@ import {
   initCommandLineEventListeners
 } from './core/command_line'
 import { updateDebugInfo } from './core/debug_panel'
-import { createLogicLoop, ProcessLoop, RenderLoop } from './core/game_loop'
+import {
+  createLogicLoop,
+  ProcessLoop,
+  RenderLoop,
+  updateCanvasBlocks
+} from './core/game_loop'
 import {
   actualFramesPerSecondState,
   blockStorage,
@@ -89,6 +94,7 @@ const main = async () => {
       viewSubTicksState.set(!viewSubTicksState.get())
     } else if (event.key === 'x') {
       logicLoop.stop()
+      updatesPerSecondState.set(0)
       runLogicLoop()
     } else if (event.key === 'c') {
       updatesPerSecondState.set(5)
@@ -97,8 +103,12 @@ const main = async () => {
     }
   })
 
+  updateCanvasBlocks(blocks, canvas)
   renderLoop.start()
-  logicLoop.start()
+
+  if (updatesPerSecondState.get() > 0) {
+    logicLoop.start()
+  }
 }
 
 main()
