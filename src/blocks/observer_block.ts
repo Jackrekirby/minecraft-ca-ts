@@ -3,8 +3,8 @@ import {
   Block,
   BlockContainer,
   BlockMovement,
-  BlockState,
   BlockType,
+  DirectionalBlock,
   MoveableBlock,
   Movement
 } from '../core/block'
@@ -18,51 +18,41 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
+import { areObjectsEqual } from '../utils/general'
+import { Air } from './air'
 
-export enum Color {
-  Red = 'red',
-  Orange = 'orange',
-  Yellow = 'yellow',
-  Lime = 'lime',
-  Green = 'green',
-  Cyan = 'cyan',
-  LightBlue = 'light_blue',
-  Blue = 'blue',
-  Purple = 'purple',
-  Magenta = 'magenta',
-  Pink = 'pink',
-  Brown = 'brown',
-  White = 'white',
-  LightGray = 'light_gray',
-  Gray = 'gray',
-  Black = 'black'
-}
+export class ObserverBlock
+  implements MoveableBlock, DirectionalBlock, OutputPowerBlock.Traits {
+  type: BlockType = BlockType.ObserverBlock
 
-export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
-  type: BlockType = BlockType.WoolBlock
   movement: Movement
   movementDirection: Direction
-  outputPower: BinaryPower
-  color: Color
+  direction: Direction
+
+  lastObservation: Block
+  hasObservedChange: boolean
 
   constructor ({
+    direction = Direction.Up,
     movement = Movement.None,
     movementDirection = Direction.Up,
-    outputPower = BinaryPower.None,
-    color = Color.White
+    lastObservation = new Air(),
+    hasObservedChange = false
   }: {
+    direction?: Direction
     movement?: Movement
     movementDirection?: Direction
-    outputPower?: BinaryPower
-    isPowered?: boolean
-    color?: Color
+    lastObservation?: Block
+    hasObservedChange?: boolean
   } = {}) {
+    this.direction = direction
     this.movement = movement
     this.movementDirection = movementDirection
-    this.outputPower = outputPower
-    this.color = color
+    this.lastObservation = lastObservation
+    this.hasObservedChange = hasObservedChange
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -78,8 +68,26 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
       return movementUpdateChange.block
     } else {
       Object.assign(newState, movementUpdateChange.state)
+      const currentObservation: Block = getNeighbourBlock(
+        position,
+        blocks,
+        Direction.Down
+      )
 
-      return new WoolBlock(newState)
+      if (this.hasObservedChange) {
+        newState.hasObservedChange = false
+      } else if (
+        [Movement.Complete, Movement.RetractionComplete].includes(this.movement)
+      ) {
+        newState.hasObservedChange = true
+      } else if (!areObjectsEqual(currentObservation, this.lastObservation)) {
+        newState.hasObservedChange = true
+      } else {
+        newState.hasObservedChange = false
+      }
+      newState.lastObservation = currentObservation
+
+      return new ObserverBlock(newState)
     }
   }
 
@@ -96,25 +104,28 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
       return movementUpdateChange.block
     } else {
       Object.assign(newState, movementUpdateChange.state)
-      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
-      return new WoolBlock(newState)
+      return new ObserverBlock(newState)
     }
   }
 
   public toString (): string {
-    return 'Wool'
+    return 'Observer'
   }
 
   public getTextureName (): string {
-    return `${this.color}_wool` + getMovementTextureName(this)
+    return (
+      `observer_${
+        this.hasObservedChange ? 'on' : 'off'
+      }_${this.direction.toLowerCase()}` + getMovementTextureName(this)
+    )
   }
 
-  // public isOutputtingPower (): boolean {
-  //   return this.outputPower !== BinaryPower.None
-  // }
-
-  public getOutputPower (_direction: Direction): BinaryPower {
-    return this.outputPower
+  public getOutputPower (direction: Direction): BinaryPower {
+    if (this.hasObservedChange && direction === this.direction) {
+      return BinaryPower.Strong
+    } else {
+      return BinaryPower.None
+    }
   }
 
   public getMovementMethod (): BlockMovement {
@@ -122,12 +133,8 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
   }
 
   public transmitsBetweenSelf (): boolean {
-    return false
-  }
-
-  public copy (): BlockState {
-    return { type: this.type, color: this.color } as BlockState
+    return true
   }
 }
 
-addCreateBlockFunction(BlockType.WoolBlock, WoolBlock)
+addCreateBlockFunction(BlockType.ObserverBlock, ObserverBlock)

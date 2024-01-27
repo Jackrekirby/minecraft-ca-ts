@@ -62,8 +62,6 @@ export class RedstoneLamp
       return movementUpdateChange.block
     } else {
       Object.assign(newState, movementUpdateChange.state)
-      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
-      Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
 
       return new RedstoneLamp(newState)
     }
@@ -81,6 +79,8 @@ export class RedstoneLamp
     if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
       return movementUpdateChange.block
     } else {
+      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
       Object.assign(newState, movementUpdateChange.state)
       return new RedstoneLamp(newState)
     }

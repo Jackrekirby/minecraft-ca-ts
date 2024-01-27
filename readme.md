@@ -120,7 +120,7 @@ updatesPerSecondState.set(100)
 - [x] Add non-sticky pistons
 - [x] Add redstone dust
 - [x] Fix pixel shifting when texture changes when zoomed out
-- [ ] Fix blocks like lamps should have their state ready when movement complete
+- [x] Fix blocks like lamps should have their state ready when movement complete (quick fix with subtick power processing)
 - [ ] Fix command history/hint on click makes command line disappear before execution
 - [ ] Improve texture packer to handle different texture sizes
 - [x] Design redstone textures and add to atlas
@@ -132,10 +132,12 @@ updatesPerSecondState.set(100)
 - [ ] Add clone command
 - [ ] Fix bug with texture packer not waiting for all images to be generated before packing
 - [x] Add lever block
-- [ ] Should block powering occur in subticks?
+- [x] Should block powering occur in subticks
 - [x] Enable block pick to support state
 - [ ] Add drag selection copy paste
 - [x] Add button block
 - [x] Add force clear of local storage when version bumped
-- [ ] Blocks should not output power whilst moving
+- [x] Blocks should not output power whilst moving (quick fix with subtick power processing)
 - [x] Add world download
+- [ ] Allow blocks to filter states visible to observers
+- [ ] Add performance metric to debug panel (tps, stps, fps)

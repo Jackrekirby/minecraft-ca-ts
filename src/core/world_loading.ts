@@ -2,6 +2,7 @@ import { Air } from '../blocks/air'
 import { Button } from '../blocks/button'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
+import { ObserverBlock } from '../blocks/observer_block'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
 import { RedstoneDust } from '../blocks/redstone_dust'
@@ -50,6 +51,8 @@ export const placeAllBlocks = (blocks: BlockContainer) => {
   blocks.setValue({ x: 8, y: 0 }, new Button({}))
 
   blocks.setValue({ x: 9, y: 0 }, new Piston({ isSticky: true }))
+
+  blocks.setValue({ x: 10, y: 0 }, new ObserverBlock({}))
 
   Object.values(Color).forEach((color: string, index: number) => {
     blocks.setValue(

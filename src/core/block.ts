@@ -22,7 +22,8 @@ export enum BlockType {
   RedstoneDust = 'RedstoneDust',
   WoolBlock = 'WoolBlock',
   Lever = 'Lever',
-  Button = 'Button'
+  Button = 'Button',
+  ObserverBlock = 'ObserverBlock'
 }
 
 export interface BlockState {

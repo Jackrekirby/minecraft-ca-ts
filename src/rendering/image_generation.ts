@@ -150,6 +150,14 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   button_off: {
     isDirectional: false,
     isMoveable: false
+  },
+  observer_on: {
+    isDirectional: true,
+    isMoveable: true
+  },
+  observer_off: {
+    isDirectional: true,
+    isMoveable: true
   }
 }
 
