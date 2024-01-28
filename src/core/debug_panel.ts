@@ -1,5 +1,4 @@
-import { BUILD_TIME } from '../utils/build_time'
-import { formatDate, invisibleRightPad } from '../utils/general'
+import { invisibleRightPad } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
 import { convertObjectToString } from './globals'
 import {
@@ -26,8 +25,6 @@ export const debugPanelState = new LocalStorageVariable<boolean>({
   }
 })
 
-const buildTime: string = formatDate(BUILD_TIME)
-
 export const updateDebugInfo = () => {
   debugPanel.innerHTML = ''
   const varWidth = 20
@@ -41,7 +38,6 @@ export const updateDebugInfo = () => {
     : ''
 
   const variables = [
-    `${invisibleRightPad('Build', varWidth)} ${buildTime}`,
     `${invisibleRightPad('Selected', varWidth - 2)} ${convertObjectToString(
       (selectedBlockState.get() as unknown) as Record<string, string>
     )}`,

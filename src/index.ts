@@ -12,6 +12,7 @@ import {
   RenderLoop,
   updateCanvasBlocks
 } from './core/game_loop'
+import { initialiseGuide, showGuide } from './core/guide'
 import {
   actualFramesPerSecondState,
   blockStorage,
@@ -24,7 +25,7 @@ import {
   initBlockEventListeners,
   initCanvasResizeListener
 } from './core/user_input'
-import { placeAllBlocks } from './core/world_loading'
+import { createDemoWorld, placeAllBlocks } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
 
@@ -47,10 +48,17 @@ setInterval(() => {
 }, 500)
 
 const main = async () => {
-  clearStorageOnVersionIncrease()
+  const reset = clearStorageOnVersionIncrease()
+  initialiseGuide()
   const canvas: Canvas = await createCanvas()
   const blocks = blockStorage.get()
+  console.log(blocks.chunks.length)
   placeAllBlocks(blocks)
+
+  if (reset) {
+    blocks.clone(await createDemoWorld())
+    showGuide()
+  }
 
   console.log(blocks)
 

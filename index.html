@@ -9,7 +9,105 @@
   <body>
     <div id="game-wrapper">
       <div id="canvas-wrapper">
-        <div id="debug-panel" style="display: none;">DEBUG PANEL</div>
+        <div id="debug-panel" style="display: none;">Debug</div>
+
+        <div id="guide-button">?</div>
+
+        <div id="guide-panel" class="hide">
+          <h1>Minecraft Cellular Automaton in Typescript</h1>
+
+          <p>
+            This project aims to recreate minecraft redstone as a cellular
+            automaton, coded in Typescript. To close this guide click the
+            <code>?</code> at the top right of the screen.
+          </p>
+
+          <p>
+            This project is still highly experimental. When the version
+            increases, the guide will reappear, settings reset and worlds lost.
+          </p>
+
+          <p>Current Build: <code id="build-details">...</code></p>
+
+          <h2>Mouse</h2>
+
+          <ul>
+            <li>
+              Pan around the world map by clicking and dragging the mouse.
+            </li>
+            <li>Scale the world map using the mouse scroll wheel.</li>
+            <li>
+              <code>Left click</code> will place a block if the location is air,
+              otherwise it will pick the block.
+            </li>
+            <li><code>Right click</code> will delete a block.</li>
+            <li>
+              <code>Ctrl left click</code> will interact with a block, such as
+              cycle the delay of a redstone repeater or toggle a lever.
+            </li>
+          </ul>
+
+          <h2>Keys</h2>
+
+          <ul>
+            <li>
+              Press <code>e</code> to log a block to the (browser) console.
+            </li>
+            <li>
+              Press <code>z</code> to toggle between viewing ticks or subticks.
+            </li>
+            <li>Press <code>x</code> to step a tick.</li>
+            <li>Press <code>c</code> to set the tick speed back to default.</li>
+            <li>
+              Press <code>v</code> to set the tick speed to as fast as possible.
+            </li>
+          </ul>
+
+          <h2>Commands</h2>
+
+          <p>Use the command terminal to run commands including:</p>
+
+          <ul>
+            <li>Set update and render speeds</li>
+            <li>Load, delete and download worlds</li>
+            <li>List and pick blocks</li>
+            <li>Toggle debug and command window visibility</li>
+          </ul>
+
+          <p>
+            The command terminal is located on the bottom left corner of the
+            screen. To open the terminal click on it or press <code>/</code>.
+          </p>
+
+          <ul>
+            <li>
+              Press <code>tab</code> to switch between command suggestions
+            </li>
+            <li>
+              Press <code>up</code> to switch between commands in your history
+            </li>
+          </ul>
+
+          <p>
+            <strong
+              >Use the <code>/world clear</code> and
+              <code>/world load ?</code> commands to load the latest demo
+              world!</strong
+            >
+          </p>
+
+          <h2>Code</h2>
+
+          <p>
+            View the source code on GitHub.
+          </p>
+
+          <a
+            href="https://github.com/jackrekirby/minecraft-ca-ts"
+            target="_blank"
+            >https://github.com/jackrekirby/minecraft-ca-ts</a
+          >
+        </div>
 
         <div id="command-wrapper">
           <div id="command-list-wrapper" style="display: none;">

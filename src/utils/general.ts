@@ -281,10 +281,7 @@ export const formatDate = (date: Date): string => {
 
   const day = pad(date.getDate())
   const month = pad(date.getMonth() + 1)
-  const year = date
-    .getFullYear()
-    .toString()
-    .slice(2)
+  const year = date.getFullYear().toString()
   const hours = pad(date.getHours())
   const minutes = pad(date.getMinutes())
 

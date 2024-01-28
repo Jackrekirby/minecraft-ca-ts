@@ -61,6 +61,26 @@ canvas {
   color: white;
 }
 
+#guide-button {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 32px;
+  text-align: center;
+  width: fit-content;
+
+  margin: 32px;
+
+  outline: none;
+  outline: 1px solid rgb(255, 255, 255, 0.2);
+  border: none;
+
+  background-color: rgb(18, 91, 167, 0.5);
+  color: white;
+  padding: 8px;
+  color: white;
+}
+
 .invisible-on-blur:not(:focus) {
   opacity: 0;
   pointer-events: none;
@@ -157,16 +177,82 @@ canvas {
 }
 
 /* For WebKit browsers (Chrome, Safari) */
-#command-list::-webkit-scrollbar {
+::-webkit-scrollbar {
   width: 4px;
 }
 
-#command-list::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-thumb {
   background-color: rgb(255, 255, 255, 0.8);
   border-radius: 0px;
 }
 
-#command-list::-webkit-scrollbar-track {
+::-webkit-scrollbar-track {
   background-color: rgb(255, 255, 255, 0.1);
   border-radius: 0px;
+}
+
+.hide {
+  display: none;
+}
+
+#guide-panel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  min-width: 256px;
+  max-width: 768px;
+  margin: 0px;
+
+  max-height: calc(100% - 128px);
+
+  outline: none;
+  outline: 1px solid rgb(255, 255, 255, 0.2);
+  border: none;
+
+  background-color: rgb(18, 91, 167, 0.9);
+  color: white;
+  padding: 8px;
+  padding-bottom: 16px;
+  color: white;
+  overflow: auto;
+  z-index: 2;
+}
+
+#guide-panel h1 {
+  text-decoration: underline;
+  font-size: large;
+  text-align: center;
+}
+
+#guide-panel h2 {
+  font-size: large;
+  font-weight: bold;
+}
+
+#guide-panel code {
+  background-color: rgb(255, 255, 255, 0.1);
+
+  padding: 0px 4px;
+
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#guide-panel a {
+  background-color: rgb(255, 255, 255, 0.5);
+  color: rgb(18, 91, 167);
+  padding: 2px 8px;
+
+  border-radius: 4px;
+  font-weight: bold;
+}
+
+#guide-panel ul {
+  padding: 0px 24px;
+}
+
+#guide-panel li {
+  padding: 2px 0px;
 }

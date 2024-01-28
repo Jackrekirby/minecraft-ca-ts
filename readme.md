@@ -141,5 +141,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Actual FPS/TPS much lower than target (consider overshoot and sleep remaining not elapsed)
 - [x] Typing in command window should not trigger keyboard shortcuts
 - [ ] Observer double pulses when facing piston head
-- [ ] Demo world not loading on local storage clear
+- [x] Demo world not loading on local storage clear
 - [ ] Add world update queue rather than updating entire world every tick
+- [ ] Center world at 0,0 on load
+- [ ] Add teleport command
+- [x] Add guide (copy readme into game)
