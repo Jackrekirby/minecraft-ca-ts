@@ -13,7 +13,7 @@ import {
 } from './world_loading'
 
 export const clearStorageOnVersionIncrease = () => {
-  const latestVersion = 3
+  const latestVersion = 4
   const savedVersion = Number(localStorage.getItem('version'))
 
   if (isNaN(savedVersion) || savedVersion !== latestVersion) {
@@ -25,7 +25,7 @@ export const clearStorageOnVersionIncrease = () => {
 }
 
 export const framesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 100,
+  defaultValue: 60,
   localStorageKey: 'frames-per-second',
   saveInterval: 0
 })

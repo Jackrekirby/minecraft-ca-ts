@@ -312,6 +312,10 @@ const buildCommandOutput = (cm: CommandManager) => {
   }, 0)
 }
 
+export const isCommandLineCurrentlyVisible = () => {
+  return commandLineElement === document.activeElement
+}
+
 export const initCommandLineEventListeners = (cm: CommandManager) => {
   document.addEventListener('keydown', event => {
     if (event.key === '/') {

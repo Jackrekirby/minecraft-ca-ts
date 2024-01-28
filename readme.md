@@ -132,9 +132,14 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] User block placement/deletion/interaction should update blocks on canvas on next frame instead of logic tick
 - [x] Paused logical ticks should be remembered on reload and blocks should render on load
 - [x] Add falling blocks
-- [ ] Add clear falling blocks command
+- [x] Add clear falling blocks command
 - [ ] Add comparator block
 - [x] Remove unused toString function from blocks
 - [ ] Investigate performance
 - [ ] Investigate object pooling rather than creating new instance
 - [x] Build time should update on webpack watch
+- [x] Actual FPS/TPS much lower than target (consider overshoot and sleep remaining not elapsed)
+- [x] Typing in command window should not trigger keyboard shortcuts
+- [ ] Observer double pulses when facing piston head
+- [ ] Demo world not loading on local storage clear
+- [ ] Add world update queue rather than updating entire world every tick

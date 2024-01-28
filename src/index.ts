@@ -2,7 +2,8 @@ import { vec2Zero } from './containers/vec2'
 import { initialiseCommands } from './core/commands'
 import {
   CommandManager,
-  initCommandLineEventListeners
+  initCommandLineEventListeners,
+  isCommandLineCurrentlyVisible
 } from './core/command_line'
 import { updateDebugInfo } from './core/debug_panel'
 import {
@@ -90,6 +91,9 @@ const main = async () => {
   }
 
   document.addEventListener('keydown', event => {
+    if (isCommandLineCurrentlyVisible()) {
+      return
+    }
     if (event.key === 'z') {
       viewSubTicksState.set(!viewSubTicksState.get())
     } else if (event.key === 'x') {
@@ -99,7 +103,7 @@ const main = async () => {
     } else if (event.key === 'c') {
       updatesPerSecondState.set(5)
     } else if (event.key === 'v') {
-      updatesPerSecondState.set(100)
+      updatesPerSecondState.set(1000)
     }
   })
 

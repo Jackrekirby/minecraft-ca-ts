@@ -1,7 +1,7 @@
 import { Dict2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { isEnum } from '../utils/general'
-import { compressObject } from '../utils/save'
+import { compressObject, LocalStorageVariable } from '../utils/save'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import {
   commandFailure,
@@ -25,6 +25,10 @@ import {
   placeAllBlocks
 } from './world_loading'
 
+export const clearFallingBlocksRequested = new LocalStorageVariable<boolean>({
+  defaultValue: false
+})
+
 export const initialiseCommands = (
   commandManager: CommandManager,
   blocks: BlockContainer
@@ -41,6 +45,11 @@ export const initialiseCommands = (
     placeAllBlocks(blocks)
     // updateCanvas()
     return commandSuccess(`cleared world`)
+  })
+
+  commandManager.createCommand('/clear falling_blocks', async () => {
+    clearFallingBlocksRequested.set(true)
+    return commandSuccess(`cleared falling blocks`)
   })
 
   commandManager.createCommand('/world download', async input => {

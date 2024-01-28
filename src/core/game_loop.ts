@@ -1,7 +1,10 @@
+import { Air } from '../blocks/air'
+import { ConcretePowder, GravityMotion } from '../blocks/concrete_powder'
 import { Vec2 } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { areObjectsEqual, sleep } from '../utils/general'
-import { Block, BlockContainer } from './block'
+import { Block, BlockContainer, BlockType, isBlock } from './block'
+import { clearFallingBlocksRequested } from './commands'
 import {
   actualSubticksPerSecondState,
   actualTicksPerSecondState,
@@ -139,14 +142,20 @@ export class RenderLoop {
     this.isRunning = true
     this.stopRequested = false
     let lastElapsedMilliseconds = 0
-    const fnc: FrameRequestCallback = (elapsedMilliseconds: number) => {
+    const fnc: FrameRequestCallback = async (elapsedMilliseconds: number) => {
       if (this.stopRequested) {
         this.isRunning = false
       }
       const deltaMilliseconds = elapsedMilliseconds - lastElapsedMilliseconds
       if (deltaMilliseconds > this.targetFramePeriodMilliseconds) {
+        const overshoot = deltaMilliseconds - this.targetFramePeriodMilliseconds
         this.callback(deltaMilliseconds)
-        lastElapsedMilliseconds = elapsedMilliseconds
+        lastElapsedMilliseconds = elapsedMilliseconds - overshoot
+      } else {
+        const remainingTimeMilliseconds =
+          this.targetFramePeriodMilliseconds - deltaMilliseconds
+
+        await sleep(Math.max(remainingTimeMilliseconds - 5, 0))
       }
 
       requestAnimationFrame(fnc)
@@ -167,7 +176,7 @@ export class ProcessLoop {
     callback: (deltaMilliseconds: number) => void
   ) {
     this.stopRequested = false
-    this.targetFramePeriodMilliseconds = 1000 / frameRate
+    this.targetFramePeriodMilliseconds = Math.floor(1000 / frameRate)
     this.callback = callback
     this.isRunning = false
   }
@@ -177,23 +186,28 @@ export class ProcessLoop {
   }
 
   public setFrameRate (frameRate: number) {
-    this.targetFramePeriodMilliseconds = 1000 / frameRate
+    this.targetFramePeriodMilliseconds = Math.floor(1000 / frameRate)
   }
 
   public async start () {
     if (this.isRunning) return
     this.isRunning = true
     this.stopRequested = false
-    let lastTimeMilliseconds = performance.now()
+    let lastTimeMilliseconds = Math.floor(performance.now())
     while (!this.stopRequested) {
-      const currentTimeMilliseconds = performance.now()
+      const currentTimeMilliseconds = Math.floor(performance.now())
       const deltaMilliseconds = currentTimeMilliseconds - lastTimeMilliseconds
       if (deltaMilliseconds > this.targetFramePeriodMilliseconds) {
+        const overshoot = deltaMilliseconds - this.targetFramePeriodMilliseconds
+
         this.callback(deltaMilliseconds)
-        lastTimeMilliseconds = currentTimeMilliseconds
+        lastTimeMilliseconds = currentTimeMilliseconds - overshoot
         await sleep(0)
       } else {
-        await sleep(deltaMilliseconds)
+        const remainingTimeMilliseconds =
+          this.targetFramePeriodMilliseconds - deltaMilliseconds
+
+        await sleep(Math.max(remainingTimeMilliseconds - 5, 0))
       }
     }
     this.isRunning = false
@@ -216,10 +230,23 @@ export const subUpdateBlocks = (blocks: BlockContainer) => {
 }
 
 export const updateBlocks = (blocks: BlockContainer) => {
+  const clearFallingSand = clearFallingBlocksRequested.get()
+
   const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
     const newBlock: Block = block.update(v, blocks)
+    if (
+      clearFallingSand &&
+      isBlock<ConcretePowder>(newBlock, BlockType.ConcretePowder) &&
+      newBlock.gravityMotion === GravityMotion.Falling
+    ) {
+      return new Air({})
+    }
     return newBlock
   })
+
+  if (clearFallingBlocksRequested.get()) {
+    clearFallingBlocksRequested.set(false)
+  }
 
   blocks.clone(newBlocks)
 }
