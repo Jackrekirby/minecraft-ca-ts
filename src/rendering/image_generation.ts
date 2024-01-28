@@ -1,7 +1,7 @@
 import fs from 'fs'
 import Jimp from 'jimp'
 import path from 'path'
-import sharp from 'sharp'
+import sharp, { Blend } from 'sharp'
 import { sleep } from '../utils/general'
 
 async function deletePngFiles (directoryPath: string): Promise<void> {
@@ -34,6 +34,7 @@ async function deletePngFiles (directoryPath: string): Promise<void> {
 interface ImageConfig {
   isDirectional: boolean
   isMoveable: boolean
+  canFall?: boolean
 }
 
 const imageConfigs: { [key: string]: ImageConfig } = {
@@ -205,6 +206,11 @@ colors.map(color => {
     isDirectional: false,
     isMoveable: true
   }
+  imageConfigs[`${color}_concrete_powder`] = {
+    isDirectional: false,
+    isMoveable: true,
+    canFall: true
+  }
 })
 
 enum RotationDirection {
@@ -271,7 +277,10 @@ async function combineImages (
   // })
 }
 
-async function combineImageList (imagePaths: string[]): Promise<sharp.Sharp> {
+async function combineImageList (
+  imagePaths: string[],
+  blend: Blend = 'over'
+): Promise<sharp.Sharp> {
   if (imagePaths.length === 0) {
     throw new Error('no images to combine')
   } else if (imagePaths.length === 1) {
@@ -299,7 +308,7 @@ async function combineImageList (imagePaths: string[]): Promise<sharp.Sharp> {
   }
 
   const overlayOptions: sharp.OverlayOptions[] = images.slice(1).map(image => {
-    return { input: image, blend: 'over' }
+    return { input: image, blend }
   })
 
   const result = sharp(images[0]).composite(overlayOptions)
@@ -347,6 +356,10 @@ async function rotateAndSaveImages (
   if (config.isMoveable) {
     await handleOverlayImage(outputFolder, filename, config.isDirectional)
   }
+
+  if (config.canFall) {
+    await handleFallingBlockImages(outputFolder, filename, config.isDirectional)
+  }
 }
 
 const movementStates = [
@@ -355,6 +368,48 @@ const movementStates = [
   'retraction_complete',
   'retraction_pending'
 ]
+const gravityStates = ['falling', 'fallen']
+
+async function handleFallingBlockImages (
+  outputFolder: string,
+  originalFileName: string,
+  isDirectional: boolean
+) {
+  const execute = async (
+    state: string,
+    rotationDirection: RotationDirection | null
+  ) => {
+    const overlayFileName = '_' + state + '.png'
+    const overlayPath = path.join(outputFolder, overlayFileName)
+    const underlayFileName =
+      [originalFileName, rotationDirection].filter(x => x != null).join('_') +
+      '.png'
+    const underlayPath = path.join(outputFolder, underlayFileName)
+    // console.log(underlayPath, overlayPath)
+    const overlayRotatedImage = await combineImageList(
+      [underlayPath, overlayPath],
+      'overlay'
+    )
+
+    const outputFileName =
+      [originalFileName, rotationDirection, state]
+        .filter(x => x != null)
+        .join('_') + '.png'
+
+    const overlayOutputPath = path.join(outputFolder, outputFileName)
+    await saveImage(overlayRotatedImage, overlayOutputPath)
+  }
+
+  for (const state of gravityStates) {
+    if (isDirectional) {
+      for (const rotationDirection of directions) {
+        execute(state, rotationDirection)
+      }
+    } else {
+      execute(state, null)
+    }
+  }
+}
 
 async function handleOverlayImage (
   outputFolder: string,
@@ -713,6 +768,21 @@ async function resizeImage2 (
   }
 }
 
+function copyFile (sourcePath: string, destinationPath: string): void {
+  const readStream = fs.createReadStream(sourcePath)
+  const writeStream = fs.createWriteStream(destinationPath)
+
+  readStream.pipe(writeStream)
+
+  writeStream.on('finish', () => {
+    console.log('File copied successfully.')
+  })
+
+  writeStream.on('error', err => {
+    console.error('Error copying file:', err)
+  })
+}
+
 // Example usage
 const inputDirectory = 'src/images/base'
 const outputDirectory = 'src/images/generated'
@@ -720,6 +790,15 @@ const outputDirectory = 'src/images/generated'
 const main = async () => {
   console.log('processRedstoneDust')
   await processRedstoneDust()
+
+  console.log('transfer gravity states')
+  gravityStates.forEach(x => {
+    copyFile(
+      path.join(inputDirectory, `_${x}.png`),
+      path.join(outputDirectory, `_${x}.png`)
+    )
+  })
+
   console.log('processImagesInDirectory')
   await processImagesInDirectory(inputDirectory, outputDirectory)
   console.log('waiting for image files to be ready...')

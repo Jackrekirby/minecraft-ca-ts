@@ -63,18 +63,6 @@ export class GlassBlock implements MoveableBlock {
     }
   }
 
-  public toString (): string {
-    return `MB${
-      {
-        [Movement.None]: '',
-        [Movement.Pending]: '?',
-        [Movement.Complete]: '*',
-        [Movement.RetractionPending]: '<',
-        [Movement.RetractionComplete]: '^'
-      }[this.movement]
-    }`
-  }
-
   public getTextureName (): string {
     return `glass` + getMovementTextureName(this)
   }

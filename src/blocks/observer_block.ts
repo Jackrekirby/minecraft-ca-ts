@@ -127,10 +127,6 @@ export class ObserverBlock
     }
   }
 
-  public toString (): string {
-    return 'Observer'
-  }
-
   public getTextureName (): string {
     return (
       `observer_${

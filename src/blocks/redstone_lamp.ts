@@ -86,10 +86,6 @@ export class RedstoneLamp
     }
   }
 
-  public toString (): string {
-    return 'RDB'
-  }
-
   public getTextureName (): string {
     return (
       `redstone_lamp_${this.isPowered ? 'on' : 'off'}` +

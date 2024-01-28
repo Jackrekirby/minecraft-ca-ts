@@ -114,10 +114,6 @@ export class RedstoneRepeater
     return new RedstoneRepeater({ ...this, ticksOn, ticksOff, isPowered })
   }
 
-  public toString (): string {
-    return 'RR'
-  }
-
   public getTextureName (): string {
     return `redstone_repeater_on_${this.ticksOn}_off_${this.ticksOff}${
       this.isPowered && this.ticksOff > 0 ? '_powered' : ''

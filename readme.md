@@ -131,3 +131,10 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add performance metric to debug panel (tps, stps, fps)
 - [x] User block placement/deletion/interaction should update blocks on canvas on next frame instead of logic tick
 - [x] Paused logical ticks should be remembered on reload and blocks should render on load
+- [x] Add falling blocks
+- [ ] Add clear falling blocks command
+- [ ] Add comparator block
+- [x] Remove unused toString function from blocks
+- [ ] Investigate performance
+- [ ] Investigate object pooling rather than creating new instance
+- [x] Build time should update on webpack watch

@@ -153,10 +153,6 @@ export class PistonHead implements DirectionalBlock {
     }
   }
 
-  public toString (): string {
-    return `PH`
-  }
-
   public getTextureName (): string {
     let motionTex: string
     switch (this.motion) {

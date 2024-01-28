@@ -43,10 +43,6 @@ export class Button
     return new Button(this)
   }
 
-  public toString (): string {
-    return 'Button'
-  }
-
   public getTextureName (): string {
     return `button_${this.isOn ? 'on' : 'off'}`
   }

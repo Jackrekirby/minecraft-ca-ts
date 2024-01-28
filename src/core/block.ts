@@ -23,7 +23,8 @@ export enum BlockType {
   WoolBlock = 'WoolBlock',
   Lever = 'Lever',
   Button = 'Button',
-  ObserverBlock = 'ObserverBlock'
+  ObserverBlock = 'ObserverBlock',
+  ConcretePowder = 'ConcretePowder'
 }
 
 export interface BlockState {
@@ -33,7 +34,6 @@ export interface BlockState {
 export interface Block extends BlockState {
   update: (position: Vec2, blocks: BlockContainer) => Block
   subupdate: (position: Vec2, blocks: BlockContainer) => Block
-  toString: () => string
   getTextureName: (position: Vec2, blocks: BlockContainer) => string
   // TODO make power redstone interface
   // direction relative to the block you are requesting power from

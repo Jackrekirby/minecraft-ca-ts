@@ -165,10 +165,6 @@ export class Piston implements DirectionalBlock, MoveableBlock {
     }
   }
 
-  public toString (): string {
-    return `P${this.isBeingPowered ? '*' : ''}`
-  }
-
   public getTextureName (position: Vec2, blocks: BlockContainer): string {
     const frontBlock: Block = getNeighbourBlock(position, blocks, Direction.Up)
     const isExtended =

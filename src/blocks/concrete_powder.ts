@@ -5,6 +5,7 @@ import {
   BlockMovement,
   BlockState,
   BlockType,
+  isBlock,
   MoveableBlock,
   Movement
 } from '../core/block'
@@ -18,51 +19,45 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
+import { Air } from './air'
+import { Color } from './wool_block'
 
-export enum Color {
-  Red = 'red',
-  Orange = 'orange',
-  Yellow = 'yellow',
-  Lime = 'lime',
-  Green = 'green',
-  Cyan = 'cyan',
-  LightBlue = 'light_blue',
-  Blue = 'blue',
-  Purple = 'purple',
-  Magenta = 'magenta',
-  Pink = 'pink',
-  Brown = 'brown',
-  White = 'white',
-  LightGray = 'light_gray',
-  Gray = 'gray',
-  Black = 'black'
+export enum GravityMotion {
+  None = 'none',
+  Falling = 'falling',
+  Fallen = 'fallen'
 }
 
-export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
-  type: BlockType = BlockType.WoolBlock
+export class ConcretePowder implements MoveableBlock, OutputPowerBlock.Traits {
+  type: BlockType = BlockType.ConcretePowder
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
+  gravityMotion: GravityMotion
   color: Color
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
     outputPower = BinaryPower.None,
-    color = Color.White
+    color = Color.White,
+    gravityMotion = GravityMotion.None
   }: {
     movement?: Movement
     movementDirection?: Direction
     outputPower?: BinaryPower
     isPowered?: boolean
     color?: Color
+    gravityMotion?: GravityMotion
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.color = color
+    this.gravityMotion = gravityMotion
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -79,7 +74,15 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
     } else {
       Object.assign(newState, movementUpdateChange.state)
 
-      return new WoolBlock(newState)
+      const downNeighbour = getNeighbourBlock(position, blocks, Direction.Down)
+
+      if (isBlock<Air>(downNeighbour, BlockType.Air)) {
+        newState.gravityMotion = GravityMotion.Falling
+      } else {
+        newState.gravityMotion = GravityMotion.None
+      }
+
+      return new ConcretePowder(newState)
     }
   }
 
@@ -97,24 +100,51 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
     } else {
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
-      return new WoolBlock(newState)
+
+      const downNeighbour = getNeighbourBlock(position, blocks, Direction.Down)
+
+      if (this.gravityMotion === GravityMotion.Fallen) {
+        newState.gravityMotion = GravityMotion.None
+      } else if (
+        this.gravityMotion === GravityMotion.Falling &&
+        isBlock<ConcretePowder>(downNeighbour, BlockType.ConcretePowder) &&
+        downNeighbour.gravityMotion === GravityMotion.Fallen
+      ) {
+        return new Air({})
+      }
+      return new ConcretePowder(newState)
     }
   }
 
   public getTextureName (): string {
-    return `${this.color}_wool` + getMovementTextureName(this)
+    let fallingTex = ''
+    if (this.movement === Movement.None) {
+      switch (this.gravityMotion) {
+        case GravityMotion.Fallen:
+          fallingTex = '_fallen'
+          break
+        case GravityMotion.Falling:
+          fallingTex = '_falling'
+          break
+      }
+    }
+    return (
+      `${this.color}_concrete_powder` +
+      fallingTex +
+      getMovementTextureName(this)
+    )
   }
-
-  // public isOutputtingPower (): boolean {
-  //   return this.outputPower !== BinaryPower.None
-  // }
 
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
   }
 
   public getMovementMethod (): BlockMovement {
-    return BlockMovement.Moveable
+    if (this.gravityMotion === GravityMotion.None) {
+      return BlockMovement.Moveable
+    } else {
+      return BlockMovement.Immovable
+    }
   }
 
   public transmitsBetweenSelf (): boolean {
@@ -126,4 +156,4 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
   }
 }
 
-addCreateBlockFunction(BlockType.WoolBlock, WoolBlock)
+addCreateBlockFunction(BlockType.ConcretePowder, ConcretePowder)

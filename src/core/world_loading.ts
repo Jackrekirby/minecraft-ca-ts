@@ -1,5 +1,6 @@
 import { Air } from '../blocks/air'
 import { Button } from '../blocks/button'
+import { ConcretePowder } from '../blocks/concrete_powder'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
 import { ObserverBlock } from '../blocks/observer_block'
@@ -32,33 +33,25 @@ export const loadWorldSave = async () => {
 }
 
 export const placeAllBlocks = (blocks: BlockContainer) => {
-  blocks.setValue({ x: 0, y: 0 }, new RedstoneBlock({}))
+  const redstoneBlocks = [
+    new RedstoneBlock({}),
+    new RedstoneTorch({}),
+    new GlassBlock({}),
+    new RedstoneLamp({}),
+    new Piston({}),
+    new RedstoneRepeater({}),
+    new RedstoneDust({}),
+    new Lever({}),
+    new Button({}),
+    new Piston({ isSticky: true }),
+    new ObserverBlock({}) // test
+  ]
 
-  blocks.setValue({ x: 1, y: 0 }, new RedstoneTorch({}))
+  redstoneBlocks.forEach((block, x) => blocks.setValue({ x, y: 2 }, block))
 
-  blocks.setValue({ x: 2, y: 0 }, new GlassBlock({}))
-
-  blocks.setValue({ x: 3, y: 0 }, new RedstoneLamp({}))
-
-  blocks.setValue({ x: 4, y: 0 }, new Piston({}))
-
-  blocks.setValue({ x: 5, y: 0 }, new RedstoneRepeater({}))
-
-  blocks.setValue({ x: 6, y: 0 }, new RedstoneDust({}))
-
-  blocks.setValue({ x: 7, y: 0 }, new Lever({}))
-
-  blocks.setValue({ x: 8, y: 0 }, new Button({}))
-
-  blocks.setValue({ x: 9, y: 0 }, new Piston({ isSticky: true }))
-
-  blocks.setValue({ x: 10, y: 0 }, new ObserverBlock({}))
-
-  Object.values(Color).forEach((color: string, index: number) => {
-    blocks.setValue(
-      { x: index, y: -1 },
-      new WoolBlock({ color: color as Color })
-    )
+  Object.values(Color).forEach((color: string, x: number) => {
+    blocks.setValue({ x, y: 1 }, new ConcretePowder({ color: color as Color }))
+    blocks.setValue({ x, y: 0 }, new WoolBlock({ color: color as Color }))
   })
 }
 export const loadChunks = (

@@ -45,10 +45,6 @@ export class RedstoneTorch
     return new RedstoneTorch(this)
   }
 
-  public toString (): string {
-    return `RT${this.isOn() ? '*' : ''}`
-  }
-
   public getTextureName (): string {
     return `redstone_torch_${
       this.isOn() ? 'on' : 'off'

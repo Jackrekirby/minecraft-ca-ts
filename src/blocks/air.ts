@@ -8,9 +8,14 @@ import {
   isMoveableBlock,
   Movement
 } from '../core/block'
-import { getAllDirections, getOppositeDirection } from '../core/direction'
+import {
+  Direction,
+  getAllDirections,
+  getOppositeDirection
+} from '../core/direction'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction, createBlock } from '../utils/create_block'
+import { ConcretePowder, GravityMotion } from './concrete_powder'
 import { Piston } from './piston'
 import { PistonHead } from './piston_head'
 
@@ -46,6 +51,15 @@ export class Air implements Block {
           movement: Movement.Complete,
           movementDirection: oppositeDirection
         })
+      } else if (
+        direction === Direction.Up &&
+        isBlock<ConcretePowder>(neighbour, BlockType.ConcretePowder) &&
+        neighbour.gravityMotion === GravityMotion.Falling
+      ) {
+        return createBlock(neighbour.type, {
+          ...neighbour,
+          gravityMotion: GravityMotion.Fallen
+        })
       }
     }
 
@@ -54,10 +68,6 @@ export class Air implements Block {
 
   public update (position: Vec2, blocks: BlockContainer): Block {
     return new Air(this)
-  }
-
-  public toString (): string {
-    return '[ ]'
   }
 
   public getTextureName (): string {

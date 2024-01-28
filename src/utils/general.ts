@@ -275,3 +275,18 @@ export const createObjectSubset = (
 
   return subset
 }
+
+export const formatDate = (date: Date): string => {
+  const pad = (num: number): string => (num < 10 ? '0' + num : num.toString())
+
+  const day = pad(date.getDate())
+  const month = pad(date.getMonth() + 1)
+  const year = date
+    .getFullYear()
+    .toString()
+    .slice(2)
+  const hours = pad(date.getHours())
+  const minutes = pad(date.getMinutes())
+
+  return `${day}/${month}/${year} ${hours}:${minutes}`
+}

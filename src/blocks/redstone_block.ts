@@ -75,10 +75,6 @@ export class RedstoneBlock
     }
   }
 
-  public toString (): string {
-    return 'RDB'
-  }
-
   public getTextureName (): string {
     return `redstone_block` + getMovementTextureName(this)
   }

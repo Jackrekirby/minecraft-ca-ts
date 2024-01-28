@@ -46,7 +46,7 @@ canvas {
   position: absolute;
   top: 0;
   left: 0;
-  width: 25%;
+  width: fit-content;
   min-width: 256px;
   max-width: 512px;
   margin: 32px;

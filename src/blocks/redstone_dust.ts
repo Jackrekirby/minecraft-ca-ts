@@ -123,10 +123,6 @@ export class RedstoneDust
     return new RedstoneDust(newState)
   }
 
-  public toString (): string {
-    return 'RD'
-  }
-
   private calculateConnectedDirections (
     position: Vec2,
     blocks: BlockContainer

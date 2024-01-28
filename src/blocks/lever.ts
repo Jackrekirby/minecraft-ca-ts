@@ -31,10 +31,6 @@ export class Lever
     return new Lever(this)
   }
 
-  public toString (): string {
-    return 'Lever'
-  }
-
   public getTextureName (): string {
     return `lever_${this.isOn ? 'on' : 'off'}`
   }
