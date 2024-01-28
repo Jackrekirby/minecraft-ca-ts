@@ -15,15 +15,16 @@ import {
 export const clearStorageOnVersionIncrease = () => {
   const latestVersion = 6
   const savedVersion = Number(localStorage.getItem('version'))
-
-  if (isNaN(savedVersion) || savedVersion !== latestVersion) {
+  const hasVersionIncreased =
+    isNaN(savedVersion) || savedVersion !== latestVersion
+  if (hasVersionIncreased) {
     console.log('cleared local storage', { latestVersion, savedVersion })
     localStorage.clear()
-    return true
   }
 
   localStorage.setItem('version', JSON.stringify(latestVersion))
-  return false
+
+  return hasVersionIncreased
 }
 
 export const framesPerSecondState = new LocalStorageVariable<number>({

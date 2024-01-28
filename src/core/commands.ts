@@ -31,12 +31,14 @@ export const clearFallingBlocksRequested = new LocalStorageVariable<boolean>({
 
 export const initialiseCommands = (
   commandManager: CommandManager,
-  blocks: BlockContainer
+  blocks: BlockContainer,
+  fillUpdateQueue: () => void
 ) => {
   commandManager.createCommand('/world load {name:string}', async input => {
     blocks.clone(await createDemoWorld())
     // blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     // updateCanvas()
+    fillUpdateQueue()
     return commandSuccess(`loaded world ${input.name}`)
   })
   commandManager.createCommand('/world clear', async () => {
@@ -44,6 +46,7 @@ export const initialiseCommands = (
     blocks.clone(await createEmptyWorld())
     placeAllBlocks(blocks)
     // updateCanvas()
+    fillUpdateQueue()
     return commandSuccess(`cleared world`)
   })
 

@@ -142,7 +142,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Typing in command window should not trigger keyboard shortcuts
 - [ ] Observer double pulses when facing piston head
 - [x] Demo world not loading on local storage clear
-- [ ] Add world update queue rather than updating entire world every tick
+- [x] Add world update queue rather than updating entire world every tick
 - [ ] Center world at 0,0 on load
 - [ ] Add teleport command
 - [x] Add guide (copy readme into game)
+- [ ] Consider new chunk container and iteration for improved performance

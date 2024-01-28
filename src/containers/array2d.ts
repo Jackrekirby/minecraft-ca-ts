@@ -119,13 +119,37 @@ export class ChunkContainer<T> {
     return chunk[blockIndex]
   }
 
+  public getPositions (): Vec2[] {
+    const positions: Vec2[] = []
+    for (const index in this.chunks) {
+      const chunkPos: Vec2 = this.chunkIndexToVec2(index)
+      const chunkBlockPos: Vec2 = {
+        x: chunkPos.x * this.chunkSize,
+        y: chunkPos.y * this.chunkSize
+      }
+      for (let y = chunkBlockPos.y; y < chunkBlockPos.y + this.chunkSize; ++y) {
+        for (
+          let x = chunkBlockPos.x;
+          x < chunkBlockPos.x + this.chunkSize;
+          ++x
+        ) {
+          const position: Vec2 = { x, y }
+
+          positions.push(position)
+        }
+      }
+    }
+
+    return positions
+  }
+
   public map (callback: (value: T, v: Vec2) => T): ChunkContainer<T> {
     const newContainer = new ChunkContainer<T>(
       this.chunkSize,
       this.createDefaultItem,
       this.isDefaultItem
     )
-    for (const [index, chunk] of Object.entries(this.chunks)) {
+    for (const index in this.chunks) {
       const chunkPos: Vec2 = this.chunkIndexToVec2(index)
       const chunkBlockPos: Vec2 = {
         x: chunkPos.x * this.chunkSize,
@@ -153,7 +177,7 @@ export class ChunkContainer<T> {
 
   public mapToDict2D<U> (callback: (value: T, v: Vec2) => U): Dict2D<U> {
     const dict2D = new Dict2D<U>()
-    for (const [index, chunk] of Object.entries(this.chunks)) {
+    for (const index in this.chunks) {
       const chunkPos: Vec2 = this.chunkIndexToVec2(index)
       const chunkBlockPos: Vec2 = {
         x: chunkPos.x * this.chunkSize,

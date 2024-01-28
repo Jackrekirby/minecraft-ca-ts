@@ -52,7 +52,6 @@ const main = async () => {
   initialiseGuide()
   const canvas: Canvas = await createCanvas()
   const blocks = blockStorage.get()
-  console.log(blocks.chunks.length)
   placeAllBlocks(blocks)
 
   if (reset) {
@@ -62,14 +61,19 @@ const main = async () => {
 
   console.log(blocks)
 
-  initBlockEventListeners(canvas, blocks)
+  const { processLogic, addToTickQueue, fillUpdateQueue } = createLogicLoop(
+    blocks,
+    canvas
+  )
+
+  initBlockEventListeners(canvas, blocks, addToTickQueue)
   initCanvasResizeListener()
 
   // load commands
 
   const commandManager = new CommandManager()
 
-  initialiseCommands(commandManager, blocks)
+  initialiseCommands(commandManager, blocks, fillUpdateQueue)
 
   initCommandLineEventListeners(commandManager)
 
@@ -85,8 +89,7 @@ const main = async () => {
     elapsedFramesInSecond += 1
   })
 
-  const runLogicLoop = createLogicLoop(blocks, canvas)
-  const logicLoop = new ProcessLoop(updatesPerSecondState.get(), runLogicLoop)
+  const logicLoop = new ProcessLoop(updatesPerSecondState.get(), processLogic)
 
   framesPerSecondState.setCallback = (x: number) => {
     renderLoop.setFrameRate(x)
@@ -107,11 +110,11 @@ const main = async () => {
     } else if (event.key === 'x') {
       logicLoop.stop()
       updatesPerSecondState.set(0)
-      runLogicLoop()
+      processLogic()
     } else if (event.key === 'c') {
       updatesPerSecondState.set(5)
     } else if (event.key === 'v') {
-      updatesPerSecondState.set(1000)
+      updatesPerSecondState.set(9999)
     }
   })
 

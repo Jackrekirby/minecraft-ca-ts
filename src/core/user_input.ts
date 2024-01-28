@@ -33,7 +33,8 @@ export const initCanvasResizeListener = () => {
 
 export const initBlockEventListeners = (
   canvas: Canvas,
-  blocks: BlockContainer
+  blocks: BlockContainer,
+  addToTickQueue: (v: Vec2) => void
 ) => {
   const placeBlock = (event: MouseEvent) => {
     // console.log('place block')
@@ -61,6 +62,7 @@ export const initBlockEventListeners = (
       })
       blocks.setValue(pi, newBlock)
       blocks.setValue(pi, newBlock.update(pi, blocks))
+      addToTickQueue(pi)
       // updateCanvas()
       updateCanvasBlocks(blocks, canvas)
     } else {
@@ -75,6 +77,7 @@ export const initBlockEventListeners = (
         const newBlock = block.interact()
         blocks.setValue(pi, newBlock)
         blocks.setValue(pi, newBlock.update(pi, blocks))
+        addToTickQueue(pi)
         // updateCanvas()
       } else {
         const copyState: BlockState = block.copy
@@ -93,6 +96,7 @@ export const initBlockEventListeners = (
     const p = canvas.getMouseWorldPosition()
     const pi = vec2Apply(p, Math.floor)
     blocks.setValue(pi, new Air({}))
+    addToTickQueue(pi)
     updateCanvasBlocks(blocks, canvas)
     // updateCanvas()
   }

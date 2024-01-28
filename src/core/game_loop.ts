@@ -216,14 +216,16 @@ export class ProcessLoop {
 
 export const subUpdateBlocks = (blocks: BlockContainer) => {
   let anyBlocksUpdated = false
-  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
+
+  const innerFunction = (block: Block, v: Vec2) => {
     const newBlock: Block = block.subupdate(v, blocks)
     if (!areObjectsEqual(block, newBlock)) {
       anyBlocksUpdated = true
     }
     return newBlock
-  })
+  }
 
+  const newBlocks: BlockContainer = blocks.map(innerFunction)
   blocks.clone(newBlocks)
 
   return anyBlocksUpdated
@@ -258,7 +260,7 @@ export const updateCanvasBlocks = (blocks: BlockContainer, canvas: Canvas) => {
   canvas.setGridImages(gridImages)
 }
 
-export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
+export const createLogicLoop1 = (blocks: BlockContainer, canvas: Canvas) => {
   let subtick = 0
   let tick = 0
   let elapsedTicksInSecond = 0
@@ -313,4 +315,204 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     updateCanvasBlocks(blocks, canvas)
   }
   return processLogic
+}
+
+const vecToStr = (v: Vec2): string => `${v.x} ${v.y}`
+const strToVec = (v: string): Vec2 => {
+  let [x, y] = v.split(' ')
+  return { x: Number(x), y: Number(y) }
+}
+
+const addToUpdateQueue = (queue: Set<string>, v: Vec2) => {
+  queue.add(vecToStr(v))
+  queue.add(vecToStr({ x: v.x + 1, y: v.y }))
+  queue.add(vecToStr({ x: v.x - 1, y: v.y }))
+  queue.add(vecToStr({ x: v.x, y: v.y + 1 }))
+  queue.add(vecToStr({ x: v.x, y: v.y - 1 }))
+}
+
+type BlockVec = { v: Vec2; block: Block }
+export const subUpdateBlocksWithQueue = (
+  blocks: BlockContainer,
+  updateQueue: Set<string>
+) => {
+  const newUpdateQueue = new Set<string>()
+
+  const innerFunction = (block: Block, v: Vec2) => {
+    // console.log('subUpdate', block, v)
+    const newBlock: Block = block.subupdate(v, blocks)
+    if (!areObjectsEqual(block, newBlock)) {
+      // console.log('adding to queue', v)
+      addToUpdateQueue(newUpdateQueue, v)
+    }
+    return newBlock
+  }
+
+  const newBlocks: BlockVec[] = []
+  for (const vs of updateQueue) {
+    const v: Vec2 = strToVec(vs)
+    const oldblock: Block = blocks.getValue(v)
+    const block: Block = innerFunction(oldblock, v)
+    newBlocks.push({ v, block })
+  }
+
+  // console.log({
+  //   x: 'sub',
+  //   updateQueue,
+  //   newUpdateQueue
+  // })
+
+  for (const { v, block } of newBlocks) {
+    blocks.setValue(v, block)
+  }
+
+  return newUpdateQueue
+}
+
+export const updateBlocksWithQueue = (
+  blocks: BlockContainer,
+  updateQueue: Set<string>
+) => {
+  const newUpdateQueue = new Set<string>()
+  const clearFallingSand = clearFallingBlocksRequested.get()
+
+  const innerFunction = (block: Block, v: Vec2) => {
+    let newBlock: Block = block.update(v, blocks)
+    if (
+      clearFallingSand &&
+      isBlock<ConcretePowder>(newBlock, BlockType.ConcretePowder) &&
+      newBlock.gravityMotion === GravityMotion.Falling
+    ) {
+      newBlock = new Air({})
+    }
+
+    if (!areObjectsEqual(block, newBlock)) {
+      addToUpdateQueue(newUpdateQueue, v)
+    }
+    return newBlock
+  }
+
+  const newBlocks: BlockVec[] = []
+  for (const vs of updateQueue) {
+    const v: Vec2 = strToVec(vs)
+    const oldblock: Block = blocks.getValue(v)
+    const block: Block = innerFunction(oldblock, v)
+    newBlocks.push({ v, block })
+  }
+
+  if (clearFallingBlocksRequested.get()) {
+    clearFallingBlocksRequested.set(false)
+  }
+
+  // console.log({
+  //   x: 'full',
+  //   updateQueue,
+  //   newUpdateQueue
+  // })
+
+  for (const { v, block } of newBlocks) {
+    blocks.setValue(v, block)
+  }
+
+  return newUpdateQueue
+}
+
+const appendSet = <T>(set1: Set<T>, set2: Set<T>) => {
+  for (const element of set2) {
+    set1.add(element)
+  }
+}
+
+export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
+  let subtick = 0
+  let tick = 0
+  let elapsedTicksInSecond = 0
+  let elapsedSubticksInSecond = 0
+
+  const queues = {
+    tick: new Set<string>(),
+    subtick: new Set<string>()
+  }
+
+  const fillUpdateQueue = () => {
+    ;(queues.tick = new Set<string>()), (queues.subtick = new Set<string>())
+    for (const v of blocks.getPositions()) {
+      queues.tick.add(vecToStr(v))
+      queues.subtick.add(vecToStr(v))
+    }
+  }
+
+  fillUpdateQueue()
+
+  console.log('queues', queues)
+
+  setInterval(() => {
+    actualTicksPerSecondState.set(elapsedTicksInSecond)
+    actualSubticksPerSecondState.set(elapsedSubticksInSecond)
+    elapsedTicksInSecond = 0
+    elapsedSubticksInSecond = 0
+  }, 1000)
+
+  // queue items from a tick need to go to next tick and subtick
+  // queue items from a subtick become the next subtick queue AND need to be appended to tick quue
+
+  const processLogic = () => {
+    if (viewSubTicksState.get()) {
+      // process one subtick or one tick before updating canvas blocks
+      if (queues.subtick.size > 0) {
+        // while there are subticks process them
+        queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
+        appendSet(queues.tick, queues.subtick)
+        subtick += 1
+        elapsedSubticksInSecond += 1
+        subtickState.set(subtick)
+      } else {
+        const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+        queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
+        queues.tick = new Set([...queues.subtick])
+
+        elapsedTicksInSecond += 1
+        tick += 1
+        tickState.set(tick)
+        subtick = 0
+      }
+    } else {
+      // process all subticks without updating canvas
+      queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
+      appendSet(queues.tick, queues.subtick)
+      subtick += 1
+      elapsedSubticksInSecond += 1
+      while (queues.subtick.size > 0) {
+        queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
+        appendSet(queues.tick, queues.subtick)
+        subtick += 1
+        elapsedSubticksInSecond += 1
+      }
+
+      subtickState.set(subtick)
+      tickState.set(tick)
+
+      const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+      queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
+      queues.tick = new Set([...queues.subtick])
+
+      subtick = 0
+      tick += 1
+      elapsedTicksInSecond += 1
+    }
+
+    // console.log(
+    //   'queues',
+    //   queues.tick.size,
+    //   Object.keys(blocks.chunks).length * 256
+    // )
+    updateCanvasBlocks(blocks, canvas)
+  }
+  return {
+    processLogic,
+    addToTickQueue: (v: Vec2) => {
+      addToUpdateQueue(queues.tick, v)
+    },
+    fillUpdateQueue
+  }
 }
