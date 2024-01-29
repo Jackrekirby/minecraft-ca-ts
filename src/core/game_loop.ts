@@ -2,12 +2,14 @@ import { Air } from '../blocks/air'
 import { ConcretePowder, GravityMotion } from '../blocks/concrete_powder'
 import { Vec2 } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
-import { areObjectsEqual, sleep } from '../utils/general'
+import { areObjectsEqual, now, sleep } from '../utils/general'
 import { Block, BlockContainer, BlockType, isBlock } from './block'
 import { clearFallingBlocksRequested } from './commands'
 import {
   actualSubticksPerSecondState,
   actualTicksPerSecondState,
+  actualUpdatesPerSecondState,
+  framesPerSecondState,
   subtickState,
   tickState,
   viewSubTicksState
@@ -191,23 +193,38 @@ export class ProcessLoop {
 
   public async start () {
     if (this.isRunning) return
+
     this.isRunning = true
     this.stopRequested = false
-    let lastTimeMilliseconds = Math.floor(performance.now())
+    let lastSleepTime = now()
+    let lastTimeMilliseconds = now()
     while (!this.stopRequested) {
-      const currentTimeMilliseconds = Math.floor(performance.now())
+      const currentTimeMilliseconds = now()
       const deltaMilliseconds = currentTimeMilliseconds - lastTimeMilliseconds
       if (deltaMilliseconds > this.targetFramePeriodMilliseconds) {
-        const overshoot = deltaMilliseconds - this.targetFramePeriodMilliseconds
-
+        const overshoot = Math.min(
+          deltaMilliseconds - this.targetFramePeriodMilliseconds,
+          this.targetFramePeriodMilliseconds
+        ) // set max overshoot to frame period so overshoot does not elapse
+        // console.log('overshoot', overshoot, this.targetFramePeriodMilliseconds)
         this.callback(deltaMilliseconds)
         lastTimeMilliseconds = currentTimeMilliseconds - overshoot
-        await sleep(0)
+
+        const timeSinceLastSlept = now() - lastSleepTime
+        const framePeriod = 1000 / framesPerSecondState.get()
+        if (timeSinceLastSlept > framePeriod) {
+          // console.log('sleep', { now: now(), timeSinceLastSlept, framePeriod })
+          await sleep(0)
+          lastSleepTime = now()
+        }
       } else {
         const remainingTimeMilliseconds =
           this.targetFramePeriodMilliseconds - deltaMilliseconds
 
+        // console.log('remainingTimeMilliseconds', remainingTimeMilliseconds)
+
         await sleep(Math.max(remainingTimeMilliseconds - 5, 0))
+        lastSleepTime = now()
       }
     }
     this.isRunning = false
@@ -429,6 +446,8 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   let elapsedTicksInSecond = 0
   let elapsedSubticksInSecond = 0
 
+  let elapsedUpdatesInSecond = 0
+
   const queues = {
     tick: new Set<string>(),
     subtick: new Set<string>()
@@ -449,8 +468,10 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   setInterval(() => {
     actualTicksPerSecondState.set(elapsedTicksInSecond)
     actualSubticksPerSecondState.set(elapsedSubticksInSecond)
+    actualUpdatesPerSecondState.set(elapsedUpdatesInSecond)
     elapsedTicksInSecond = 0
     elapsedSubticksInSecond = 0
+    elapsedUpdatesInSecond = 0
   }, 1000)
 
   // queue items from a tick need to go to next tick and subtick
@@ -461,6 +482,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       // process one subtick or one tick before updating canvas blocks
       if (queues.subtick.size > 0) {
         // while there are subticks process them
+        elapsedUpdatesInSecond += queues.subtick.size
         queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
         appendSet(queues.tick, queues.subtick)
         subtick += 1
@@ -468,6 +490,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
         subtickState.set(subtick)
       } else {
         const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+        elapsedUpdatesInSecond += combinedUpdateQueue.size
         queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
         queues.tick = new Set([...queues.subtick])
 
@@ -478,13 +501,17 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       }
     } else {
       // process all subticks without updating canvas
+      elapsedUpdatesInSecond += queues.subtick.size
       queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
       appendSet(queues.tick, queues.subtick)
+      elapsedUpdatesInSecond += queues.subtick.size
       subtick += 1
       elapsedSubticksInSecond += 1
       while (queues.subtick.size > 0) {
+        elapsedUpdatesInSecond += queues.subtick.size
         queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
         appendSet(queues.tick, queues.subtick)
+
         subtick += 1
         elapsedSubticksInSecond += 1
       }
@@ -493,6 +520,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       tickState.set(tick)
 
       const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+      elapsedUpdatesInSecond += combinedUpdateQueue.size
       queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
       queues.tick = new Set([...queues.subtick])
 
@@ -501,11 +529,6 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       elapsedTicksInSecond += 1
     }
 
-    // console.log(
-    //   'queues',
-    //   queues.tick.size,
-    //   Object.keys(blocks.chunks).length * 256
-    // )
     updateCanvasBlocks(blocks, canvas)
   }
   return {

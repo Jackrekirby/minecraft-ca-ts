@@ -135,7 +135,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add clear falling blocks command
 - [ ] Add comparator block
 - [x] Remove unused toString function from blocks
-- [ ] Investigate performance
+- [x] Investigate performance
 - [ ] Investigate object pooling rather than creating new instance
 - [x] Build time should update on webpack watch
 - [x] Actual FPS/TPS much lower than target (consider overshoot and sleep remaining not elapsed)
@@ -147,3 +147,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add teleport command
 - [x] Add guide (copy readme into game)
 - [ ] Consider new chunk container and iteration for improved performance
+- [ ] Save on place/destroy block immediately, otherise every 30s
+- [x] Can tick/subtick processing be increased more (until fps tanks)? Yes
+- [x] Add queue length to debug panel
+- [ ] Command callbacks to change fps/tps not always updating when tps high
+- [ ] Improve update canvas block performance by not overwriting entire array but just changes.

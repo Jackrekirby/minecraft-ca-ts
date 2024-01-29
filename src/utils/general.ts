@@ -287,3 +287,5 @@ export const formatDate = (date: Date): string => {
 
   return `${day}/${month}/${year} ${hours}:${minutes}`
 }
+
+export const now = () => Math.floor(performance.now())

@@ -117,7 +117,7 @@ const main = async () => {
       updatesPerSecondState.set(9999)
     }
   })
-
+  // TODO: do not need to update canvas blocks unless rendering
   updateCanvasBlocks(blocks, canvas)
   renderLoop.start()
 

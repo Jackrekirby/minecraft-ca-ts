@@ -95,6 +95,10 @@ export const actualFramesPerSecondState = new LocalStorageVariable<number>({
   defaultValue: 0
 })
 
+export const actualUpdatesPerSecondState = new LocalStorageVariable<number>({
+  defaultValue: 0
+})
+
 // build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
 // tick: createGlobalValue('TICK', 0),
 // subtick: createGlobalValue('SUBTICK', 0),

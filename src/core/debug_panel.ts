@@ -5,6 +5,7 @@ import {
   actualFramesPerSecondState,
   actualSubticksPerSecondState,
   actualTicksPerSecondState,
+  actualUpdatesPerSecondState,
   framesPerSecondState,
   selectedBlockState,
   subtickState,
@@ -54,7 +55,11 @@ export const updateDebugInfo = () => {
     `${invisibleRightPad(
       'Frames/s',
       varWidth - 3
-    )} ${actualFramesPerSecondState.get()} [${framesPerSecondState.get()}]`
+    )} ${actualFramesPerSecondState.get()} [${framesPerSecondState.get()}]`,
+    `${invisibleRightPad(
+      'Updates/s',
+      varWidth - 3
+    )} ${actualUpdatesPerSecondState.get()}`
   ]
 
   variables.forEach(value => {
