@@ -14,12 +14,14 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
+  observerFilteredMovement,
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
-
 import { addCreateBlockFunction } from '../utils/create_block'
+
+import { ObserverFilter } from './observer_block'
 
 export enum Color {
   Red = 'red',
@@ -40,7 +42,8 @@ export enum Color {
   Black = 'black'
 }
 
-export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
+export class WoolBlock
+  implements MoveableBlock, OutputPowerBlock.Traits, ObserverFilter {
   type: BlockType = BlockType.WoolBlock
   movement: Movement
   movementDirection: Direction
@@ -105,10 +108,6 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
     return `${this.color}_wool` + getMovementTextureName(this)
   }
 
-  // public isOutputtingPower (): boolean {
-  //   return this.outputPower !== BinaryPower.None
-  // }
-
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
   }
@@ -123,6 +122,15 @@ export class WoolBlock implements MoveableBlock, OutputPowerBlock.Traits {
 
   public copy (): BlockState {
     return { type: this.type, color: this.color } as BlockState
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      outputPower: this.outputPower,
+      movement: observerFilteredMovement(this.movement),
+      color: this.color
+    }
   }
 }
 

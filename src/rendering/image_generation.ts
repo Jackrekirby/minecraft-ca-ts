@@ -60,6 +60,14 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: false,
     isMoveable: true
   },
+  obsidian: {
+    isDirectional: false,
+    isMoveable: false
+  },
+  target_block: {
+    isDirectional: false,
+    isMoveable: true
+  },
   piston_head: {
     isDirectional: true,
     isMoveable: false

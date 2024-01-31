@@ -48,7 +48,7 @@ canvas {
   left: 0;
   width: fit-content;
   min-width: 256px;
-  max-width: 512px;
+  max-width: min(50%, 512px);
   margin: 32px;
 
   outline: none;
@@ -59,6 +59,7 @@ canvas {
   color: white;
   padding: 8px;
   color: white;
+  pointer-events: none;
 }
 
 #guide-button {

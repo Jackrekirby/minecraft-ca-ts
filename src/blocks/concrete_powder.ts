@@ -15,6 +15,7 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
+  observerFilteredMovement,
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
@@ -23,6 +24,7 @@ import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { Air } from './air'
+import { ObserverFilter } from './observer_block'
 import { Color } from './wool_block'
 
 export enum GravityMotion {
@@ -31,7 +33,8 @@ export enum GravityMotion {
   Fallen = 'fallen'
 }
 
-export class ConcretePowder implements MoveableBlock, OutputPowerBlock.Traits {
+export class ConcretePowder
+  implements MoveableBlock, OutputPowerBlock.Traits, ObserverFilter {
   type: BlockType = BlockType.ConcretePowder
   movement: Movement
   movementDirection: Direction
@@ -153,6 +156,14 @@ export class ConcretePowder implements MoveableBlock, OutputPowerBlock.Traits {
 
   public copy (): BlockState {
     return { type: this.type, color: this.color } as BlockState
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      outputPower: this.outputPower,
+      movement: observerFilteredMovement(this.movement)
+    }
   }
 }
 

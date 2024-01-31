@@ -206,23 +206,18 @@ export class ProcessLoop {
           deltaMilliseconds - this.targetFramePeriodMilliseconds,
           this.targetFramePeriodMilliseconds
         ) // set max overshoot to frame period so overshoot does not elapse
-        // console.log('overshoot', overshoot, this.targetFramePeriodMilliseconds)
         this.callback(deltaMilliseconds)
         lastTimeMilliseconds = currentTimeMilliseconds - overshoot
 
         const timeSinceLastSlept = now() - lastSleepTime
         const framePeriod = 1000 / framesPerSecondState.get()
         if (timeSinceLastSlept > framePeriod) {
-          // console.log('sleep', { now: now(), timeSinceLastSlept, framePeriod })
           await sleep(0)
           lastSleepTime = now()
         }
       } else {
         const remainingTimeMilliseconds =
           this.targetFramePeriodMilliseconds - deltaMilliseconds
-
-        // console.log('remainingTimeMilliseconds', remainingTimeMilliseconds)
-
         await sleep(Math.max(remainingTimeMilliseconds - 5, 0))
         lastSleepTime = now()
       }
@@ -231,107 +226,11 @@ export class ProcessLoop {
   }
 }
 
-export const subUpdateBlocks = (blocks: BlockContainer) => {
-  let anyBlocksUpdated = false
-
-  const innerFunction = (block: Block, v: Vec2) => {
-    const newBlock: Block = block.subupdate(v, blocks)
-    if (!areObjectsEqual(block, newBlock)) {
-      anyBlocksUpdated = true
-    }
-    return newBlock
-  }
-
-  const newBlocks: BlockContainer = blocks.map(innerFunction)
-  blocks.clone(newBlocks)
-
-  return anyBlocksUpdated
-}
-
-export const updateBlocks = (blocks: BlockContainer) => {
-  const clearFallingSand = clearFallingBlocksRequested.get()
-
-  const newBlocks: BlockContainer = blocks.map((block: Block, v: Vec2) => {
-    const newBlock: Block = block.update(v, blocks)
-    if (
-      clearFallingSand &&
-      isBlock<ConcretePowder>(newBlock, BlockType.ConcretePowder) &&
-      newBlock.gravityMotion === GravityMotion.Falling
-    ) {
-      return new Air({})
-    }
-    return newBlock
-  })
-
-  if (clearFallingBlocksRequested.get()) {
-    clearFallingBlocksRequested.set(false)
-  }
-
-  blocks.clone(newBlocks)
-}
-
 export const updateCanvasBlocks = (blocks: BlockContainer, canvas: Canvas) => {
   const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
     return block.getTextureName(v, blocks)
   })
   canvas.setGridImages(gridImages)
-}
-
-export const createLogicLoop1 = (blocks: BlockContainer, canvas: Canvas) => {
-  let subtick = 0
-  let tick = 0
-  let elapsedTicksInSecond = 0
-  let elapsedSubticksInSecond = 0
-  let didSubUpdate = true
-
-  setInterval(() => {
-    actualTicksPerSecondState.set(elapsedTicksInSecond)
-    actualSubticksPerSecondState.set(elapsedSubticksInSecond)
-    elapsedTicksInSecond = 0
-    elapsedSubticksInSecond = 0
-  }, 1000)
-
-  const processLogic = () => {
-    if (viewSubTicksState.get()) {
-      // process one subtick or one tick before updating canvas blocks
-      if (didSubUpdate) {
-        // while there are subticks process them
-        didSubUpdate = subUpdateBlocks(blocks)
-        subtick += 1
-        elapsedSubticksInSecond += 1
-        subtickState.set(subtick)
-      } else {
-        updateBlocks(blocks)
-        didSubUpdate = true
-        elapsedTicksInSecond += 1
-        tick += 1
-        tickState.set(tick)
-        subtick = 0
-      }
-    } else {
-      // process all subticks without updating canvas
-      let didSubUpdate = subUpdateBlocks(blocks)
-      subtick += 1
-      elapsedSubticksInSecond += 1
-      while (didSubUpdate) {
-        didSubUpdate = subUpdateBlocks(blocks)
-        subtick += 1
-        elapsedSubticksInSecond += 1
-      }
-
-      subtickState.set(subtick)
-      tickState.set(tick)
-
-      updateBlocks(blocks)
-
-      subtick = 0
-      tick += 1
-      elapsedTicksInSecond += 1
-    }
-
-    updateCanvasBlocks(blocks, canvas)
-  }
-  return processLogic
 }
 
 const vecToStr = (v: Vec2): string => `${v.x} ${v.y}`
@@ -372,12 +271,6 @@ export const subUpdateBlocksWithQueue = (
     const block: Block = innerFunction(oldblock, v)
     newBlocks.push({ v, block })
   }
-
-  // console.log({
-  //   x: 'sub',
-  //   updateQueue,
-  //   newUpdateQueue
-  // })
 
   for (const { v, block } of newBlocks) {
     blocks.setValue(v, block)
@@ -421,12 +314,6 @@ export const updateBlocksWithQueue = (
     clearFallingBlocksRequested.set(false)
   }
 
-  // console.log({
-  //   x: 'full',
-  //   updateQueue,
-  //   newUpdateQueue
-  // })
-
   for (const { v, block } of newBlocks) {
     blocks.setValue(v, block)
   }
@@ -463,8 +350,6 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   fillUpdateQueue()
 
-  console.log('queues', queues)
-
   setInterval(() => {
     actualTicksPerSecondState.set(elapsedTicksInSecond)
     actualSubticksPerSecondState.set(elapsedSubticksInSecond)
@@ -478,18 +363,23 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   // queue items from a subtick become the next subtick queue AND need to be appended to tick quue
 
   const processLogic = () => {
+    let combinedUpdateQueue: Set<string>
     if (viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
       if (queues.subtick.size > 0) {
         // while there are subticks process them
         elapsedUpdatesInSecond += queues.subtick.size
+        combinedUpdateQueue = queues.subtick
         queues.subtick = subUpdateBlocksWithQueue(blocks, queues.subtick)
+
         appendSet(queues.tick, queues.subtick)
         subtick += 1
         elapsedSubticksInSecond += 1
         subtickState.set(subtick)
       } else {
-        const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+        // TODO: combinedUpdateQueue can just be made from tick queue as tick queue
+        // already has subtick queue appended
+        combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
         elapsedUpdatesInSecond += combinedUpdateQueue.size
         queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
         queues.tick = new Set([...queues.subtick])
@@ -519,7 +409,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       subtickState.set(subtick)
       tickState.set(tick)
 
-      const combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
+      combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
       elapsedUpdatesInSecond += combinedUpdateQueue.size
       queues.subtick = updateBlocksWithQueue(blocks, combinedUpdateQueue)
       queues.tick = new Set([...queues.subtick])
@@ -529,6 +419,18 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
       elapsedTicksInSecond += 1
     }
 
+    // console.log(combinedUpdateQueue.size)
+    // const updateCanvasBlocks2 = () => {
+    //   for (const vs of combinedUpdateQueue) {
+    //     const v: Vec2 = strToVec(vs)
+    //     const block: Block = blocks.getValue(v)
+    //     if (block.type !== BlockType.Air) {
+    //       canvas.imageGrid.setValue(v, block.getTextureName(v, blocks))
+    //     }
+    //     // console.log(v, block)
+    //   }
+    // }
+    // updateCanvasBlocks2()
     updateCanvasBlocks(blocks, canvas)
   }
   return {

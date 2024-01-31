@@ -20,6 +20,7 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
+  observerFilteredMovement,
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
@@ -28,9 +29,10 @@ import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { zipArrays } from '../utils/general'
+import { ObserverFilter } from './observer_block'
 import { PistonHead } from './piston_head'
 
-export class Piston implements DirectionalBlock, MoveableBlock {
+export class Piston implements DirectionalBlock, MoveableBlock, ObserverFilter {
   type: BlockType = BlockType.Piston
   isBeingPowered: boolean
   isExtended: boolean
@@ -198,6 +200,16 @@ export class Piston implements DirectionalBlock, MoveableBlock {
 
   public copy (): BlockState {
     return { type: this.type, isSticky: this.isSticky } as BlockState
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      isExtended: this.isExtended,
+      direction: this.direction,
+      isSticky: this.isSticky,
+      movement: observerFilteredMovement(this.movement)
+    }
   }
 }
 

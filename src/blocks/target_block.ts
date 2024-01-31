@@ -17,32 +17,27 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
-import {
-  BinaryPower,
-  IsPoweredBlock,
-  OutputPowerBlock
-} from '../core/powerable_block'
+import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
+import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
-export class RedstoneLamp
+export class TargetBlock
   implements
     MoveableBlock,
     OutputPowerBlock.Traits,
-    IsPoweredBlock.Traits,
+    ConnectsToRedstoneDustBlock.Traits,
     ObserverFilter {
-  type: BlockType = BlockType.RedstoneLamp
+  type: BlockType = BlockType.TargetBlock
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
-  isPowered: boolean
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
-    outputPower = BinaryPower.None,
-    isPowered = false
+    outputPower = BinaryPower.None
   }: {
     movement?: Movement
     movementDirection?: Direction
@@ -52,7 +47,6 @@ export class RedstoneLamp
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
-    this.isPowered = isPowered
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -69,7 +63,7 @@ export class RedstoneLamp
     } else {
       Object.assign(newState, movementUpdateChange.state)
 
-      return new RedstoneLamp(newState)
+      return new TargetBlock(newState)
     }
   }
 
@@ -85,18 +79,14 @@ export class RedstoneLamp
     if (movementUpdateChange.type === MovementUpdateType.BlockChange) {
       return movementUpdateChange.block
     } else {
-      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
-      Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
       Object.assign(newState, movementUpdateChange.state)
-      return new RedstoneLamp(newState)
+      Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      return new TargetBlock(newState)
     }
   }
 
   public getTextureName (): string {
-    return (
-      `redstone_lamp_${this.isPowered ? 'on' : 'off'}` +
-      getMovementTextureName(this)
-    )
+    return `target_block` + getMovementTextureName(this)
   }
 
   public getOutputPower (_direction: Direction): BinaryPower {
@@ -111,6 +101,10 @@ export class RedstoneLamp
     return false
   }
 
+  public doesConnectToRedstoneDust (_direction: Direction): boolean {
+    return true
+  }
+
   public filteredState (): Record<string, any> {
     return {
       type: this.type,
@@ -120,4 +114,4 @@ export class RedstoneLamp
   }
 }
 
-addCreateBlockFunction(BlockType.RedstoneLamp, RedstoneLamp)
+addCreateBlockFunction(BlockType.TargetBlock, TargetBlock)

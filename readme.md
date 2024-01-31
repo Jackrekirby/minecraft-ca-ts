@@ -140,15 +140,22 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Build time should update on webpack watch
 - [x] Actual FPS/TPS much lower than target (consider overshoot and sleep remaining not elapsed)
 - [x] Typing in command window should not trigger keyboard shortcuts
-- [ ] Observer double pulses when facing piston head
+- [x] Observer double pulses when facing piston head
+- [x] Observer pulses on incomplete block movement
 - [x] Demo world not loading on local storage clear
 - [x] Add world update queue rather than updating entire world every tick
 - [ ] Center world at 0,0 on load
 - [ ] Add teleport command
 - [x] Add guide (copy readme into game)
 - [ ] Consider new chunk container and iteration for improved performance
-- [ ] Save on place/destroy block immediately, otherise every 30s
+- [ ] Save on place/destroy block immediately, otherwise every 30s
 - [x] Can tick/subtick processing be increased more (until fps tanks)? Yes
 - [x] Add queue length to debug panel
-- [ ] Command callbacks to change fps/tps not always updating when tps high
-- [ ] Improve update canvas block performance by not overwriting entire array but just changes.
+- [x] Command callbacks to change fps/tps not always updating when tps high. Clear overshoot if it exceeds loop period.
+- [-] Improve update canvas block performance by not overwriting entire array but just changes.
+- [ ] Replace dictionaries with maps, much faster
+- [ ] Add slime blocks
+- [x] Add target block
+- [x] Add obsidian
+- [ ] Add random texture rotation
+- [ ] Add hard and soft power types

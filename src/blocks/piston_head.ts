@@ -175,16 +175,30 @@ export class PistonHead implements DirectionalBlock {
     return `${sticky}piston_head${motionTex}_${this.direction.toLowerCase()}`
   }
 
-  // public isOutputtingPower (): boolean {
-  //   return false
-  // }
-
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable
   }
 
   public copy (): BlockState {
     return { type: this.type, isSticky: this.isSticky } as BlockState
+  }
+
+  public filteredState (): Record<string, any> {
+    const filteredMotion = (() => {
+      switch (this.motion) {
+        case PistonHeadMotion.RetractingMidExtension:
+          return PistonHeadMotion.RetractingMidExtension
+        default:
+          return PistonHeadMotion.Extended
+      }
+    })()
+
+    return {
+      type: this.type,
+      motion: filteredMotion,
+      direction: this.direction,
+      isSticky: this.isSticky
+    }
   }
 }
 

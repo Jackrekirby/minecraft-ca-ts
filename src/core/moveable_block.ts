@@ -200,3 +200,15 @@ export const getMovementTextureName = (block: MoveableBlock) => {
 
   return `${movementTex}${directionTex}`
 }
+
+export const observerFilteredMovement = (movement: Movement): Movement => {
+  switch (movement) {
+    case Movement.Complete:
+      return Movement.Complete
+    case Movement.RetractionComplete:
+      return Movement.RetractionComplete
+    default:
+      // do not want to detect pending/failed movement
+      return Movement.None
+  }
+}

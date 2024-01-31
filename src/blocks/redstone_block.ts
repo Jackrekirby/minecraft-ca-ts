@@ -12,19 +12,22 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
+  observerFilteredMovement,
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
+import { ObserverFilter } from './observer_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
 export class RedstoneBlock
   implements
     MoveableBlock,
     OutputPowerBlock.Traits,
-    ConnectsToRedstoneDustBlock.Traits {
+    ConnectsToRedstoneDustBlock.Traits,
+    ObserverFilter {
   type: BlockType = BlockType.RedstoneBlock
   movement: Movement
   movementDirection: Direction
@@ -79,10 +82,6 @@ export class RedstoneBlock
     return `redstone_block` + getMovementTextureName(this)
   }
 
-  // public isOutputtingPower (): boolean {
-  //   return true
-  // }
-
   public getOutputPower (_direction: Direction): BinaryPower {
     return BinaryPower.Strong
   }
@@ -93,6 +92,13 @@ export class RedstoneBlock
 
   public doesConnectToRedstoneDust (_direction: Direction): boolean {
     return true
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      movement: observerFilteredMovement(this.movement)
+    }
   }
 }
 

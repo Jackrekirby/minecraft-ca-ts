@@ -4,12 +4,14 @@ import { ConcretePowder } from '../blocks/concrete_powder'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
 import { ObserverBlock } from '../blocks/observer_block'
+import { Obsidian } from '../blocks/obsidian'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
 import { RedstoneDust } from '../blocks/redstone_dust'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
+import { TargetBlock } from '../blocks/target_block'
 import { Color, WoolBlock } from '../blocks/wool_block'
 import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
@@ -44,7 +46,9 @@ export const placeAllBlocks = (blocks: BlockContainer) => {
     new Lever({}),
     new Button({}),
     new Piston({ isSticky: true }),
-    new ObserverBlock({}) // test
+    new ObserverBlock({}),
+    new Obsidian({}),
+    new TargetBlock({})
   ]
 
   redstoneBlocks.forEach((block, x) => blocks.setValue({ x, y: 2 }, block))

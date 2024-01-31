@@ -12,12 +12,14 @@ import {
   getMovementTextureName,
   MovementUpdateChange,
   MovementUpdateType,
+  observerFilteredMovement,
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
 import { addCreateBlockFunction } from '../utils/create_block'
+import { ObserverFilter } from './observer_block'
 
-export class GlassBlock implements MoveableBlock {
+export class GlassBlock implements MoveableBlock, ObserverFilter {
   type: BlockType = BlockType.GlassBlock
   movement: Movement
   movementDirection: Direction
@@ -67,12 +69,15 @@ export class GlassBlock implements MoveableBlock {
     return `glass` + getMovementTextureName(this)
   }
 
-  // public isOutputtingPower (): boolean {
-  //   return false
-  // }
-
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Moveable
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      movement: observerFilteredMovement(this.movement)
+    }
   }
 }
 
