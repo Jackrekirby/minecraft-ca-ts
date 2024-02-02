@@ -145,7 +145,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Demo world not loading on local storage clear
 - [x] Add world update queue rather than updating entire world every tick
 - [ ] Center world at 0,0 on load
-- [ ] Add teleport command
+- [x] Add teleport command
+- [x] Add scale command
 - [x] Add guide (copy readme into game)
 - [ ] Consider new chunk container and iteration for improved performance
 - [ ] Save on place/destroy block immediately, otherwise every 30s
@@ -160,9 +161,13 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add random texture rotation
 - [ ] Add hard and soft power types
 - [x] Support texture layers
+- [ ] Support rotated textures
 - [x] Convert all textures to texture layers that could benefit from it
 - [ ] Support color blending for redstone signal strength
 - [x] Support togglable redstone signal strength
 - [x] Add signal strength view limit
 - [ ] Reduce idle time - performance worse without updateCanvasBlocks call due to more idle
 - [x] Increase signal strength number size
+- [ ] Investigate web workers
+- [ ] Investigate webgl canvas context
+- [x] Fix world not displaying on clear/load when tick rate 0

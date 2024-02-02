@@ -1,5 +1,6 @@
 import { Dict2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
+import { Canvas } from '../rendering/canvas'
 import { isEnum } from '../utils/general'
 import { compressObject, LocalStorageVariable } from '../utils/save'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
@@ -11,6 +12,7 @@ import {
   commandSuccess
 } from './command_line'
 import { debugPanelState } from './debug_panel'
+import { updateCanvasBlocks } from './game_loop'
 import { convertObjectToString, convertStringToObject } from './globals'
 import {
   downloadFile,
@@ -33,12 +35,14 @@ export const clearFallingBlocksRequested = new LocalStorageVariable<boolean>({
 export const initialiseCommands = (
   commandManager: CommandManager,
   blocks: BlockContainer,
+  canvas: Canvas,
   fillUpdateQueue: () => void
 ) => {
   commandManager.createCommand('/world load {name:string}', async input => {
     blocks.clone(await createDemoWorld())
     // blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
     // updateCanvas()
+    updateCanvasBlocks(blocks, canvas)
     fillUpdateQueue()
     return commandSuccess(`loaded world ${input.name}`)
   })
@@ -47,6 +51,7 @@ export const initialiseCommands = (
     blocks.clone(await createEmptyWorld())
     placeAllBlocks(blocks)
     // updateCanvas()
+    updateCanvasBlocks(blocks, canvas)
     fillUpdateQueue()
     return commandSuccess(`cleared world`)
   })
@@ -55,6 +60,30 @@ export const initialiseCommands = (
     clearFallingBlocksRequested.set(true)
     return commandSuccess(`cleared falling blocks`)
   })
+
+  commandManager.createCommand('/teleport {x:float} {y:float}', async input => {
+    const x = Number(input.x),
+      y = Number(input.y)
+    if (isNaN(x) || isNaN(y)) {
+      return commandFailure(`failed to teleport. x or y is not a valid number`)
+    }
+    canvas.moveTo({ x, y })
+    return commandSuccess(`teleported to {x: ${x}, y: ${y}}`)
+  })
+
+  commandManager.createCommand(
+    '/set scale {pixels_per_block:float}',
+    async input => {
+      const x = Number(input.pixels_per_block)
+      if (isNaN(x)) {
+        return commandFailure(
+          `failed to scale. pixels_per_block is not a valid number`
+        )
+      }
+      canvas.setScale(x)
+      return commandSuccess(`set world scale to ${x} pixels per block`)
+    }
+  )
 
   commandManager.createCommand('/world download', async input => {
     const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(

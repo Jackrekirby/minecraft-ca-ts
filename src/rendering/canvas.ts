@@ -176,41 +176,72 @@ export class Canvas {
     canvas.addEventListener('pointerleave', () => (isPanning = false))
   }
 
+  private scaleAboutPosition (scale: number, position: Vec2) {
+    const preScaledScreenPosition: Vec2 = this.calculateWorldToScreenPosition(
+      position.x,
+      position.y
+    )
+
+    this.scale.set(scale)
+
+    const postScaledScreenPosition = this.calculateWorldToScreenPosition(
+      position.x,
+      position.y
+    )
+
+    const scaleOffset = vec2Subtract(
+      preScaledScreenPosition,
+      postScaledScreenPosition
+    )
+
+    this.offset.set(vec2Add(this.offset.get(), scaleOffset))
+
+    this.render()
+  }
+
+  setScale (pixelsPerUnit: number) {
+    const centerWorldPosition: Vec2 = this.calculateScreenToWorldPosition(
+      this.canvas.width / 2,
+      this.canvas.height / 2
+    )
+
+    this.scaleAboutPosition(pixelsPerUnit, centerWorldPosition)
+  }
+
+  moveTo = (worldPosition: Vec2) => {
+    const screenPosition: Vec2 = this.calculateWorldToScreenPosition(
+      worldPosition.x,
+      worldPosition.y
+    )
+
+    const delta = vec2Add(vec2Subtract(this.offset.get(), screenPosition), {
+      x: this.canvas.width / 2,
+      y: this.canvas.height / 2
+    })
+    console.log('move', delta)
+    this.offset.set(delta)
+  }
+
   handleScaling = () => {
     const handleScroll = (event: WheelEvent): void => {
       // scaleOrigin in world pos
-      const axisFlippedOrigin: Vec2 = this.calculateAxisFlippedPosition(
+      const mouseCanvasPosition: Vec2 = this.calculateAxisFlippedPosition(
         this.mouse.x,
         this.mouse.y
       )
-      const worldOrigin: Vec2 = this.calculateScreenToWorldPosition(
-        axisFlippedOrigin.x,
-        axisFlippedOrigin.y
-      )
-      const preScaleScreenOrigin = this.calculateWorldToScreenPosition(
-        worldOrigin.x,
-        worldOrigin.y
+      const mouseWorldPosition: Vec2 = this.calculateScreenToWorldPosition(
+        mouseCanvasPosition.x,
+        mouseCanvasPosition.y
       )
 
+      let scale: number
       if (event.deltaY > 0) {
-        this.scale.set(this.scale.get() / this.scaleFactor)
-      } else if (event.deltaY < 0) {
-        this.scale.set(this.scale.get() * this.scaleFactor)
+        scale = this.scale.get() / this.scaleFactor
+      } else {
+        scale = this.scale.get() * this.scaleFactor
       }
 
-      const postScaleScreenOrigin = this.calculateWorldToScreenPosition(
-        worldOrigin.x,
-        worldOrigin.y
-      )
-
-      const scaleOffset = vec2Subtract(
-        preScaleScreenOrigin,
-        postScaleScreenOrigin
-      )
-
-      this.offset.set(vec2Add(this.offset.get(), scaleOffset))
-
-      this.render()
+      this.scaleAboutPosition(scale, mouseWorldPosition)
     }
 
     this.canvas.addEventListener('wheel', handleScroll)
