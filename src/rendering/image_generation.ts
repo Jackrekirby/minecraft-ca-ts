@@ -634,7 +634,8 @@ const processRedstoneDust = async () => {
       'redstone_dust_overlay_' + i + '.png'
     )
     const outPath = path.join(outputDirectory, 'number_' + i + '.png')
-    await shiftImagePixels(inPath, outPath, -1, -1)
+    // TODO: remove if no longer shifting and just copy
+    await shiftImagePixels(inPath, outPath, 0, 0)
   }
 
   for (let i = 0; i < 2; i++) {
