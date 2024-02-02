@@ -373,7 +373,7 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
       hintItemIndex = 0
     }
 
-    console.log(hintItemIndex, commandListElement.children.length)
+    // console.log(hintItemIndex, commandListElement.children.length)
 
     selectCommandListItem()
     setTimeout(() => focusEndOfCommandLine(), 0)

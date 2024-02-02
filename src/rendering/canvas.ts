@@ -26,11 +26,24 @@ function floorToNearest (value: number, target: number) {
   return Math.floor(value / target) * target
 }
 
+export interface CanvasGridCellLayer {
+  textureName: string
+  blendMode?: GlobalCompositeOperation
+  alpha?: number
+  minSize?: number
+}
+
+export interface CanvasGridCell {
+  layers: CanvasGridCellLayer[]
+}
+
+export type CanvasGridItem = CanvasGridCell | string
+
 export class Canvas {
   canvas: HTMLCanvasElement
   ctx: CanvasRenderingContext2D
   images: Map<string, HTMLImageElement>
-  imageGrid: Dict2D<string>
+  imageGrid: Dict2D<CanvasGridItem>
 
   // panning and scaling
   scale: StateHandler<number>
@@ -355,20 +368,40 @@ export class Canvas {
       this.calculateScreenToWorldPosition(0, 0),
       Math.floor
     )
+    const mode = true
+
+    const scale = this.scale.get()
+
+    const drawLayer = (v: Vec2, layer: CanvasGridCellLayer) => {
+      if (layer.minSize && layer.minSize > scale) return
+      this.ctx.globalCompositeOperation = layer.blendMode ?? 'source-over'
+      this.ctx.globalAlpha = layer.alpha ?? 1.0
+
+      this.drawImage(layer.textureName, v.x, v.y, 1, 1)
+
+      this.ctx.globalCompositeOperation = 'source-over'
+      this.ctx.globalAlpha = 1.0
+    }
 
     // TODO automatically which render method depending on render space
     // and grid size. Could chunk imageGrid as well.
-    if (true) {
+    if (mode) {
       // attempt to render all blocks and cull those outside render space
       // good if blocks in world < blocks in render space
-      this.imageGrid.foreach((textureName: string, v: Vec2) => {
+      this.imageGrid.foreach((item: CanvasGridItem, v: Vec2) => {
         if (
           v.x >= bottomLeft.x &&
           v.x <= topRight.x + 1 &&
           v.y >= bottomLeft.y &&
           v.y <= topRight.y + 1
         ) {
-          this.drawImage(textureName, v.x, v.y, 1, 1)
+          if (typeof item === 'string') {
+            this.drawImage(item, v.x, v.y, 1, 1)
+          } else {
+            for (const layer of item.layers) {
+              drawLayer(v, layer)
+            }
+          }
         }
       })
     } else {
@@ -377,17 +410,24 @@ export class Canvas {
       // good if blocks in render space < blocks in world
       for (let y = bottomLeft.y; y <= topRight.y + 1; y += 1) {
         for (let x = bottomLeft.x; x <= topRight.x + 1; x += 1) {
-          const texture_name = this.imageGrid.getValue({ x, y })
-          if (texture_name === undefined) {
+          const item: CanvasGridItem = this.imageGrid.getValue({ x, y })
+
+          if (item === undefined) {
             continue
           }
-          this.drawImage(texture_name, x, y, 1, 1)
+          if (typeof item === 'string') {
+            this.drawImage(item, x, y, 1, 1)
+          } else {
+            for (const layer of item.layers) {
+              drawLayer({ x, y }, layer)
+            }
+          }
         }
       }
     }
   }
 
-  public setGridImages (imageGrid: Dict2D<string>) {
+  public setGridImages (imageGrid: Dict2D<CanvasGridItem>) {
     this.imageGrid = imageGrid
   }
 

@@ -25,6 +25,7 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -167,7 +168,10 @@ export class Piston implements DirectionalBlock, MoveableBlock, ObserverFilter {
     }
   }
 
-  public getTextureName (position: Vec2, blocks: BlockContainer): string {
+  public getTextureName (
+    position: Vec2,
+    blocks: BlockContainer
+  ): CanvasGridItem {
     const frontBlock: Block = getNeighbourBlock(position, blocks, Direction.Up)
     const isExtended =
       isBlock<PistonHead>(frontBlock, BlockType.PistonHead) &&
@@ -182,12 +186,22 @@ export class Piston implements DirectionalBlock, MoveableBlock, ObserverFilter {
     //   frontBlock.movementDirection === this.direction)
 
     const sticky = this.isSticky ? 'sticky_' : ''
-    const tex =
-      `${sticky}piston${isPowered ? '_on' : '_off'}${
-        isExtended ? '_extended' : ''
-      }_${this.direction.toLowerCase()}` +
-      (isExtended ? '' : getMovementTextureName(this))
-    return tex
+    // const tex = +(isExtended ? '' : getMovementTextureName(this))
+    // return tex
+    const texDirection = this.direction.toLowerCase()
+    return {
+      layers: [
+        {
+          textureName: `${sticky}piston_off${
+            isExtended ? '_extended' : ''
+          }_${texDirection}`
+        },
+        {
+          textureName: isPowered ? `piston_on_${texDirection}` : ''
+        },
+        isExtended ? { textureName: '' } : getMovementTextureName(this)
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   // public isOutputtingPower (): boolean {

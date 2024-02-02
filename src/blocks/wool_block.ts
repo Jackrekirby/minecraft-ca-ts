@@ -19,6 +19,7 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { addCreateBlockFunction } from '../utils/create_block'
 
 import { ObserverFilter } from './observer_block'
@@ -104,8 +105,15 @@ export class WoolBlock
     }
   }
 
-  public getTextureName (): string {
-    return `${this.color}_wool` + getMovementTextureName(this)
+  public getTextureName (): CanvasGridItem {
+    return {
+      layers: [
+        {
+          textureName: `${this.color}_wool`
+        },
+        getMovementTextureName(this)
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   public getOutputPower (_direction: Direction): BinaryPower {

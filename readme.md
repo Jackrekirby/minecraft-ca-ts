@@ -159,3 +159,10 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add obsidian
 - [ ] Add random texture rotation
 - [ ] Add hard and soft power types
+- [x] Support texture layers
+- [x] Convert all textures to texture layers that could benefit from it
+- [ ] Support color blending for redstone signal strength
+- [x] Support togglable redstone signal strength
+- [x] Add signal strength view limit
+- [ ] Reduce idle time - performance worse without updateCanvasBlocks call due to more idle
+- [x] Increase signal strength number size

@@ -20,6 +20,11 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  CanvasGridCell,
+  CanvasGridCellLayer,
+  CanvasGridItem
+} from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -119,23 +124,31 @@ export class ConcretePowder
     }
   }
 
-  public getTextureName (): string {
+  public getTextureName (): CanvasGridItem {
     let fallingTex = ''
     if (this.movement === Movement.None) {
       switch (this.gravityMotion) {
         case GravityMotion.Fallen:
-          fallingTex = '_fallen'
+          fallingTex = 'fallen'
           break
         case GravityMotion.Falling:
-          fallingTex = '_falling'
+          fallingTex = 'falling'
           break
       }
     }
-    return (
-      `${this.color}_concrete_powder` +
-      fallingTex +
-      getMovementTextureName(this)
-    )
+    return {
+      layers: [
+        {
+          textureName: `${this.color}_concrete_powder`
+        },
+        {
+          textureName: fallingTex,
+          blendMode: 'luminosity',
+          alpha: 0.7
+        } as CanvasGridCellLayer,
+        getMovementTextureName(this)
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   public getOutputPower (_direction: Direction): BinaryPower {

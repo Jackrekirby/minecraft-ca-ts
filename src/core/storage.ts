@@ -45,6 +45,12 @@ export const viewSubTicksState = new LocalStorageVariable<boolean>({
   saveInterval: 0
 })
 
+export const viewSignalStrengthState = new LocalStorageVariable<boolean>({
+  defaultValue: true,
+  localStorageKey: 'view-signal-strength',
+  saveInterval: 0
+})
+
 export const blockStorage = new LocalStorageVariable<BlockContainer>({
   localStorageKey: 'world',
   defaultValue: createEmptyWorld(),
@@ -55,9 +61,9 @@ export const blockStorage = new LocalStorageVariable<BlockContainer>({
       }
     )
 
-    // console.log('save', blocksForStorage.items)
+    // console.log('save', Object.fromEntries(blocksForStorage.items))
 
-    return compressObject(blocksForStorage.items)
+    return compressObject(Object.fromEntries(blocksForStorage.items))
   },
   storageToValue: (storage: string) => {
     const blocks: BlockContainer = createEmptyBlockContainer()

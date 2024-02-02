@@ -51,10 +51,6 @@ export class RedstoneTorch
     }_${this.direction.toLowerCase()}`
   }
 
-  // public isOutputtingPower (direction: Direction): boolean {
-  //   return direction !== getOppositeDirection(this.direction) && this.isOn()
-  // }
-
   public getOutputPower (direction: Direction): BinaryPower {
     if (this.isOn() && direction !== getOppositeDirection(this.direction)) {
       return BinaryPower.Strong

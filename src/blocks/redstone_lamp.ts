@@ -22,6 +22,7 @@ import {
   IsPoweredBlock,
   OutputPowerBlock
 } from '../core/powerable_block'
+import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
@@ -92,11 +93,15 @@ export class RedstoneLamp
     }
   }
 
-  public getTextureName (): string {
-    return (
-      `redstone_lamp_${this.isPowered ? 'on' : 'off'}` +
-      getMovementTextureName(this)
-    )
+  public getTextureName (): CanvasGridItem {
+    return {
+      layers: [
+        {
+          textureName: `redstone_lamp_${this.isPowered ? 'on' : 'off'}`
+        },
+        getMovementTextureName(this)
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   public getOutputPower (_direction: Direction): BinaryPower {

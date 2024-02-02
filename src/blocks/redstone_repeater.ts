@@ -9,6 +9,7 @@ import {
 } from '../core/block'
 import { Direction, getOppositeDirection } from '../core/direction'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import {
   getNeighbourBlock,
   getOppositeRelativeDirection
@@ -29,22 +30,26 @@ export class RedstoneRepeater
   ticksOff: number
   isPowered: boolean // is outputting power
   direction: Direction
+  isLocked: boolean
 
   constructor ({
     ticksOn = 0,
     ticksOff = 1,
     isPowered = false,
-    direction = Direction.Up
+    direction = Direction.Up,
+    isLocked = false
   }: {
     ticksOn?: number
     ticksOff?: number
     isPowered?: boolean
     direction?: Direction
+    isLocked?: boolean
   } = {}) {
     this.ticksOn = ticksOn
     this.ticksOff = ticksOff
     this.isPowered = isPowered
     this.direction = direction
+    this.isLocked = isLocked
   }
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
@@ -111,18 +116,37 @@ export class RedstoneRepeater
       }
     }
 
-    return new RedstoneRepeater({ ...this, ticksOn, ticksOff, isPowered })
+    return new RedstoneRepeater({
+      ...this,
+      ticksOn,
+      ticksOff,
+      isPowered,
+      isLocked
+    })
   }
 
-  public getTextureName (): string {
-    return `redstone_repeater_on_${this.ticksOn}_off_${this.ticksOff}${
-      this.isPowered && this.ticksOff > 0 ? '_powered' : ''
-    }_${this.direction.toLowerCase()}`
+  public getTextureName (): CanvasGridItem {
+    const texDirection = this.direction.toLowerCase()
+    return {
+      layers: [
+        {
+          textureName: `redstone_repeater_base_${texDirection}`
+        },
+        {
+          textureName: `redstone_repeater_on_${this.ticksOn}_off_${
+            this.ticksOff
+          }${
+            this.isPowered && this.ticksOff > 0 ? '_powered' : ''
+          }_${texDirection}`
+        },
+        {
+          textureName: this.isLocked
+            ? `redstone_repeater_locked_${texDirection}`
+            : ''
+        }
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
-
-  // public isOutputtingPower (direction: Direction): boolean {
-  //   return this.isPowered && direction === this.direction
-  // }
 
   public getOutputPower (direction: Direction): BinaryPower {
     if (this.isPowered && direction === this.direction) {

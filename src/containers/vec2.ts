@@ -34,3 +34,13 @@ export const vec2Zero = () => {
 export const vec2Apply = (v: Vec2, fnc: (z: number) => number) => {
   return { x: fnc(v.x), y: fnc(v.y) }
 }
+
+export const vec2AreEqual = (u: Vec2, v: Vec2): boolean => {
+  return u.x === v.x && u.y === v.y
+}
+
+export const vecToStr = (v: Vec2): string => `${v.x} ${v.y}`
+export const strToVec = (v: string): Vec2 => {
+  let [x, y] = v.split(' ')
+  return { x: Number(x), y: Number(y) }
+}

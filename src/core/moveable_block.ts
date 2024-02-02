@@ -2,6 +2,7 @@ import { Air } from '../blocks/air'
 import { Piston } from '../blocks/piston'
 import { PistonHead, PistonHeadMotion } from '../blocks/piston_head'
 import { Vec2 } from '../containers/vec2'
+import { CanvasGridCellLayer } from '../rendering/canvas'
 import {
   getNeighbourBlock,
   getOppositeRelativeDirection
@@ -185,20 +186,26 @@ export const updateSubMovement = (
   })
 }
 
-export const getMovementTextureName = (block: MoveableBlock) => {
+export const getMovementTextureName = (
+  block: MoveableBlock
+): CanvasGridCellLayer => {
   const movementTex = {
     [Movement.None]: '',
-    [Movement.Pending]: '_extension_pending',
-    [Movement.Complete]: '_extension_complete',
-    [Movement.RetractionPending]: '_retraction_pending',
-    [Movement.RetractionComplete]: '_retraction_complete'
+    [Movement.Pending]: 'extension_pending',
+    [Movement.Complete]: 'extension_complete',
+    [Movement.RetractionPending]: 'retraction_pending',
+    [Movement.RetractionComplete]: 'retraction_complete'
   }[block.movement]
   const directionTex =
     block.movement === Movement.None
       ? ''
       : `_${block.movementDirection.toLowerCase()}`
 
-  return `${movementTex}${directionTex}`
+  return {
+    textureName: `${movementTex}${directionTex}`,
+    blendMode: 'luminosity',
+    alpha: 0.7
+  }
 }
 
 export const observerFilteredMovement = (movement: Movement): Movement => {

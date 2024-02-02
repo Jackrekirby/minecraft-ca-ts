@@ -1,5 +1,6 @@
 import { ChunkContainer } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
+import { CanvasGridItem } from '../rendering/canvas'
 import { Direction } from './direction'
 
 export type BlockContainer = ChunkContainer<Block>
@@ -36,7 +37,7 @@ export interface BlockState {
 export interface Block extends BlockState {
   update: (position: Vec2, blocks: BlockContainer) => Block
   subupdate: (position: Vec2, blocks: BlockContainer) => Block
-  getTextureName: (position: Vec2, blocks: BlockContainer) => string
+  getTextureName: (position: Vec2, blocks: BlockContainer) => CanvasGridItem
   // TODO make power redstone interface
   // direction relative to the block you are requesting power from
   // isOutputtingPower: (direction: Direction) => boolean

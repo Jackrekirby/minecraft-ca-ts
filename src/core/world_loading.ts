@@ -13,7 +13,7 @@ import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
 import { TargetBlock } from '../blocks/target_block'
 import { Color, WoolBlock } from '../blocks/wool_block'
-import { ChunkContainer, Dict2D, StringDict } from '../containers/array2d'
+import { ChunkContainer, Dict2D2, StringDict } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { createBlock } from '../utils/create_block'
 import { Block, BlockContainer, BlockType } from './block'
@@ -62,41 +62,13 @@ export const loadChunks = (
   chunks: StringDict<Block>,
   blocks: BlockContainer
 ) => {
-  const chunkDict = new Dict2D(chunks)
+  const chunkDict = new Dict2D2(chunks)
   // console.log(chunkDict)
 
   chunkDict.map((block: Block, v: Vec2) => {
     blocks.setValue(v, createBlock(block.type, block))
   })
 }
-
-// export const loadChunksFromStorage = async (
-//   allowLocalStorage: boolean = true,
-//   allowWorldDemos: boolean = true
-// ) => {
-//   const chunksRaw = localStorage.getItem('chunks')
-
-//   const blocks: BlockContainer = new ChunkContainer<Block>(
-//     16,
-//     () => new Air({}),
-//     (block: Block) => block.type === BlockType.Air,
-//     true
-//   )
-
-//   // console.log('chunksRaw', chunksRaw)
-
-//   if (chunksRaw && allowLocalStorage) {
-//     const chunks = JSON.parse(chunksRaw) as StringDict<Block>
-//     loadChunks(chunks, blocks)
-//   } else if (allowWorldDemos) {
-//     const chunks = (await loadWorldSave()) as StringDict<Block>
-//     loadChunks(chunks, blocks)
-//   }
-
-//   placeAllBlocks(blocks)
-
-//   return blocks
-// }
 
 export const createEmptyBlockContainer = () => {
   const blocks: BlockContainer = new ChunkContainer<Block>(

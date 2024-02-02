@@ -17,6 +17,7 @@ import {
   framesPerSecondState,
   selectedBlockState,
   updatesPerSecondState,
+  viewSignalStrengthState,
   viewSubTicksState
 } from './storage'
 import {
@@ -79,15 +80,16 @@ export const initialiseCommands = (
     return commandSuccess(`downloaded world`)
   })
 
-  // commandManager.createCommand('/tick step', async () => {
-
-  //   return commandSuccess(
-  //     `stepped tick to ${GLOBALS.tick.get()}.${GLOBALS.subtick.get()}`
-  //   )
-  // })
   commandManager.createCommand('/toggle view_subticks', async () => {
     viewSubTicksState.set(!viewSubTicksState.get())
     return commandSuccess(`toggled view subticks to ${viewSubTicksState.get()}`)
+  })
+
+  commandManager.createCommand('/toggle view_signal_strength', async () => {
+    viewSignalStrengthState.set(!viewSignalStrengthState.get())
+    return commandSuccess(
+      `toggled view signal strength to ${viewSignalStrengthState.get()}`
+    )
   })
 
   commandManager.createCommand(

@@ -1,7 +1,8 @@
 import { Air } from '../blocks/air'
 import { ConcretePowder, GravityMotion } from '../blocks/concrete_powder'
+import { Dict2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
-import { Canvas } from '../rendering/canvas'
+import { Canvas, CanvasGridItem } from '../rendering/canvas'
 import { areObjectsEqual, now, sleep } from '../utils/general'
 import { Block, BlockContainer, BlockType, isBlock } from './block'
 import { clearFallingBlocksRequested } from './commands'
@@ -227,9 +228,11 @@ export class ProcessLoop {
 }
 
 export const updateCanvasBlocks = (blocks: BlockContainer, canvas: Canvas) => {
-  const gridImages = blocks.mapToDict2D((block: Block, v: Vec2) => {
-    return block.getTextureName(v, blocks)
-  })
+  const gridImages: Dict2D<CanvasGridItem> = blocks.mapToDict2D(
+    (block: Block, v: Vec2) => {
+      return block.getTextureName(v, blocks)
+    }
+  )
   canvas.setGridImages(gridImages)
 }
 
@@ -350,6 +353,8 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   fillUpdateQueue()
 
+  console.log('queue', queues)
+
   setInterval(() => {
     actualTicksPerSecondState.set(elapsedTicksInSecond)
     actualSubticksPerSecondState.set(elapsedSubticksInSecond)
@@ -437,6 +442,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     processLogic,
     addToTickQueue: (v: Vec2) => {
       addToUpdateQueue(queues.tick, v)
+      addToUpdateQueue(queues.subtick, v)
     },
     fillUpdateQueue
   }

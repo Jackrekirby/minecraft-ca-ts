@@ -18,6 +18,7 @@ import {
   updateSubMovement
 } from '../core/moveable_block'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
 
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -127,12 +128,17 @@ export class ObserverBlock
     }
   }
 
-  public getTextureName (): string {
-    return (
-      `observer_${
-        this.hasObservedChange ? 'on' : 'off'
-      }_${this.direction.toLowerCase()}` + getMovementTextureName(this)
-    )
+  public getTextureName (): CanvasGridItem {
+    return {
+      layers: [
+        {
+          textureName: `observer_${
+            this.hasObservedChange ? 'on' : 'off'
+          }_${this.direction.toLowerCase()}`
+        },
+        getMovementTextureName(this)
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   public getOutputPower (direction: Direction): BinaryPower {

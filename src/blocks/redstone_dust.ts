@@ -13,6 +13,12 @@ import {
   getOtherDirections
 } from '../core/direction'
 import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import { viewSignalStrengthState } from '../core/storage'
+import {
+  CanvasGridCell,
+  CanvasGridCellLayer,
+  CanvasGridItem
+} from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 
@@ -147,13 +153,29 @@ export class RedstoneDust
     return connectedDirections
   }
 
-  public getTextureName (position: Vec2, blocks: BlockContainer): string {
+  public getTextureName (): CanvasGridItem {
     let tex = 'redstone_dust'
     this.connectedDirections.forEach(
       direction => (tex += '_' + direction.toLowerCase())
     )
-    tex += '_' + this.getInternalPowerStrength()
-    return tex
+    let signalStrength = this.getInternalPowerStrength()
+    tex += signalStrength > 0 ? '_on' : '_off'
+
+    return {
+      layers: [
+        {
+          textureName: tex
+        },
+        {
+          textureName: viewSignalStrengthState.get()
+            ? `number_${signalStrength}`
+            : '',
+          blendMode: 'source-over',
+          alpha: 1.0,
+          minSize: 32
+        } as CanvasGridCellLayer
+      ].filter(x => x.textureName !== '')
+    } as CanvasGridCell
   }
 
   // public isOutputtingPower (direction: Direction): boolean {

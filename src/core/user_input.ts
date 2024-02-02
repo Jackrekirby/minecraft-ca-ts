@@ -66,7 +66,7 @@ export const initBlockEventListeners = (
       // updateCanvas()
       updateCanvasBlocks(blocks, canvas)
     } else {
-      console.log('selected block', block.type)
+      // console.log('selected block', block.type)
 
       if (
         // TODO add interaction() to each block type

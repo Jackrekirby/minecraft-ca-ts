@@ -1,5 +1,5 @@
 import { getMissingKeys } from '../utils/general'
-import { Vec2 } from './vec2'
+import { Vec2, vec2Multiply } from './vec2'
 
 export interface StringDict<T> {
   [key: string]: T
@@ -121,21 +121,42 @@ export class ChunkContainer<T> {
 
   public getPositions (): Vec2[] {
     const positions: Vec2[] = []
-    for (const index in this.chunks) {
-      const chunkPos: Vec2 = this.chunkIndexToVec2(index)
-      const chunkBlockPos: Vec2 = {
-        x: chunkPos.x * this.chunkSize,
-        y: chunkPos.y * this.chunkSize
+    if (true) {
+      for (const chunkIndex in this.chunks) {
+        const chunkPos: Vec2 = vec2Multiply(this.chunkIndexToVec2(chunkIndex), {
+          x: this.chunkSize,
+          y: this.chunkSize
+        })
+        const xmax = chunkPos.x + this.chunkSize,
+          ymax = chunkPos.y + this.chunkSize
+        for (let y = chunkPos.y; y < ymax; ++y) {
+          for (let x = chunkPos.x; x < xmax; ++x) {
+            const position: Vec2 = { x, y }
+            positions.push(position)
+          }
+        }
       }
-      for (let y = chunkBlockPos.y; y < chunkBlockPos.y + this.chunkSize; ++y) {
+    } else {
+      for (const index in this.chunks) {
+        const chunkPos: Vec2 = this.chunkIndexToVec2(index)
+        const chunkBlockPos: Vec2 = {
+          x: chunkPos.x * this.chunkSize,
+          y: chunkPos.y * this.chunkSize
+        }
         for (
-          let x = chunkBlockPos.x;
-          x < chunkBlockPos.x + this.chunkSize;
-          ++x
+          let y = chunkBlockPos.y;
+          y < chunkBlockPos.y + this.chunkSize;
+          ++y
         ) {
-          const position: Vec2 = { x, y }
+          for (
+            let x = chunkBlockPos.x;
+            x < chunkBlockPos.x + this.chunkSize;
+            ++x
+          ) {
+            const position: Vec2 = { x, y }
 
-          positions.push(position)
+            positions.push(position)
+          }
         }
       }
     }
@@ -177,39 +198,164 @@ export class ChunkContainer<T> {
 
   public mapToDict2D<U> (callback: (value: T, v: Vec2) => U): Dict2D<U> {
     const dict2D = new Dict2D<U>()
-    for (const index in this.chunks) {
-      const chunkPos: Vec2 = this.chunkIndexToVec2(index)
-      const chunkBlockPos: Vec2 = {
-        x: chunkPos.x * this.chunkSize,
-        y: chunkPos.y * this.chunkSize
+    if (false) {
+      for (const [chunkIndex, blocks] of Object.entries(this.chunks)) {
+        const chunkPos: Vec2 = vec2Multiply(this.chunkIndexToVec2(chunkIndex), {
+          x: this.chunkSize,
+          y: this.chunkSize
+        })
+
+        let blockIndex = 0
+        for (const block of blocks) {
+          if (!this.isDefaultItem(block)) {
+            const v: Vec2 = {
+              x: (blockIndex % this.chunkSize) + chunkPos.x,
+              y: Math.floor(blockIndex / this.chunkSize) + chunkPos.y
+            }
+
+            const newValue = callback(block, v)
+            dict2D.setValue(v, newValue)
+          }
+          ++blockIndex
+        }
       }
-      for (let y = chunkBlockPos.y; y < chunkBlockPos.y + this.chunkSize; ++y) {
+    } else {
+      for (const index in this.chunks) {
+        const chunkPos: Vec2 = this.chunkIndexToVec2(index)
+
+        const chunkBlockPos: Vec2 = {
+          x: chunkPos.x * this.chunkSize,
+          y: chunkPos.y * this.chunkSize
+        }
         for (
-          let x = chunkBlockPos.x;
-          x < chunkBlockPos.x + this.chunkSize;
-          ++x
+          let y = chunkBlockPos.y;
+          y < chunkBlockPos.y + this.chunkSize;
+          ++y
         ) {
-          const position: Vec2 = { x, y }
-          const value: T = this.getValue(position)
-          if (!this.isDefaultItem(value)) {
-            const newValue = callback(value, position)
-            dict2D.setValue(position, newValue)
+          for (
+            let x = chunkBlockPos.x;
+            x < chunkBlockPos.x + this.chunkSize;
+            ++x
+          ) {
+            const position: Vec2 = { x, y }
+            const value: T = this.getValue(position)
+            if (!this.isDefaultItem(value)) {
+              const newValue = callback(value, position)
+              dict2D.setValue(position, newValue)
+            }
           }
         }
       }
     }
+
     return dict2D
   }
 }
 
 export class Dict2D<T> {
+  public items: Map<string, T>
+
+  constructor () {
+    this.items = new Map<string, T>()
+  }
+
+  public clone (other: Dict2D<T>) {
+    this.items = other.items
+  }
+
+  private getIndex (v: Vec2): string {
+    return `${v.x} ${v.y}`
+  }
+
+  private indexToVec2 (i: string): Vec2 {
+    const [x, y] = i.split(' ')
+    return { x: Number(x), y: Number(y) }
+  }
+
+  public setValue (v: Vec2, value: T): void {
+    const index = this.getIndex(v)
+    this.items.set(index, value)
+  }
+
+  public getValue (v: Vec2): T {
+    const index = this.getIndex(v)
+    return this.items.get(index)!
+  }
+
+  public map<U> (callback: (value: T, v: Vec2) => U): Dict2D<U> {
+    const newContainer = new Dict2D<U>()
+    for (const [index, value] of this.items) {
+      const v: Vec2 = this.indexToVec2(index)
+      const newValue = callback(value, v)
+      newContainer.setValue(v, newValue)
+    }
+    return newContainer
+  }
+
+  public foreach<U> (callback: (value: T, v: Vec2) => U): void {
+    for (const [index, value] of this.items) {
+      const v: Vec2 = this.indexToVec2(index)
+      callback(value, v)
+    }
+  }
+}
+
+// export class Dict2D<T> {
+//   public items: StringDict<T>
+
+//   constructor (items?: StringDict<T>) {
+//     this.items = items ?? {}
+//   }
+
+//   public clone (other: Dict2D<T>) {
+//     this.items = other.items
+//   }
+
+//   private getIndex (v: Vec2): string {
+//     return `${v.x} ${v.y}`
+//   }
+
+//   private indexToVec2 (i: string): Vec2 {
+//     const [x, y] = i.split(' ')
+//     return { x: Number(x), y: Number(y) }
+//   }
+
+//   public setValue (v: Vec2, value: T): void {
+//     const index = this.getIndex(v)
+//     this.items[index] = value
+//   }
+
+//   public getValue (v: Vec2): T {
+//     const index = this.getIndex(v)
+//     return this.items[index]
+//   }
+
+//   public map<U> (callback: (value: T, v: Vec2) => U): Dict2D<U> {
+//     const newContainer = new Dict2D<U>()
+//     for (const [index, value] of Object.entries(this.items)) {
+//       const v: Vec2 = this.indexToVec2(index)
+//       const newValue = callback(value, v)
+//       newContainer.setValue(v, newValue)
+//     }
+//     return newContainer
+//   }
+
+//   public foreach<U> (callback: (value: T, v: Vec2) => U): void {
+//     for (const [index, value] of Object.entries(this.items)) {
+//       const v: Vec2 = this.indexToVec2(index)
+//       callback(value, v)
+//     }
+//   }
+// }
+
+export class Dict2D2<T> {
   public items: StringDict<T>
 
   constructor (items?: StringDict<T>) {
     this.items = items ?? {}
   }
 
-  public clone (other: Dict2D<T>) {
+  public clone (other: Dict2D2<T>) {
     this.items = other.items
   }
 
@@ -232,8 +378,8 @@ export class Dict2D<T> {
     return this.items[index]
   }
 
-  public map<U> (callback: (value: T, v: Vec2) => U): Dict2D<U> {
-    const newContainer = new Dict2D<U>()
+  public map<U> (callback: (value: T, v: Vec2) => U): Dict2D2<U> {
+    const newContainer = new Dict2D2<U>()
     for (const [index, value] of Object.entries(this.items)) {
       const v: Vec2 = this.indexToVec2(index)
       const newValue = callback(value, v)

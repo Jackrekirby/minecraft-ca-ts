@@ -39,19 +39,19 @@ interface ImageConfig {
 
 const imageConfigs: { [key: string]: ImageConfig } = {
   // must be first
-  _extension_complete: {
+  extension_complete: {
     isDirectional: true,
     isMoveable: false
   },
-  _extension_pending: {
+  extension_pending: {
     isDirectional: true,
     isMoveable: false
   },
-  _retraction_complete: {
+  retraction_complete: {
     isDirectional: true,
     isMoveable: false
   },
-  _retraction_pending: {
+  retraction_pending: {
     isDirectional: true,
     isMoveable: false
   },
@@ -92,10 +92,6 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: false
   },
-  piston_on_extended: {
-    isDirectional: true,
-    isMoveable: false
-  },
   sticky_piston_head: {
     isDirectional: true,
     isMoveable: false
@@ -108,19 +104,11 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isDirectional: true,
     isMoveable: false
   },
-  sticky_piston_on: {
-    isDirectional: true,
-    isMoveable: false
-  },
   sticky_piston_off: {
     isDirectional: true,
     isMoveable: true
   },
   sticky_piston_off_extended: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  sticky_piston_on_extended: {
     isDirectional: true,
     isMoveable: false
   },
@@ -165,6 +153,14 @@ const imageConfigs: { [key: string]: ImageConfig } = {
     isMoveable: true
   },
   observer_off: {
+    isDirectional: true,
+    isMoveable: true
+  },
+  redstone_repeater_base: {
+    isDirectional: true,
+    isMoveable: true
+  },
+  redstone_repeater_locked: {
     isDirectional: true,
     isMoveable: true
   }
@@ -361,13 +357,13 @@ async function rotateAndSaveImages (
     }
   }
 
-  if (config.isMoveable) {
-    await handleOverlayImage(outputFolder, filename, config.isDirectional)
-  }
+  // if (config.isMoveable) {
+  //   await handleOverlayImage(outputFolder, filename, config.isDirectional)
+  // }
 
-  if (config.canFall) {
-    await handleFallingBlockImages(outputFolder, filename, config.isDirectional)
-  }
+  // if (config.canFall) {
+  //   await handleFallingBlockImages(outputFolder, filename, config.isDirectional)
+  // }
 }
 
 const movementStates = [
@@ -387,13 +383,12 @@ async function handleFallingBlockImages (
     state: string,
     rotationDirection: RotationDirection | null
   ) => {
-    const overlayFileName = '_' + state + '.png'
+    const overlayFileName = state + '.png'
     const overlayPath = path.join(outputFolder, overlayFileName)
     const underlayFileName =
       [originalFileName, rotationDirection].filter(x => x != null).join('_') +
       '.png'
     const underlayPath = path.join(outputFolder, underlayFileName)
-    // console.log(underlayPath, overlayPath)
     const overlayRotatedImage = await combineImageList(
       [underlayPath, overlayPath],
       'overlay'
@@ -429,7 +424,7 @@ async function handleOverlayImage (
     state: string,
     rotationDirection: RotationDirection | null
   ) => {
-    const overlayFileName = '_' + [state, movementDirection].join('_') + '.png'
+    const overlayFileName = [state, movementDirection].join('_') + '.png'
     const overlayPath = path.join(outputFolder, overlayFileName)
     const underlayFileName =
       [originalFileName, rotationDirection].filter(x => x != null).join('_') +
@@ -638,11 +633,11 @@ const processRedstoneDust = async () => {
       inputDirectory,
       'redstone_dust_overlay_' + i + '.png'
     )
-    const outPath = path.join(outputDirectory, '_number_' + i + '.png')
+    const outPath = path.join(outputDirectory, 'number_' + i + '.png')
     await shiftImagePixels(inPath, outPath, -1, -1)
   }
 
-  for (let i = 0; i < 16; i++) {
+  for (let i = 0; i < 2; i++) {
     isOn = i > 0
     for (const isLeft of [false, true]) {
       for (const isRight of [false, true]) {
@@ -678,8 +673,7 @@ const processRedstoneDust = async () => {
               }
             }
 
-            imageOutName += '_' + i
-            imageOutName += '.png'
+            imageOutName += '_' + (isOn ? 'on' : 'off') + '.png'
 
             // console.log(imageList)
             const combinedImage: sharp.Sharp = await combineImageList(imageList)
@@ -687,13 +681,13 @@ const processRedstoneDust = async () => {
             const outPath = path.join(outDir, imageOutName)
             await combinedImage.toFile(outPath)
 
-            await resizeImage2(outPath, outPath, 2)
+            // await resizeImage2(outPath, outPath, 2)
 
-            const combinedImage2: sharp.Sharp = await combineImageList([
-              outPath,
-              path.join(outputDirectory, '_number_' + i + '.png')
-            ])
-            await combinedImage2.toFile(outPath)
+            // const combinedImage2: sharp.Sharp = await combineImageList([
+            //   outPath,
+            //   path.join(outputDirectory, '_number_' + i + '.png')
+            // ])
+            // await combinedImage2.toFile(outPath)
           }
         }
       }
@@ -800,12 +794,13 @@ const main = async () => {
   await processRedstoneDust()
 
   console.log('transfer gravity states')
-  gravityStates.forEach(x => {
+  for (const x of gravityStates) {
+    //TODO: this is async
     copyFile(
-      path.join(inputDirectory, `_${x}.png`),
-      path.join(outputDirectory, `_${x}.png`)
+      path.join(inputDirectory, `${x}.png`),
+      path.join(outputDirectory, `${x}.png`)
     )
-  })
+  }
 
   console.log('processImagesInDirectory')
   await processImagesInDirectory(inputDirectory, outputDirectory)
