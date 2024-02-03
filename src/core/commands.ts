@@ -92,7 +92,11 @@ export const initialiseCommands = (
       }
     )
 
-    const stringValue = JSON.stringify(blocksForStorage.items, null, 2)
+    const stringValue = JSON.stringify(
+      Object.fromEntries(blocksForStorage.items),
+      null,
+      2
+    )
     downloadFile(stringValue, 'world.json')
     return commandSuccess(`downloaded world`)
   })
@@ -104,7 +108,9 @@ export const initialiseCommands = (
       }
     )
 
-    const stringValue = compressObject(blocksForStorage.items)
+    const stringValue = compressObject(
+      Object.fromEntries(blocksForStorage.items)
+    )
     downloadFile(stringValue, 'world.txt')
     return commandSuccess(`downloaded world`)
   })

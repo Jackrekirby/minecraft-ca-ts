@@ -91,3 +91,13 @@ export namespace IsPoweredBlock {
     return { isPowered }
   }
 }
+
+export namespace OutputSignalStrengthBlock {
+  export interface Traits {
+    getOutputPowerStrength: (direction: Direction) => number
+  }
+
+  export function isBlock (block: object): block is Traits {
+    return 'getOutputPowerStrength' in block
+  }
+}

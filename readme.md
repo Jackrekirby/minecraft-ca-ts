@@ -133,7 +133,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Paused logical ticks should be remembered on reload and blocks should render on load
 - [x] Add falling blocks
 - [x] Add clear falling blocks command
-- [ ] Add comparator block
+- [x] Add comparator block
 - [x] Remove unused toString function from blocks
 - [x] Investigate performance
 - [ ] Investigate object pooling rather than creating new instance
@@ -163,7 +163,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Support texture layers
 - [ ] Support rotated textures
 - [x] Convert all textures to texture layers that could benefit from it
-- [ ] Support color blending for redstone signal strength
+- [x] Support color blending for redstone signal strength (in-browser available but slow so generate in texture atlas instead)
 - [x] Support togglable redstone signal strength
 - [x] Add signal strength view limit
 - [ ] Reduce idle time - performance worse without updateCanvasBlocks call due to more idle
@@ -171,3 +171,6 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Investigate web workers
 - [ ] Investigate webgl canvas context
 - [x] Fix world not displaying on clear/load when tick rate 0
+- [ ] Add redstone junction
+- [ ] Make solid blocks support signal strength
+- [ ] Add block with variable comparator output signal

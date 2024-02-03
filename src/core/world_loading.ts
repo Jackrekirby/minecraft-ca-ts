@@ -7,6 +7,7 @@ import { ObserverBlock } from '../blocks/observer_block'
 import { Obsidian } from '../blocks/obsidian'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
+import { RedstoneComparator } from '../blocks/redstone_compator'
 import { RedstoneDust } from '../blocks/redstone_dust'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
@@ -48,7 +49,8 @@ export const placeAllBlocks = (blocks: BlockContainer) => {
     new Piston({ isSticky: true }),
     new ObserverBlock({}),
     new Obsidian({}),
-    new TargetBlock({})
+    new TargetBlock({}),
+    new RedstoneComparator({})
   ]
 
   redstoneBlocks.forEach((block, x) => blocks.setValue({ x, y: 2 }, block))

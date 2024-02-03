@@ -27,7 +27,8 @@ export enum BlockType {
   ObserverBlock = 'ObserverBlock',
   ConcretePowder = 'ConcretePowder',
   Obsidian = 'Obsidian',
-  TargetBlock = 'TargetBlock'
+  TargetBlock = 'TargetBlock',
+  RedstoneComparator = 'RedstoneComparator'
 }
 
 export interface BlockState {

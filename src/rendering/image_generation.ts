@@ -4,6 +4,123 @@ import path from 'path'
 import sharp, { Blend } from 'sharp'
 import { sleep } from '../utils/general'
 
+interface ImageConfig {
+  isDirectional: boolean
+}
+
+const imageConfigs: { [key: string]: ImageConfig } = {
+  // must be first
+  extension_complete: {
+    isDirectional: true
+  },
+  extension_pending: {
+    isDirectional: true
+  },
+  retraction_complete: {
+    isDirectional: true
+  },
+  retraction_pending: {
+    isDirectional: true
+  },
+  // others
+  glass: {
+    isDirectional: false
+  },
+  obsidian: {
+    isDirectional: false
+  },
+  target_block: {
+    isDirectional: false
+  },
+  piston_head: {
+    isDirectional: true
+  },
+  piston_head_retracting: {
+    isDirectional: true
+  },
+  piston_head_extending: {
+    isDirectional: true
+  },
+  piston_on: {
+    isDirectional: true
+  },
+  piston_off: {
+    isDirectional: true
+  },
+  piston_off_extended: {
+    isDirectional: true
+  },
+  sticky_piston_head: {
+    isDirectional: true
+  },
+  sticky_piston_head_retracting: {
+    isDirectional: true
+  },
+  sticky_piston_head_extending: {
+    isDirectional: true
+  },
+  sticky_piston_off: {
+    isDirectional: true
+  },
+  sticky_piston_off_extended: {
+    isDirectional: true
+  },
+  redstone_block: {
+    isDirectional: false
+  },
+  redstone_lamp_on: {
+    isDirectional: false
+  },
+  redstone_torch_on: {
+    isDirectional: true
+  },
+  redstone_lamp_off: {
+    isDirectional: false
+  },
+  redstone_torch_off: {
+    isDirectional: true
+  },
+  lever_on: {
+    isDirectional: false
+  },
+  lever_off: {
+    isDirectional: false
+  },
+  button_on: {
+    isDirectional: false
+  },
+  button_off: {
+    isDirectional: false
+  },
+  observer_on: {
+    isDirectional: true
+  },
+  observer_off: {
+    isDirectional: true
+  },
+  redstone_repeater_base: {
+    isDirectional: true
+  },
+  redstone_repeater_locked: {
+    isDirectional: true
+  },
+  comparator_base: {
+    isDirectional: true
+  },
+  comparator_subtract_on: {
+    isDirectional: true
+  },
+  comparator_subtract_off: {
+    isDirectional: true
+  },
+  comparator_add_on: {
+    isDirectional: true
+  },
+  comparator_add_off: {
+    isDirectional: true
+  }
+}
+
 async function deletePngFiles (directoryPath: string): Promise<void> {
   try {
     // Ensure the directory exists
@@ -31,141 +148,6 @@ async function deletePngFiles (directoryPath: string): Promise<void> {
   }
 }
 
-interface ImageConfig {
-  isDirectional: boolean
-  isMoveable: boolean
-  canFall?: boolean
-}
-
-const imageConfigs: { [key: string]: ImageConfig } = {
-  // must be first
-  extension_complete: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  extension_pending: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  retraction_complete: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  retraction_pending: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  // others
-  glass: {
-    isDirectional: false,
-    isMoveable: true
-  },
-  obsidian: {
-    isDirectional: false,
-    isMoveable: false
-  },
-  target_block: {
-    isDirectional: false,
-    isMoveable: true
-  },
-  piston_head: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  piston_head_retracting: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  piston_head_extending: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  piston_on: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  piston_off: {
-    isDirectional: true,
-    isMoveable: true
-  },
-  piston_off_extended: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  sticky_piston_head: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  sticky_piston_head_retracting: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  sticky_piston_head_extending: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  sticky_piston_off: {
-    isDirectional: true,
-    isMoveable: true
-  },
-  sticky_piston_off_extended: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  redstone_block: {
-    isDirectional: false,
-    isMoveable: true
-  },
-  redstone_lamp_on: {
-    isDirectional: false,
-    isMoveable: true
-  },
-  redstone_torch_on: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  redstone_lamp_off: {
-    isDirectional: false,
-    isMoveable: true
-  },
-  redstone_torch_off: {
-    isDirectional: true,
-    isMoveable: false
-  },
-  lever_on: {
-    isDirectional: false,
-    isMoveable: false
-  },
-  lever_off: {
-    isDirectional: false,
-    isMoveable: false
-  },
-  button_on: {
-    isDirectional: false,
-    isMoveable: false
-  },
-  button_off: {
-    isDirectional: false,
-    isMoveable: false
-  },
-  observer_on: {
-    isDirectional: true,
-    isMoveable: true
-  },
-  observer_off: {
-    isDirectional: true,
-    isMoveable: true
-  },
-  redstone_repeater_base: {
-    isDirectional: true,
-    isMoveable: true
-  },
-  redstone_repeater_locked: {
-    isDirectional: true,
-    isMoveable: true
-  }
-}
-
 const createRepeaterTextureNames = () => {
   const texs: string[] = []
   for (let i = 4; i > 0; i--) {
@@ -181,8 +163,7 @@ const createRepeaterTextureNames = () => {
 
 createRepeaterTextureNames().map(name => {
   imageConfigs[name] = {
-    isDirectional: true,
-    isMoveable: false
+    isDirectional: true
   }
 })
 
@@ -207,13 +188,10 @@ const colors: string[] = [
 
 colors.map(color => {
   imageConfigs[`${color}_wool`] = {
-    isDirectional: false,
-    isMoveable: true
+    isDirectional: false
   }
   imageConfigs[`${color}_concrete_powder`] = {
-    isDirectional: false,
-    isMoveable: true,
-    canFall: true
+    isDirectional: false
   }
 })
 

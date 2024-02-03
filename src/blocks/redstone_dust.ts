@@ -12,7 +12,11 @@ import {
   getOppositeDirection,
   getOtherDirections
 } from '../core/direction'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  OutputSignalStrengthBlock
+} from '../core/powerable_block'
 import { viewSignalStrengthState } from '../core/storage'
 import {
   CanvasGridCell,
@@ -37,7 +41,8 @@ export class RedstoneDust
     Block,
     OutputPowerBlock.Traits,
     // IsPoweredBlock.Traits,
-    ConnectsToRedstoneDustBlock.Traits {
+    ConnectsToRedstoneDustBlock.Traits,
+    OutputSignalStrengthBlock.Traits {
   type: BlockType = BlockType.RedstoneDust
   outputPower: BinaryPower
   // isPowered: boolean
@@ -89,20 +94,30 @@ export class RedstoneDust
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
 
-      const isBeingPowered =
+      let neighbourPowerStrength = 0
+      if (
+        OutputSignalStrengthBlock.isBlock(neighbour) &&
+        !isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)
+      ) {
+        neighbourPowerStrength = neighbour.getOutputPowerStrength(
+          getOppositeDirection(direction)
+        )
+      } else if (
         OutputPowerBlock.isBlock(neighbour) &&
         neighbour.getOutputPower(getOppositeDirection(direction)) ===
           BinaryPower.Strong &&
         !isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)
+      ) {
+        neighbourPowerStrength = 15
+      }
 
-      if (isBeingPowered) {
+      if (neighbourPowerStrength) {
         // isPowered = true
         // newState.powerStrength = 15
-        inputPowerStrength[direction] = 15
-        break
+        inputPowerStrength[direction] = neighbourPowerStrength
       } else if (isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)) {
         const powerStrength = Math.max(
-          neighbour.getOuputPowerStrength(getOppositeDirection(direction)) - 1,
+          neighbour.getOutputPowerStrength(getOppositeDirection(direction)) - 1,
           0
         )
         if (powerStrength >= this.getInternalPowerStrength()) {
@@ -206,7 +221,7 @@ export class RedstoneDust
     return powerStrength
   }
 
-  private getOuputPowerStrength (direction: Direction) {
+  public getOutputPowerStrength (direction: Direction) {
     const powerStrengths = getOtherDirections(direction).map(
       direction => this.inputPowerStrength[direction]
     )
@@ -215,7 +230,7 @@ export class RedstoneDust
   }
 
   public getOutputPower (direction: Direction): BinaryPower {
-    const powerStrength = this.getOuputPowerStrength(direction)
+    const powerStrength = this.getOutputPowerStrength(direction)
     if (
       powerStrength > 0 &&
       (this.connectedDirections.length == 0 ||
