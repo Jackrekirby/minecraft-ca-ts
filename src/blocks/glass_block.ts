@@ -16,7 +16,11 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
-import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
+import {
+  CanvasGridCell,
+  CanvasGridCellLayer,
+  CanvasGridItem
+} from '../rendering/canvas'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
 
@@ -71,7 +75,7 @@ export class GlassBlock implements MoveableBlock, ObserverFilter {
       layers: [
         {
           textureName: `glass`
-        },
+        } as CanvasGridCellLayer,
         getMovementTextureName(this)
       ].filter(x => x.textureName !== '')
     } as CanvasGridCell

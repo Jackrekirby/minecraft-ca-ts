@@ -61,7 +61,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Piston will not retract if pending block
 - [-] Side blocks disappear on complete movement block
 - [x] Make saveable state (to file so users can try them out)
-- [x] Test pistons pushing and facing eachother (they replicate infinitely!!!)
+- [ ] Test pistons pushing and facing eachother (they replicate infinitely!!!)
 - [x] Make blocks classes so they can use prototypes
 - [x] Add subticks
 - [x] Add chunk system (infinite world)

@@ -23,6 +23,7 @@
     "webpack-cli": "^5.1.4"
   },
   "dependencies": {
+    "@types/offscreencanvas": "^2019.7.3",
     "jimp": "^0.22.10",
     "pako": "^2.1.0",
     "sharp": "^0.33.1"

@@ -619,13 +619,84 @@ async function resizeImage (
   }
 }
 
+type PixelColor = {
+  r: number
+  g: number
+  b: number
+  a: number
+}
+
+type PixelCoord = {
+  x: number
+  y: number
+}
+
+type PixelModifierFunction = (
+  pixel: PixelColor,
+  coordinates: PixelCoord
+) => PixelColor
+
+async function modifyPixelsAndSave (
+  inputPath: string,
+  outputPath: string,
+  pixelModifier: PixelModifierFunction
+): Promise<void> {
+  try {
+    // Read the image from the input path
+    const image = await sharp(inputPath)
+
+    // Extract the image metadata
+    const metadata: sharp.Metadata = await image.metadata()
+
+    // Get pixel data as raw Buffer
+    const rawPixelData = await image.raw().toBuffer({ resolveWithObject: true })
+    const width = metadata.width!,
+      height = metadata.height!
+    // Iterate over each pixel and apply the pixel modifier function
+    for (let y = 0; y < height; y++) {
+      for (let x = 0; x < width; x++) {
+        const index = (y * width + x) * 4
+        const pixel = {
+          r: rawPixelData.data[index],
+          g: rawPixelData.data[index + 1],
+          b: rawPixelData.data[index + 2],
+          a: rawPixelData.data[index + 3]
+        }
+
+        const modifiedPixel = pixelModifier(pixel, { x, y })
+
+        rawPixelData.data[index] = modifiedPixel.r
+        rawPixelData.data[index + 1] = modifiedPixel.g
+        rawPixelData.data[index + 2] = modifiedPixel.b
+        rawPixelData.data[index + 3] = modifiedPixel.a
+      }
+    }
+
+    // Create a new Sharp image with the modified pixel data
+    const modifiedImage = sharp(rawPixelData.data, {
+      raw: {
+        width: width,
+        height: height,
+        channels: 4
+      }
+    })
+
+    // Save the modified image to the output path
+    await modifiedImage.toFile(outputPath)
+
+    // console.log('Image modified and saved successfully.')
+  } catch (error) {
+    console.error('Error:', error)
+  }
+}
+
 const processRedstoneDust = async () => {
   const directions = ['up', 'down', 'left', 'right']
   const imagePrefix = inputDirectory + '/redstone_dust'
   const outDir = outputDirectory
-  let isOn = false
+  // let isOn = false
   const buildImageName = (direction: string) => {
-    return imagePrefix + '_' + direction + '_' + (isOn ? 'on' : 'off') + '.png'
+    return imagePrefix + '_' + direction + '.png'
   }
 
   for (let i = 0; i < 16; i++) {
@@ -638,8 +709,8 @@ const processRedstoneDust = async () => {
     await shiftImagePixels(inPath, outPath, 0, 0)
   }
 
-  for (let i = 0; i < 2; i++) {
-    isOn = i > 0
+  for (let i = 0; i < 16; i++) {
+    // isOn = i > 0
     for (const isLeft of [false, true]) {
       for (const isRight of [false, true]) {
         for (const isUp of [false, true]) {
@@ -674,13 +745,34 @@ const processRedstoneDust = async () => {
               }
             }
 
-            imageOutName += '_' + (isOn ? 'on' : 'off') + '.png'
+            imageOutName += '_' + i + '.png'
 
             // console.log(imageList)
             const combinedImage: sharp.Sharp = await combineImageList(imageList)
             // const resizedImage = await resizeImageByMultiplier(combinedImage, 2)
             const outPath = path.join(outDir, imageOutName)
             await combinedImage.toFile(outPath)
+
+            modifyPixelsAndSave(
+              outPath,
+              outPath,
+              (pixel: PixelColor, coordinates: PixelCoord): PixelColor => {
+                // console.log(
+                //   coordinates,
+                //   pixel,
+                //   (pixel.r / 255) * (90 + (255 - 90) * (i / 15))
+                // )
+                if (i > 0) {
+                  pixel.r = (pixel.r / 255) * (120 + (255 - 120) * (i / 15))
+                } else {
+                  pixel.r = 90
+                }
+
+                pixel.g = 0
+                pixel.b = 0
+                return pixel
+              }
+            )
 
             // await resizeImage2(outPath, outPath, 2)
 

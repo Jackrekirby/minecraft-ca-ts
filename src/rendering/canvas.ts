@@ -26,11 +26,18 @@ function floorToNearest (value: number, target: number) {
   return Math.floor(value / target) * target
 }
 
+type SomeCanvasRenderingContext2D =
+  | OffscreenCanvasRenderingContext2D
+  | CanvasRenderingContext2D
+
+export type ColorMask = (index: number, value: number) => number
+
 export interface CanvasGridCellLayer {
   textureName: string
   blendMode?: GlobalCompositeOperation
   alpha?: number
   minSize?: number
+  mask?: ColorMask
 }
 
 export interface CanvasGridCell {
@@ -247,7 +254,12 @@ export class Canvas {
     this.canvas.addEventListener('wheel', handleScroll)
   }
 
-  drawText = (text: string, x: number, y: number) => {
+  drawText = (
+    text: string,
+    x: number,
+    y: number,
+    ctx: SomeCanvasRenderingContext2D = this.ctx
+  ) => {
     const q1 = this.calculateWorldToScreenPosition(x, y)
     const p = this.calculateAxisFlippedPosition(q1.x, q1.y)
 
@@ -270,13 +282,13 @@ export class Canvas {
 
     const screenCellWidth = this.canvas.width / (numCellsWide / gridSize)
 
-    this.ctx.fillStyle = 'white'
-    this.ctx.font = `${screenCellWidth / 4}px Roboto Mono`
+    ctx.fillStyle = 'white'
+    ctx.font = `${screenCellWidth / 4}px Roboto Mono`
 
     // this.ctx.strokeStyle = 'white'
     // this.ctx.lineWidth = 1
     // this.ctx.strokeText(text, p.x, p.y - 4, screenCellWidth)
-    this.ctx.fillText(
+    ctx.fillText(
       text,
       Math.floor(p.x + 3),
       Math.floor(p.y - 4),
@@ -306,6 +318,28 @@ export class Canvas {
       Math.floor(w * this.scale.get() + (p.x - Math.floor(p.x))),
       Math.floor(h * this.scale.get() + (p.y - Math.floor(p.y)))
     )
+  }
+
+  recolorImage (x: number, y: number, w: number, h: number, mask: ColorMask) {
+    const q1 = this.calculateWorldToScreenPosition(x, y)
+    const p = this.calculateAxisFlippedPosition(q1.x, q1.y + this.scale.get())
+    const settings: CanvasRenderingContext2DSettings = {
+      willReadFrequently: true
+    }
+    const imageData = this.ctx.getImageData(
+      Math.floor(p.x),
+      Math.floor(p.y),
+      Math.floor(w * this.scale.get() + (p.x - Math.floor(p.x))),
+      Math.floor(h * this.scale.get() + (p.y - Math.floor(p.y))),
+      settings
+    )
+    const pixels = imageData.data
+
+    for (let i = 0; i < pixels.length; ++i) {
+      pixels[i] = mask(i, pixels[i])
+    }
+
+    this.ctx.putImageData(imageData, Math.floor(p.x), Math.floor(p.y))
   }
 
   drawImage = (
@@ -340,20 +374,26 @@ export class Canvas {
     )
   }
 
-  drawLine = (x1: number, y1: number, x2: number, y2: number) => {
+  drawLine = (
+    x1: number,
+    y1: number,
+    x2: number,
+    y2: number,
+    ctx: SomeCanvasRenderingContext2D = this.ctx
+  ) => {
     const q1 = this.calculateWorldToScreenPosition(x1, y1)
     const p1 = this.calculateAxisFlippedPosition(q1.x, q1.y)
 
     const q2 = this.calculateWorldToScreenPosition(x2, y2)
     const p2 = this.calculateAxisFlippedPosition(q2.x, q2.y)
 
-    this.ctx.beginPath()
-    this.ctx.moveTo(Math.floor(p1.x), Math.floor(p1.y))
-    this.ctx.lineTo(Math.ceil(p2.x), Math.ceil(p2.y))
-    this.ctx.stroke()
+    ctx.beginPath()
+    ctx.moveTo(Math.floor(p1.x), Math.floor(p1.y))
+    ctx.lineTo(Math.ceil(p2.x), Math.ceil(p2.y))
+    ctx.stroke()
   }
 
-  drawGridOverlay () {
+  drawGridOverlay (ctx: SomeCanvasRenderingContext2D = this.ctx) {
     const topRight = this.calculateScreenToWorldPosition(
       this.canvas.width,
       this.canvas.height
@@ -363,8 +403,8 @@ export class Canvas {
 
     const setLineStyle = (z: number) => {
       const isMajorLine = z % (gridSize * 4) === 0
-      this.ctx.lineWidth = isMajorLine ? 1 : 1
-      this.ctx.strokeStyle = `rgba(255, 255, 255, ${isMajorLine ? 0.6 : 0.2})`
+      ctx.lineWidth = isMajorLine ? 1 : 1
+      ctx.strokeStyle = `rgba(255, 255, 255, ${isMajorLine ? 0.6 : 0.2})`
     }
     for (
       let y = floorToNearest(bottomLeft.y, gridSize);
@@ -372,8 +412,8 @@ export class Canvas {
       y += gridSize
     ) {
       setLineStyle(y)
-      this.drawLine(bottomLeft.x, y, topRight.x, y)
-      this.drawText(`${y}`, bottomLeft.x, y)
+      this.drawLine(bottomLeft.x, y, topRight.x, y, ctx)
+      this.drawText(`${y}`, bottomLeft.x, y, ctx)
     }
 
     for (
@@ -382,8 +422,8 @@ export class Canvas {
       x += gridSize
     ) {
       setLineStyle(x)
-      this.drawLine(x, bottomLeft.y, x, topRight.y)
-      this.drawText(`${x}`, x, bottomLeft.y)
+      this.drawLine(x, bottomLeft.y, x, topRight.y, ctx)
+      this.drawText(`${x}`, x, bottomLeft.y, ctx)
     }
   }
 
@@ -405,6 +445,7 @@ export class Canvas {
 
     const drawLayer = (v: Vec2, layer: CanvasGridCellLayer) => {
       if (layer.minSize && layer.minSize > scale) return
+
       this.ctx.globalCompositeOperation = layer.blendMode ?? 'source-over'
       this.ctx.globalAlpha = layer.alpha ?? 1.0
 
@@ -412,6 +453,12 @@ export class Canvas {
 
       this.ctx.globalCompositeOperation = 'source-over'
       this.ctx.globalAlpha = 1.0
+
+      if (layer.mask) {
+        this.recolorImage(v.x, v.y, 1, 1, layer.mask)
+      }
+
+      // this.ctx.filter = 'none'
     }
 
     // TODO automatically which render method depending on render space
@@ -463,10 +510,22 @@ export class Canvas {
   }
 
   public render () {
-    this.ctx.fillStyle = 'rgb(18, 91, 167)'
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height)
-
-    this.drawGridOverlay()
+    // draw foreground to cleared canvas
+    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
     this.drawGrid()
+    // draw background to offscreen canvas so foreground can apply color blending
+    const offscreenCanvas = new OffscreenCanvas(
+      this.canvas.width,
+      this.canvas.height
+    )
+    const offscreenCtx: OffscreenCanvasRenderingContext2D = offscreenCanvas.getContext(
+      '2d'
+    )!
+    offscreenCtx.fillStyle = 'rgb(18, 91, 167)'
+    offscreenCtx.fillRect(0, 0, this.canvas.width, this.canvas.height)
+    this.drawGridOverlay(offscreenCtx)
+    this.ctx.globalCompositeOperation = 'destination-over'
+    this.ctx.drawImage(offscreenCanvas, 0, 0)
+    this.ctx.globalCompositeOperation = 'source-over'
   }
 }

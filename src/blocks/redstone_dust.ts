@@ -159,13 +159,25 @@ export class RedstoneDust
       direction => (tex += '_' + direction.toLowerCase())
     )
     let signalStrength = this.getInternalPowerStrength()
-    tex += signalStrength > 0 ? '_on' : '_off'
-
+    // tex += signalStrength > 0 ? '_on' : '_off'
+    tex += '_' + signalStrength
     return {
       layers: [
         {
           textureName: tex
-        },
+          // mask: (i, v) => {
+          //   switch (i % 4) {
+          //     case 0:
+          //       return (v / 255) * (90 + (255 - 90) * (signalStrength / 15))
+          //     case 1:
+          //       return v * 0
+          //     case 2:
+          //       return v * 0
+          //     default:
+          //       return v
+          //   }
+          // }
+        } as CanvasGridCellLayer,
         {
           textureName: viewSignalStrengthState.get()
             ? `number_${signalStrength}`
