@@ -3,9 +3,10 @@ import { initialiseCommands } from './core/commands'
 import {
   CommandManager,
   initCommandLineEventListeners,
+  initialiseCommandLine,
   isCommandLineCurrentlyVisible
 } from './core/command_line'
-import { updateDebugInfo } from './core/debug_panel'
+import { initialiseDebugPanel, updateDebugInfo } from './core/debug_panel'
 import {
   createLogicLoop,
   ProcessLoop,
@@ -14,12 +15,9 @@ import {
 } from './core/game_loop'
 import { initialiseGuide, showGuide } from './core/guide'
 import {
-  actualFramesPerSecondState,
-  blockStorage,
   clearStorageOnVersionIncrease,
-  framesPerSecondState,
-  updatesPerSecondState,
-  viewSubTicksState
+  initialiseStorage,
+  storage
 } from './core/storage'
 import {
   initBlockEventListeners,
@@ -29,7 +27,6 @@ import { createDemoWorld, placeAllBlocks } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
 
-// dom
 const createCanvas = async () => {
   const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
   const canvas = new Canvas(
@@ -43,15 +40,14 @@ const createCanvas = async () => {
   return canvas
 }
 
-setInterval(() => {
-  updateDebugInfo()
-}, 500)
-
 const main = async () => {
   const reset = clearStorageOnVersionIncrease()
+  initialiseStorage()
+  initialiseDebugPanel()
+  initialiseCommandLine()
   initialiseGuide()
   const canvas: Canvas = await createCanvas()
-  const blocks = blockStorage.get()
+  const blocks = storage.blockStorage.get()
   placeAllBlocks(blocks)
 
   if (reset) {
@@ -60,6 +56,10 @@ const main = async () => {
   }
 
   console.log(blocks)
+
+  setInterval(() => {
+    updateDebugInfo()
+  }, 500)
 
   const { processLogic, addToTickQueue, fillUpdateQueue } = createLogicLoop(
     blocks,
@@ -81,22 +81,25 @@ const main = async () => {
 
   let elapsedFramesInSecond = 0
   setInterval(() => {
-    actualFramesPerSecondState.set(elapsedFramesInSecond)
+    storage.actualFramesPerSecondState.set(elapsedFramesInSecond)
     elapsedFramesInSecond = 0
   }, 1000)
-  const renderLoop = new RenderLoop(framesPerSecondState.get(), () => {
+  const renderLoop = new RenderLoop(storage.framesPerSecondState.get(), () => {
     canvas.render()
     elapsedFramesInSecond += 1
   })
 
-  const logicLoop = new ProcessLoop(updatesPerSecondState.get(), processLogic)
+  const logicLoop = new ProcessLoop(
+    storage.updatesPerSecondState.get(),
+    processLogic
+  )
 
-  framesPerSecondState.setCallback = (x: number) => {
+  storage.framesPerSecondState.setCallback = (x: number) => {
     renderLoop.setFrameRate(x)
     renderLoop.start()
   }
 
-  updatesPerSecondState.setCallback = (x: number) => {
+  storage.updatesPerSecondState.setCallback = (x: number) => {
     logicLoop.setFrameRate(x)
     logicLoop.start()
   }
@@ -106,33 +109,25 @@ const main = async () => {
       return
     }
     if (event.key === 'z') {
-      viewSubTicksState.set(!viewSubTicksState.get())
+      storage.viewSubTicksState.set(!storage.viewSubTicksState.get())
     } else if (event.key === 'x') {
       logicLoop.stop()
-      updatesPerSecondState.set(0)
+      storage.updatesPerSecondState.set(0)
       processLogic()
     } else if (event.key === 'c') {
-      updatesPerSecondState.set(5)
+      storage.updatesPerSecondState.set(5)
     } else if (event.key === 'v') {
-      updatesPerSecondState.set(9999)
+      storage.updatesPerSecondState.set(9999)
     }
   })
   // TODO: do not need to update canvas blocks unless rendering
   updateCanvasBlocks(blocks, canvas)
   renderLoop.start()
 
-  if (updatesPerSecondState.get() > 0) {
+  if (storage.updatesPerSecondState.get() > 0) {
     logicLoop.start()
   }
 }
 
 main()
-
-// console.log('test')
-// test()
-// test2()
-// test3()
-// // test4()
-// test5()
-// test3()
-// test5()
+// webglCanvas3()

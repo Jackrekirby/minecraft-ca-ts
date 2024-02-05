@@ -289,3 +289,18 @@ export const formatDate = (date: Date): string => {
 }
 
 export const now = () => Math.floor(performance.now())
+
+export const downloadFile = (value: string, fileName: string): void => {
+  const blob = new Blob([value], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+
+  const a = document.createElement('a')
+  a.href = url
+  a.download = fileName
+  document.body.appendChild(a)
+
+  a.click()
+
+  document.body.removeChild(a)
+  URL.revokeObjectURL(url)
+}

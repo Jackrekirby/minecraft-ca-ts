@@ -27,105 +27,83 @@ export const clearStorageOnVersionIncrease = () => {
   return hasVersionIncreased
 }
 
-export const framesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 60,
-  localStorageKey: 'frames-per-second',
-  saveInterval: 0
-})
+export const storage: StringDict<LocalStorageVariable<any>> = {}
+export const initialiseStorage = () => {
+  storage.framesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 60,
+    localStorageKey: 'frames-per-second',
+    saveInterval: 0
+  })
 
-export const updatesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 5,
-  localStorageKey: 'updates-per-second',
-  saveInterval: 0
-})
+  storage.updatesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 5,
+    localStorageKey: 'updates-per-second',
+    saveInterval: 0
+  })
 
-export const viewSubTicksState = new LocalStorageVariable<boolean>({
-  defaultValue: false,
-  localStorageKey: 'view-subticks',
-  saveInterval: 0
-})
+  storage.viewSubTicksState = new LocalStorageVariable<boolean>({
+    defaultValue: false,
+    localStorageKey: 'view-subticks',
+    saveInterval: 0
+  })
 
-export const viewSignalStrengthState = new LocalStorageVariable<boolean>({
-  defaultValue: true,
-  localStorageKey: 'view-signal-strength',
-  saveInterval: 0
-})
+  storage.viewSignalStrengthState = new LocalStorageVariable<boolean>({
+    defaultValue: true,
+    localStorageKey: 'view-signal-strength',
+    saveInterval: 0
+  })
 
-export const blockStorage = new LocalStorageVariable<BlockContainer>({
-  localStorageKey: 'world',
-  defaultValue: createEmptyWorld(),
-  valueToStorage: (blocks: BlockContainer) => {
-    const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
-      (block: Block, v: Vec2) => {
-        return block
-      }
-    )
+  storage.blockStorage = new LocalStorageVariable<BlockContainer>({
+    localStorageKey: 'world',
+    defaultValue: createEmptyWorld(),
+    valueToStorage: (blocks: BlockContainer) => {
+      const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+        (block: Block, v: Vec2) => {
+          return block
+        }
+      )
 
-    // console.log('save', Object.fromEntries(blocksForStorage.items))
+      // console.log('save', Object.fromEntries(blocksForStorage.items))
 
-    return compressObject(Object.fromEntries(blocksForStorage.items))
-  },
-  storageToValue: (storage: string) => {
-    const blocks: BlockContainer = createEmptyBlockContainer()
-    const chunks = decompressObject(storage) as StringDict<Block>
-    loadChunks(chunks, blocks)
-    return blocks
-  }
-})
+      return compressObject(Object.fromEntries(blocksForStorage.items))
+    },
+    storageToValue: (storage: string) => {
+      const blocks: BlockContainer = createEmptyBlockContainer()
+      const chunks = decompressObject(storage) as StringDict<Block>
+      loadChunks(chunks, blocks)
+      return blocks
+    }
+  })
 
-export const tickState = new LocalStorageVariable<number>({
-  defaultValue: 0,
-  saveInterval: 0
-})
+  storage.tickState = new LocalStorageVariable<number>({
+    defaultValue: 0,
+    saveInterval: 0
+  })
 
-export const subtickState = new LocalStorageVariable<number>({
-  defaultValue: 0,
-  saveInterval: 0
-})
+  storage.subtickState = new LocalStorageVariable<number>({
+    defaultValue: 0,
+    saveInterval: 0
+  })
 
-export const selectedBlockState = new LocalStorageVariable<BlockState>({
-  defaultValue: { type: BlockType.Air },
-  localStorageKey: 'selected-block',
-  saveInterval: 0
-})
+  storage.selectedBlockState = new LocalStorageVariable<BlockState>({
+    defaultValue: { type: BlockType.Air },
+    localStorageKey: 'selected-block',
+    saveInterval: 0
+  })
 
-export const actualTicksPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 0
-})
+  storage.actualTicksPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 0
+  })
 
-export const actualSubticksPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 0
-})
+  storage.actualSubticksPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 0
+  })
 
-export const actualFramesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 0
-})
+  storage.actualFramesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 0
+  })
 
-export const actualUpdatesPerSecondState = new LocalStorageVariable<number>({
-  defaultValue: 0
-})
-
-// build: createGlobalValue('BUILD', process.env.BUILD_TIME?.replace(',', '')),
-// tick: createGlobalValue('TICK', 0),
-// subtick: createGlobalValue('SUBTICK', 0),
-// selectedBlock: createStoredGlobalValue<BlockState>(
-//   'PICKED',
-//   { type: BlockType.Air },
-//   (blockState: BlockState) =>
-//     convertObjectToString((blockState as unknown) as Record<string, string>)
-// )
-
-export const downloadFile = (value: string, fileName: string): void => {
-  const blob = new Blob([value], { type: 'application/json' })
-  const url = URL.createObjectURL(blob)
-
-  const a = document.createElement('a')
-  a.href = url
-  a.download = fileName
-  document.body.appendChild(a)
-
-  a.click()
-
-  document.body.removeChild(a)
-  URL.revokeObjectURL(url)
+  storage.actualUpdatesPerSecondState = new LocalStorageVariable<number>({
+    defaultValue: 0
+  })
 }

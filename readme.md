@@ -174,3 +174,11 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Add redstone junction
 - [ ] Make solid blocks support signal strength
 - [ ] Add block with variable comparator output signal
+- [x] Stop storage variable initialising themselves on file import
+
+### webgl canvas
+
+- [ ] Rather than attempting to draw lines just draw a repeating texture
+- [ ] Reinitialise context on window resize
+- [ ] Make shader programs completely seperate
+- [ ] Test if base 2 atlas size is required

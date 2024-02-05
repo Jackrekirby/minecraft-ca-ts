@@ -17,7 +17,7 @@ import {
   OutputPowerBlock,
   OutputSignalStrengthBlock
 } from '../core/powerable_block'
-import { viewSignalStrengthState } from '../core/storage'
+import { storage } from '../core/storage'
 import {
   CanvasGridCell,
   CanvasGridCellLayer,
@@ -194,7 +194,7 @@ export class RedstoneDust
           // }
         } as CanvasGridCellLayer,
         {
-          textureName: viewSignalStrengthState.get()
+          textureName: storage.viewSignalStrengthState.get()
             ? `number_${signalStrength}`
             : '',
           blendMode: 'source-over',

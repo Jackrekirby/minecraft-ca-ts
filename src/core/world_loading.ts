@@ -28,7 +28,7 @@ export const loadWorldSave = async () => {
     }
 
     const jsonData = await response.json()
-    console.log('JSON data:', jsonData)
+    // console.log('JSON data:', jsonData)
     return jsonData
   } catch (error) {
     console.error('Error fetching JSON:', error)

@@ -6,7 +6,7 @@ import { addClickHandlerWithDragCheck } from '../utils/general'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
-import { selectedBlockState } from './storage'
+import { storage } from './storage'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
 
@@ -54,7 +54,7 @@ export const initBlockEventListeners = (
     const block = blocks.getValue(pi)
 
     if (block.type === BlockType.Air) {
-      const copyState = selectedBlockState.get() as Block
+      const copyState = storage.selectedBlockState.get() as Block
 
       const newBlock = createBlock(copyState.type, {
         direction,
@@ -84,7 +84,7 @@ export const initBlockEventListeners = (
           ? block.copy()
           : { type: block.type }
 
-        selectedBlockState.set(copyState)
+        storage.selectedBlockState.set(copyState)
       }
 
       updateCanvasBlocks(blocks, canvas)

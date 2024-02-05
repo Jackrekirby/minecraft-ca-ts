@@ -1,27 +1,19 @@
 import { Dict2D } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
-import { isEnum } from '../utils/general'
+import { downloadFile, isEnum } from '../utils/general'
 import { compressObject, LocalStorageVariable } from '../utils/save'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import {
   commandFailure,
   commandInfo,
-  commandLineVisibilityState,
   CommandManager,
   commandSuccess
 } from './command_line'
-import { debugPanelState } from './debug_panel'
+
 import { updateCanvasBlocks } from './game_loop'
 import { convertObjectToString, convertStringToObject } from './globals'
-import {
-  downloadFile,
-  framesPerSecondState,
-  selectedBlockState,
-  updatesPerSecondState,
-  viewSignalStrengthState,
-  viewSubTicksState
-} from './storage'
+import { storage } from './storage'
 import {
   createDemoWorld,
   createEmptyWorld,
@@ -116,14 +108,16 @@ export const initialiseCommands = (
   })
 
   commandManager.createCommand('/toggle view_subticks', async () => {
-    viewSubTicksState.set(!viewSubTicksState.get())
-    return commandSuccess(`toggled view subticks to ${viewSubTicksState.get()}`)
+    storage.viewSubTicksState.set(!storage.viewSubTicksState.get())
+    return commandSuccess(
+      `toggled view subticks to ${storage.viewSubTicksState.get()}`
+    )
   })
 
   commandManager.createCommand('/toggle view_signal_strength', async () => {
-    viewSignalStrengthState.set(!viewSignalStrengthState.get())
+    storage.viewSignalStrengthState.set(!storage.viewSignalStrengthState.get())
     return commandSuccess(
-      `toggled view signal strength to ${viewSignalStrengthState.get()}`
+      `toggled view signal strength to ${storage.viewSignalStrengthState.get()}`
     )
   })
 
@@ -132,7 +126,7 @@ export const initialiseCommands = (
     async input => {
       const ups = Number(input.ups)
       if (!isNaN(ups)) {
-        updatesPerSecondState.set(ups)
+        storage.updatesPerSecondState.set(ups)
         return commandSuccess(`set updates per second ${ups}`)
       } else {
         return commandFailure(`updates per second was not a number`)
@@ -145,7 +139,7 @@ export const initialiseCommands = (
     async input => {
       const ups = Number(input.fps)
       if (!isNaN(ups)) {
-        framesPerSecondState.set(ups)
+        storage.framesPerSecondState.set(ups)
         return commandSuccess(`set frames per second ${ups}`)
       } else {
         return commandFailure(`frames per second was not a number`)
@@ -154,11 +148,11 @@ export const initialiseCommands = (
   )
 
   commandManager.createCommand('/toggle debug_window', async input => {
-    if (debugPanelState.get()) {
-      debugPanelState.set(false)
+    if (storage.debugPanelState.get()) {
+      storage.debugPanelState.set(false)
       return commandSuccess('debug window hidden')
     } else {
-      debugPanelState.set(true)
+      storage.debugPanelState.set(true)
       return commandSuccess('debug window revealed')
     }
   })
@@ -166,11 +160,11 @@ export const initialiseCommands = (
   commandManager.createCommand(
     '/toggle command_line_visibility',
     async input => {
-      if (commandLineVisibilityState.get()) {
-        commandLineVisibilityState.set(false)
+      if (storage.commandLineVisibilityState.get()) {
+        storage.commandLineVisibilityState.set(false)
         return commandSuccess('command line hidden')
       } else {
-        commandLineVisibilityState.set(true)
+        storage.commandLineVisibilityState.set(true)
         return commandSuccess('command line revealed')
       }
     }
@@ -202,7 +196,7 @@ export const initialiseCommands = (
   commandManager.createCommand('/block pick {type:string}', async input => {
     const block = (convertStringToObject(input.type) as unknown) as BlockState
     if (isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))) {
-      selectedBlockState.set(block)
+      storage.selectedBlockState.set(block)
       return commandSuccess(
         `picked block ${convertObjectToString(
           (block as unknown) as Record<string, string>
@@ -227,7 +221,7 @@ export const initialiseCommands = (
       if (
         isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))
       ) {
-        selectedBlockState.set(block)
+        storage.selectedBlockState.set(block)
         return commandSuccess(
           `picked block ${convertObjectToString(
             (block as unknown) as Record<string, string>

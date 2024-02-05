@@ -6,15 +6,7 @@ import { Canvas, CanvasGridItem } from '../rendering/canvas'
 import { areObjectsEqual, now, sleep } from '../utils/general'
 import { Block, BlockContainer, BlockType, isBlock } from './block'
 import { clearFallingBlocksRequested } from './commands'
-import {
-  actualSubticksPerSecondState,
-  actualTicksPerSecondState,
-  actualUpdatesPerSecondState,
-  framesPerSecondState,
-  subtickState,
-  tickState,
-  viewSubTicksState
-} from './storage'
+import { storage } from './storage'
 
 export class Game {
   private lastUpdateTime: number = 0
@@ -211,7 +203,7 @@ export class ProcessLoop {
         lastTimeMilliseconds = currentTimeMilliseconds - overshoot
 
         const timeSinceLastSlept = now() - lastSleepTime
-        const framePeriod = 1000 / framesPerSecondState.get()
+        const framePeriod = 1000 / storage.framesPerSecondState.get()
         if (timeSinceLastSlept > framePeriod) {
           await sleep(0)
           lastSleepTime = now()
@@ -356,9 +348,9 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   console.log('queue', queues)
 
   setInterval(() => {
-    actualTicksPerSecondState.set(elapsedTicksInSecond)
-    actualSubticksPerSecondState.set(elapsedSubticksInSecond)
-    actualUpdatesPerSecondState.set(elapsedUpdatesInSecond)
+    storage.actualTicksPerSecondState.set(elapsedTicksInSecond)
+    storage.actualSubticksPerSecondState.set(elapsedSubticksInSecond)
+    storage.actualUpdatesPerSecondState.set(elapsedUpdatesInSecond)
     elapsedTicksInSecond = 0
     elapsedSubticksInSecond = 0
     elapsedUpdatesInSecond = 0
@@ -369,7 +361,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   const processLogic = () => {
     let combinedUpdateQueue: Set<string>
-    if (viewSubTicksState.get()) {
+    if (storage.viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
       if (queues.subtick.size > 0) {
         // while there are subticks process them
@@ -380,7 +372,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
         appendSet(queues.tick, queues.subtick)
         subtick += 1
         elapsedSubticksInSecond += 1
-        subtickState.set(subtick)
+        storage.subtickState.set(subtick)
       } else {
         // TODO: combinedUpdateQueue can just be made from tick queue as tick queue
         // already has subtick queue appended
@@ -391,7 +383,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
         elapsedTicksInSecond += 1
         tick += 1
-        tickState.set(tick)
+        storage.tickState.set(tick)
         subtick = 0
       }
     } else {
@@ -411,8 +403,8 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
         elapsedSubticksInSecond += 1
       }
 
-      subtickState.set(subtick)
-      tickState.set(tick)
+      storage.subtickState.set(subtick)
+      storage.tickState.set(tick)
 
       combinedUpdateQueue = new Set([...queues.subtick, ...queues.tick])
       elapsedUpdatesInSecond += combinedUpdateQueue.size

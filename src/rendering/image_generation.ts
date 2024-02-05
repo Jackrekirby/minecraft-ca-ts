@@ -474,8 +474,10 @@ async function combineImagesInDirectory (
 
     const OFFSET = 1
     const LENGTH = 32 + OFFSET * 2
-    const combinedWidth = LENGTH * gridSize
-    const combinedHeight = LENGTH * gridSize
+
+    // round width to next power of 2
+    const combinedWidth = Math.pow(2, Math.ceil(Math.log2(LENGTH * gridSize)))
+    const combinedHeight = combinedWidth
 
     // Initialize variables for the resulting image and tilemap
 

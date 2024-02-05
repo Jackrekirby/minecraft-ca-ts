@@ -1,5 +1,6 @@
 import { StateHandler, zipArrays } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
+import { storage } from './storage'
 
 const commandLineElement = document.getElementById(
   'command-line'
@@ -24,7 +25,9 @@ export interface CommandOutput {
   message: string
 }
 
-function mapCommandOutputToEmoji (outputType: CommandOutputType): string {
+export const mapCommandOutputToEmoji = (
+  outputType: CommandOutputType
+): string => {
   switch (outputType) {
     case CommandOutputType.Success:
       return '🟢'
@@ -464,15 +467,17 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
   }
 }
 
-export const commandLineVisibilityState = new LocalStorageVariable<boolean>({
-  defaultValue: true,
-  localStorageKey: 'show-command-line',
-  saveInterval: 0,
-  setCallback: (isCommandLineVisible: boolean) => {
-    if (isCommandLineVisible) {
-      commandLineElement.classList.remove('invisible-on-blur')
-    } else {
-      commandLineElement.classList.add('invisible-on-blur')
+export const initialiseCommandLine = () => {
+  storage.commandLineVisibilityState = new LocalStorageVariable<boolean>({
+    defaultValue: true,
+    localStorageKey: 'show-command-line',
+    saveInterval: 0,
+    setCallback: (isCommandLineVisible: boolean) => {
+      if (isCommandLineVisible) {
+        commandLineElement.classList.remove('invisible-on-blur')
+      } else {
+        commandLineElement.classList.add('invisible-on-blur')
+      }
     }
-  }
-})
+  })
+}
