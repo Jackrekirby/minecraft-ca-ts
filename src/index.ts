@@ -14,6 +14,7 @@ import {
   updateCanvasBlocks
 } from './core/game_loop'
 import { initialiseGuide, showGuide } from './core/guide'
+import { initialiseInventory } from './core/inventory'
 import {
   clearStorageOnVersionIncrease,
   initialiseStorage,
@@ -27,15 +28,9 @@ import { createDemoWorld, placeAllBlocks } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
 
-const createCanvas = async () => {
+const createCanvas = async (textureAtlas: Map<string, HTMLImageElement>) => {
   const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
-  const canvas = new Canvas(
-    canvasElement,
-    await loadImages(),
-    40,
-    1.05,
-    vec2Zero()
-  )
+  const canvas = new Canvas(canvasElement, textureAtlas, 40, 1.05, vec2Zero())
 
   return canvas
 }
@@ -46,7 +41,11 @@ const main = async () => {
   initialiseDebugPanel()
   initialiseCommandLine()
   initialiseGuide()
-  const canvas: Canvas = await createCanvas()
+
+  const textureAtlas: Map<string, HTMLImageElement> = await loadImages()
+  initialiseInventory(textureAtlas)
+
+  const canvas: Canvas = await createCanvas(textureAtlas)
   const blocks = storage.blockStorage.get()
   placeAllBlocks(blocks)
 

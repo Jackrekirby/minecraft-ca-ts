@@ -35,8 +35,8 @@ export const loadWorldSave = async () => {
   }
 }
 
-export const placeAllBlocks = (blocks: BlockContainer) => {
-  const redstoneBlocks = [
+export const listSelectableBlocks = (): Block[] => {
+  const blocks: Block[] = [
     new RedstoneBlock({}),
     new RedstoneTorch({}),
     new GlassBlock({}),
@@ -53,12 +53,40 @@ export const placeAllBlocks = (blocks: BlockContainer) => {
     new RedstoneComparator({})
   ]
 
-  redstoneBlocks.forEach((block, x) => blocks.setValue({ x, y: 2 }, block))
+  Object.values(Color).forEach((color: string, x: number) => {
+    blocks.push(new WoolBlock({ color: color as Color }))
+  })
 
   Object.values(Color).forEach((color: string, x: number) => {
-    blocks.setValue({ x, y: 1 }, new ConcretePowder({ color: color as Color }))
-    blocks.setValue({ x, y: 0 }, new WoolBlock({ color: color as Color }))
+    blocks.push(new ConcretePowder({ color: color as Color }))
   })
+
+  return blocks
+}
+
+export const placeAllBlocks = (blocks: BlockContainer) => {
+  const allBlocks = listSelectableBlocks()
+
+  allBlocks
+    .filter(
+      block =>
+        ![BlockType.ConcretePowder, BlockType.WoolBlock].includes(block.type)
+    )
+    .forEach((block, x) => {
+      blocks.setValue({ x, y: 2 }, block)
+    })
+
+  allBlocks
+    .filter(block => [BlockType.WoolBlock].includes(block.type))
+    .forEach((block, x) => {
+      blocks.setValue({ x, y: 0 }, block)
+    })
+
+  allBlocks
+    .filter(block => [BlockType.ConcretePowder].includes(block.type))
+    .forEach((block, x) => {
+      blocks.setValue({ x, y: 1 }, block)
+    })
 }
 export const loadChunks = (
   chunks: StringDict<Block>,

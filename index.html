@@ -11,6 +11,15 @@
       <div id="canvas-wrapper">
         <div id="debug-panel" style="display: none;">Debug</div>
 
+        <div id="block-selection-wrapper" class="">
+          <div id="block-selection-panel-heading">Inventory</div>
+          <div id="block-selection-panel"></div>
+        </div>
+
+        <div id="inventory-wrapper" class="">
+          <div id="inventory-panel"></div>
+        </div>
+
         <div id="guide-button">?</div>
 
         <div id="guide-panel" class="hide">
@@ -35,16 +44,22 @@
             <li>
               Pan around the world map by clicking and dragging the mouse.
             </li>
-            <li>Scale the world map using the mouse scroll wheel.</li>
+            <li>
+              Scale the world map using the mouse
+              <code>scroll wheel + ctrl</code>.
+            </li>
+            <li>
+              Switch between items in the inventory with the mouse
+              <code>scroll wheel</code>.
+            </li>
             <li>
               <code>Left click</code> will place a block if the location is air,
-              otherwise it will pick the block.
+              if the block is interactable it will interact with the block,
+              otherwise it will pick the block. Block interaction includes
+              cycling the delay of a redstone repeater or toggling a lever.
             </li>
             <li><code>Right click</code> will delete a block.</li>
-            <li>
-              <code>Ctrl left click</code> will interact with a block, such as
-              cycle the delay of a redstone repeater or toggle a lever.
-            </li>
+            <li><code>Ctrl left click</code> will pick the block.</li>
           </ul>
 
           <h2>Keys</h2>
@@ -52,6 +67,10 @@
           <ul>
             <li>
               Press <code>e</code> to log a block to the (browser) console.
+            </li>
+            <li>
+              Press <code>a</code> to toggle the visibility of the inventory
+              search panel.
             </li>
             <li>
               Press <code>z</code> to toggle between viewing ticks or subticks.

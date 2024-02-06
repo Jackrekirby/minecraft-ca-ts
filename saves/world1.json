@@ -341,9 +341,9 @@
     },
     "14 5": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 13,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -355,9 +355,9 @@
     },
     "15 5": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Right",
         "isLocked": false
     },
@@ -365,16 +365,16 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "None",
-        "isPowered": false
+        "outputPower": "Strong",
+        "isPowered": true
     },
     "13 6": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 15,
             "Right": 0
         },
         "connectedDirections": [
@@ -384,11 +384,11 @@
     },
     "14 6": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 14,
             "Right": 0
         },
         "connectedDirections": [
@@ -399,9 +399,9 @@
     },
     "15 6": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Right",
         "isLocked": false
     },
@@ -411,9 +411,9 @@
     },
     "12 7": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down",
         "isLocked": false
     },
@@ -447,9 +447,9 @@
     },
     "7 8": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Strong",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 15,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -461,9 +461,9 @@
     },
     "12 8": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down",
         "isLocked": false
     },
@@ -485,14 +485,14 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "None",
-        "isPowered": false
+        "outputPower": "Strong",
+        "isPowered": true
     },
     "8 9": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Left",
         "isLocked": false
     },
@@ -520,9 +520,9 @@
     },
     "12 9": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down",
         "isLocked": false
     },
@@ -542,14 +542,14 @@
     },
     "7 10": {
         "type": "RedstoneTorch",
-        "isBeingPowered": false,
+        "isBeingPowered": true,
         "direction": "Up"
     },
     "8 10": {
         "type": "RedstoneRepeater",
-        "ticksOn": 2,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
         "direction": "Right",
         "isLocked": false
     },
@@ -577,9 +577,9 @@
     },
     "12 10": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down",
         "isLocked": false
     },
@@ -621,10 +621,10 @@
     },
     "7 11": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 15,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -678,10 +678,10 @@
     },
     "7 12": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 14,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -743,12 +743,12 @@
     },
     "4 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 10
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -757,12 +757,12 @@
     },
     "5 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 11
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -772,12 +772,12 @@
     },
     "6 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 12
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -786,10 +786,10 @@
     },
     "7 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 13,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -802,11 +802,11 @@
     },
     "8 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 12,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -816,11 +816,11 @@
     },
     "9 13": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 11,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -831,9 +831,9 @@
     },
     "10 13": {
         "type": "RedstoneRepeater",
-        "ticksOn": 2,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
         "direction": "Right",
         "isLocked": false
     },
@@ -889,7 +889,7 @@
     },
     "3 14": {
         "type": "Piston",
-        "isBeingPowered": true,
+        "isBeingPowered": false,
         "isExtended": true,
         "direction": "Down",
         "movement": "None",
@@ -898,18 +898,18 @@
     },
     "4 14": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Left",
         "isLocked": false
     },
     "5 14": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 10,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -920,10 +920,10 @@
     },
     "7 14": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 12,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -934,10 +934,10 @@
     },
     "9 14": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 10,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -948,19 +948,19 @@
     },
     "10 14": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Right",
         "isLocked": false
     },
     "11 14": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Up",
-        "isLocked": true
+        "isLocked": false
     },
     "12 14": {
         "type": "RedstoneLamp",
@@ -1014,10 +1014,10 @@
     },
     "7 15": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 11,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -1460,11 +1460,11 @@
     },
     "0 -16": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 1,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -1474,7 +1474,7 @@
     },
     "1 -16": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -1529,9 +1529,9 @@
     },
     "2 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 9,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -1543,11 +1543,11 @@
     },
     "3 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 8,
             "Right": 0
         },
         "connectedDirections": [
@@ -1557,11 +1557,11 @@
     },
     "4 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 7,
             "Right": 0
         },
         "connectedDirections": [
@@ -1571,11 +1571,11 @@
     },
     "5 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 6,
             "Right": 0
         },
         "connectedDirections": [
@@ -1585,11 +1585,11 @@
     },
     "6 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 5,
             "Right": 0
         },
         "connectedDirections": [
@@ -1599,11 +1599,11 @@
     },
     "7 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 4,
             "Right": 0
         },
         "connectedDirections": [
@@ -1613,11 +1613,11 @@
     },
     "8 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 3,
             "Right": 0
         },
         "connectedDirections": [
@@ -1627,11 +1627,11 @@
     },
     "9 -14": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 2,
             "Right": 0
         },
         "connectedDirections": [
@@ -1643,14 +1643,14 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "None",
-        "isPowered": false
+        "outputPower": "Weak",
+        "isPowered": true
     },
     "11 -14": {
         "type": "RedstoneRepeater",
-        "ticksOn": 0,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 1,
+        "ticksOff": 0,
+        "isPowered": true,
         "direction": "Right",
         "isLocked": false
     },
@@ -1671,18 +1671,12 @@
         "lastObservation": {
             "type": "Air"
         },
-        "hasObservedChange": true
-    },
-    "14 -14": {
-        "type": "PistonHead",
-        "direction": "Left",
-        "motion": "extending2",
-        "isSticky": true
+        "hasObservedChange": false
     },
     "15 -14": {
         "type": "Piston",
         "isBeingPowered": false,
-        "isExtended": true,
+        "isExtended": false,
         "direction": "Left",
         "movement": "None",
         "movementDirection": "Right",
@@ -1690,9 +1684,9 @@
     },
     "2 -13": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 10,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -1729,7 +1723,7 @@
     },
     "10 -13": {
         "type": "Piston",
-        "isBeingPowered": false,
+        "isBeingPowered": true,
         "isExtended": false,
         "direction": "Up",
         "movement": "None",
@@ -1738,9 +1732,9 @@
     },
     "2 -12": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 11,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -1753,7 +1747,7 @@
     },
     "3 -12": {
         "type": "RedstoneTorch",
-        "isBeingPowered": false,
+        "isBeingPowered": true,
         "direction": "Right"
     },
     "4 -12": {
@@ -1768,7 +1762,7 @@
     "5 -12": {
         "type": "PistonHead",
         "direction": "Right",
-        "motion": "extending2",
+        "motion": "extended",
         "isSticky": false
     },
     "6 -12": {
@@ -1777,7 +1771,7 @@
         "movementDirection": "Right",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "pink"
+        "color": "green"
     },
     "7 -12": {
         "type": "ConcretePowder",
@@ -1785,7 +1779,7 @@
         "movementDirection": "Right",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "brown"
+        "color": "cyan"
     },
     "8 -12": {
         "type": "ConcretePowder",
@@ -1793,7 +1787,7 @@
         "movementDirection": "Right",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "white"
+        "color": "light_blue"
     },
     "9 -12": {
         "type": "ConcretePowder",
@@ -1801,7 +1795,7 @@
         "movementDirection": "Right",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "gray"
+        "color": "blue"
     },
     "10 -12": {
         "type": "ConcretePowder",
@@ -1809,13 +1803,13 @@
         "movementDirection": "Right",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "light_gray"
+        "color": "purple"
     },
     "2 -11": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 12,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -1831,7 +1825,7 @@
         "movementDirection": "Left",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "magenta"
+        "color": "lime"
     },
     "10 -11": {
         "type": "ConcretePowder",
@@ -1839,16 +1833,16 @@
         "movementDirection": "Up",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "red"
+        "color": "magenta"
     },
     "2 -10": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 0
+            "Right": 13
         },
         "connectedDirections": [
             "Down",
@@ -1857,12 +1851,12 @@
     },
     "3 -10": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 0
+            "Right": 14
         },
         "connectedDirections": [
             "Left",
@@ -1871,17 +1865,25 @@
     },
     "4 -10": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 0
+            "Right": 15
         },
         "connectedDirections": [
             "Left",
             "Right"
         ]
+    },
+    "5 -10": {
+        "type": "ConcretePowder",
+        "movement": "None",
+        "movementDirection": "Left",
+        "outputPower": "Strong",
+        "gravityMotion": "none",
+        "color": "yellow"
     },
     "6 -10": {
         "type": "RedstoneRepeater",
@@ -1908,7 +1910,7 @@
         "movementDirection": "Up",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "orange"
+        "color": "pink"
     },
     "10 -9": {
         "type": "ConcretePowder",
@@ -1916,7 +1918,7 @@
         "movementDirection": "Up",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "yellow"
+        "color": "brown"
     },
     "6 -8": {
         "type": "GlassBlock",
@@ -1944,7 +1946,7 @@
         "movementDirection": "Up",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "lime"
+        "color": "white"
     },
     "11 -8": {
         "type": "ObserverBlock",
@@ -1971,7 +1973,7 @@
         "movementDirection": "Left",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "purple"
+        "color": "orange"
     },
     "7 -7": {
         "type": "ConcretePowder",
@@ -1979,7 +1981,7 @@
         "movementDirection": "Left",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "blue"
+        "color": "red"
     },
     "8 -7": {
         "type": "ConcretePowder",
@@ -1987,7 +1989,7 @@
         "movementDirection": "Left",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "light_blue"
+        "color": "light_gray"
     },
     "9 -7": {
         "type": "ConcretePowder",
@@ -1995,20 +1997,18 @@
         "movementDirection": "Left",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "cyan"
+        "color": "gray"
     },
     "10 -7": {
-        "type": "ConcretePowder",
-        "movement": "None",
-        "movementDirection": "Up",
-        "outputPower": "None",
-        "gravityMotion": "none",
-        "color": "green"
+        "type": "PistonHead",
+        "direction": "Left",
+        "motion": "extended",
+        "isSticky": false
     },
     "11 -7": {
         "type": "Piston",
-        "isBeingPowered": true,
-        "isExtended": false,
+        "isBeingPowered": false,
+        "isExtended": true,
         "direction": "Left",
         "movement": "None",
         "movementDirection": "Up",
@@ -2016,20 +2016,20 @@
     },
     "12 -7": {
         "type": "RedstoneRepeater",
-        "ticksOn": 3,
-        "ticksOff": 1,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 4,
+        "isPowered": false,
         "direction": "Up",
         "isLocked": false
     },
     "11 -6": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 15
+            "Right": 0
         },
         "connectedDirections": []
     },
@@ -2037,8 +2037,8 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Strong",
-        "isPowered": true
+        "outputPower": "None",
+        "isPowered": false
     },
     "20 0": {
         "type": "ConcretePowder",
@@ -2046,17 +2046,9 @@
         "movementDirection": "Up",
         "outputPower": "None",
         "gravityMotion": "none",
-        "color": "white"
-    },
-    "20 1": {
-        "type": "ConcretePowder",
-        "movement": "None",
-        "movementDirection": "Up",
-        "outputPower": "None",
-        "gravityMotion": "none",
         "color": "light_gray"
     },
-    "20 2": {
+    "20 1": {
         "type": "ConcretePowder",
         "movement": "None",
         "movementDirection": "Up",
@@ -2069,42 +2061,54 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "gravityMotion": "none",
+        "gravityMotion": "falling",
         "color": "black"
     },
     "16 5": {
         "type": "Piston",
-        "isBeingPowered": false,
-        "isExtended": false,
+        "isBeingPowered": true,
+        "isExtended": true,
         "direction": "Right",
         "movement": "None",
         "movementDirection": "Up",
         "isSticky": true
     },
     "17 5": {
+        "type": "PistonHead",
+        "direction": "Right",
+        "motion": "extended",
+        "isSticky": true
+    },
+    "18 5": {
         "type": "Piston",
-        "isBeingPowered": false,
+        "isBeingPowered": true,
         "isExtended": false,
         "direction": "Right",
         "movement": "None",
         "movementDirection": "Right",
         "isSticky": true
     },
-    "18 5": {
+    "19 5": {
         "type": "GlassBlock",
         "movement": "None",
         "movementDirection": "Right"
     },
     "16 6": {
         "type": "Piston",
-        "isBeingPowered": false,
-        "isExtended": false,
+        "isBeingPowered": true,
+        "isExtended": true,
         "direction": "Right",
         "movement": "None",
         "movementDirection": "Up",
         "isSticky": true
     },
     "17 6": {
+        "type": "PistonHead",
+        "direction": "Right",
+        "motion": "extended",
+        "isSticky": true
+    },
+    "18 6": {
         "type": "ObserverBlock",
         "movement": "None",
         "movementDirection": "Right",
@@ -2240,18 +2244,18 @@
     },
     "4 16": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Down",
         "isLocked": false
     },
     "7 16": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 10,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2323,23 +2327,23 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "isPowered": true
+        "isPowered": false
     },
     "4 17": {
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Weak",
-        "isPowered": true
+        "outputPower": "None",
+        "isPowered": false
     },
     "5 17": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 7
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2348,12 +2352,12 @@
     },
     "6 17": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 8
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2362,10 +2366,10 @@
     },
     "7 17": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 9,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2421,7 +2425,7 @@
     },
     "4 18": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -2432,10 +2436,10 @@
     },
     "7 18": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 8,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2462,10 +2466,10 @@
     },
     "7 19": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 7,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2497,12 +2501,12 @@
     },
     "0 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 10
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2512,12 +2516,12 @@
     },
     "1 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 11
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2527,12 +2531,12 @@
     },
     "2 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 12
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2541,12 +2545,12 @@
     },
     "3 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 13
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2555,12 +2559,12 @@
     },
     "4 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 14
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2569,12 +2573,12 @@
     },
     "5 20": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 15
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -2583,18 +2587,18 @@
     },
     "6 20": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Left",
         "isLocked": false
     },
     "7 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 6,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2644,26 +2648,26 @@
     },
     "0 21": {
         "type": "RedstoneRepeater",
-        "ticksOn": 4,
-        "ticksOff": 0,
+        "ticksOn": 3,
+        "ticksOff": 1,
         "isPowered": true,
         "direction": "Up",
         "isLocked": false
     },
     "1 21": {
         "type": "RedstoneRepeater",
-        "ticksOn": 2,
-        "ticksOff": 0,
+        "ticksOn": 1,
+        "ticksOff": 1,
         "isPowered": true,
         "direction": "Up",
         "isLocked": false
     },
     "7 21": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 5,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2677,7 +2681,7 @@
         "movement": "None",
         "movementDirection": "Left",
         "outputPower": "None",
-        "color": "white"
+        "color": "orange"
     },
     "0 22": {
         "type": "PistonHead",
@@ -2696,12 +2700,12 @@
     },
     "6 22": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 3
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2710,10 +2714,10 @@
     },
     "7 22": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 4,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2726,11 +2730,11 @@
     },
     "8 22": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 3,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -2743,7 +2747,7 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "color": "light_gray"
+        "color": "yellow"
     },
     "3 23": {
         "type": "RedstoneDust",
@@ -2761,7 +2765,7 @@
     },
     "4 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -2776,12 +2780,12 @@
     },
     "5 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 1
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2791,12 +2795,12 @@
     },
     "6 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 2,
+            "Down": 0,
             "Left": 0,
-            "Right": 2
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2807,10 +2811,10 @@
     },
     "7 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 3,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2823,11 +2827,11 @@
     },
     "8 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 2,
-            "Left": 2,
+            "Down": 0,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -2839,11 +2843,11 @@
     },
     "9 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 1,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -2854,7 +2858,7 @@
     },
     "10 23": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -2886,7 +2890,7 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "color": "gray"
+        "color": "lime"
     },
     "4 24": {
         "type": "RedstoneDust",
@@ -2904,7 +2908,7 @@
     },
     "5 24": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -2920,12 +2924,12 @@
     },
     "6 24": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 1,
+            "Down": 0,
             "Left": 0,
-            "Right": 1
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -2936,10 +2940,10 @@
     },
     "7 24": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 2,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -2952,11 +2956,11 @@
     },
     "8 24": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 1,
-            "Left": 1,
+            "Down": 0,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -2968,7 +2972,7 @@
     },
     "9 24": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -3001,7 +3005,7 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "color": "black"
+        "color": "green"
     },
     "5 25": {
         "type": "RedstoneDust",
@@ -3019,7 +3023,7 @@
     },
     "6 25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -3035,10 +3039,10 @@
     },
     "7 25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 1,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -3051,7 +3055,7 @@
     },
     "8 25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -3095,7 +3099,7 @@
             "type": "WoolBlock",
             "outputPower": "None",
             "movement": "None",
-            "color": "brown"
+            "color": "cyan"
         },
         "hasObservedChange": false
     },
@@ -3104,7 +3108,7 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "color": "brown"
+        "color": "cyan"
     },
     "6 26": {
         "type": "RedstoneDust",
@@ -3122,7 +3126,7 @@
     },
     "7 26": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -3189,7 +3193,7 @@
         "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 11,
+            "Down": 8,
             "Left": 0,
             "Right": 0
         },
@@ -3200,13 +3204,13 @@
     },
     "-13 -16": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
     "-12 -16": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
@@ -3216,7 +3220,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 12,
+            "Left": 8,
             "Right": 0
         },
         "connectedDirections": [
@@ -3231,7 +3235,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 11,
+            "Left": 7,
             "Right": 0
         },
         "connectedDirections": [
@@ -3245,7 +3249,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 10,
+            "Left": 6,
             "Right": 0
         },
         "connectedDirections": [
@@ -3259,7 +3263,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 9,
+            "Left": 5,
             "Right": 0
         },
         "connectedDirections": [
@@ -3274,7 +3278,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 8,
+            "Left": 4,
             "Right": 0
         },
         "connectedDirections": [
@@ -3288,7 +3292,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 7,
+            "Left": 3,
             "Right": 0
         },
         "connectedDirections": [
@@ -3302,7 +3306,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 6,
+            "Left": 2,
             "Right": 0
         },
         "connectedDirections": [
@@ -3317,7 +3321,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 5,
+            "Left": 1,
             "Right": 0
         },
         "connectedDirections": [
@@ -3331,7 +3335,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 4,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -3341,11 +3345,11 @@
     },
     "-2 -16": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 3,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -3356,11 +3360,11 @@
     },
     "-1 -16": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 2,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -4996,12 +5000,12 @@
     },
     "-1 20": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 9
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -5010,10 +5014,10 @@
     },
     "-1 21": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 8,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -5043,7 +5047,7 @@
     },
     "-1 22": {
         "type": "Piston",
-        "isBeingPowered": true,
+        "isBeingPowered": false,
         "isExtended": true,
         "direction": "Left",
         "movement": "None",
@@ -5055,14 +5059,14 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "isPowered": true
+        "isPowered": false
     },
     "1 -27": {
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "isPowered": true
+        "isPowered": false
     },
     "2 -27": {
         "type": "RedstoneLamp",
@@ -5089,13 +5093,13 @@
         "type": "TargetBlock",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Weak"
+        "outputPower": "None"
     },
     "1 -26": {
         "type": "TargetBlock",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Weak"
+        "outputPower": "None"
     },
     "2 -26": {
         "type": "TargetBlock",
@@ -5117,11 +5121,11 @@
     },
     "0 -25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 2,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -5132,11 +5136,11 @@
     },
     "1 -25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 1,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -5147,7 +5151,7 @@
     },
     "2 -25": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -5517,13 +5521,21 @@
         "gravityMotion": "none",
         "color": "pink"
     },
+    "20 -2": {
+        "type": "ConcretePowder",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "gravityMotion": "none",
+        "color": "brown"
+    },
     "20 -1": {
         "type": "ConcretePowder",
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "gravityMotion": "falling",
-        "color": "brown"
+        "gravityMotion": "none",
+        "color": "white"
     },
     "16 16": {
         "type": "Piston",
@@ -5535,30 +5547,32 @@
         "isSticky": true
     },
     "16 21": {
-        "type": "GlassBlock",
+        "type": "WoolBlock",
         "movement": "None",
-        "movementDirection": "Left"
+        "movementDirection": "Left",
+        "outputPower": "None",
+        "color": "red"
     },
     "17 21": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Left",
         "outputPower": "None",
-        "color": "pink"
+        "color": "brown"
     },
     "18 21": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Left",
         "outputPower": "None",
-        "color": "magenta"
+        "color": "black"
     },
     "19 21": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Left",
         "outputPower": "None",
-        "color": "purple"
+        "color": "gray"
     },
     "21 21": {
         "type": "Piston",
@@ -5585,7 +5599,7 @@
         "movement": "None",
         "movementDirection": "Down",
         "outputPower": "None",
-        "color": "blue"
+        "color": "light_gray"
     },
     "21 22": {
         "type": "ObserverBlock",
@@ -5596,7 +5610,7 @@
             "type": "WoolBlock",
             "outputPower": "None",
             "movement": "None",
-            "color": "blue"
+            "color": "light_gray"
         },
         "hasObservedChange": false
     },
@@ -5612,49 +5626,47 @@
         "movement": "None",
         "movementDirection": "Down",
         "outputPower": "None",
-        "color": "light_blue"
+        "color": "white"
     },
     "20 24": {
-        "type": "WoolBlock",
+        "type": "GlassBlock",
         "movement": "None",
-        "movementDirection": "Down",
-        "outputPower": "None",
-        "color": "cyan"
+        "movementDirection": "Down"
     },
     "20 25": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Down",
         "outputPower": "None",
-        "color": "green"
+        "color": "pink"
     },
     "16 26": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Right",
         "outputPower": "None",
-        "color": "red"
+        "color": "light_blue"
     },
     "17 26": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Right",
         "outputPower": "None",
-        "color": "orange"
+        "color": "blue"
     },
     "18 26": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Right",
         "outputPower": "None",
-        "color": "yellow"
+        "color": "purple"
     },
     "19 26": {
         "type": "WoolBlock",
         "movement": "None",
         "movementDirection": "Right",
         "outputPower": "None",
-        "color": "lime"
+        "color": "magenta"
     },
     "19 27": {
         "type": "ObserverBlock",
@@ -5665,7 +5677,7 @@
             "type": "WoolBlock",
             "outputPower": "None",
             "movement": "None",
-            "color": "lime"
+            "color": "magenta"
         },
         "hasObservedChange": false
     },
@@ -5698,11 +5710,11 @@
     },
     "-16 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 5,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -5712,11 +5724,11 @@
     },
     "-15 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 4,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -5726,11 +5738,11 @@
     },
     "-14 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 3,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -5740,10 +5752,10 @@
     },
     "-14 -31": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 2,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -5754,10 +5766,10 @@
     },
     "-14 -30": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 1,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -5779,7 +5791,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 11
+            "Right": 8
         },
         "connectedDirections": [
             "Up",
@@ -5788,7 +5800,7 @@
     },
     "-14 -29": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Left",
         "mode": "subtract"
     },
@@ -5796,7 +5808,7 @@
         "type": "RedstoneDust",
         "outputPower": "Strong",
         "inputPowerStrength": {
-            "Up": 12,
+            "Up": 8,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -5823,13 +5835,13 @@
     },
     "-15 -28": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
     "-13 -28": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Down",
         "mode": "add"
     },
@@ -5849,7 +5861,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 10
+            "Right": 7
         },
         "connectedDirections": [
             "Up",
@@ -5861,7 +5873,7 @@
         "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 11,
+            "Down": 8,
             "Left": 0,
             "Right": 0
         },
@@ -5873,7 +5885,7 @@
     },
     "-14 -27": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
@@ -5883,7 +5895,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 12,
+            "Left": 8,
             "Right": 0
         },
         "connectedDirections": [
@@ -5895,7 +5907,7 @@
     },
     "-12 -27": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
@@ -5960,24 +5972,24 @@
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "isPowered": true
+        "isPowered": false
     },
     "-1 -27": {
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
         "outputPower": "None",
-        "isPowered": true
+        "isPowered": false
     },
     "-16 -26": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 10,
+        "outputSignalStrength": 7,
         "direction": "Up",
         "mode": "add"
     },
     "-13 -26": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
@@ -6027,17 +6039,17 @@
         "type": "TargetBlock",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Weak"
+        "outputPower": "None"
     },
     "-1 -26": {
         "type": "TargetBlock",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "Weak"
+        "outputPower": "None"
     },
     "-16 -25": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 7,
         "direction": "Up",
         "mode": "add"
     },
@@ -6046,7 +6058,7 @@
         "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 12,
+            "Down": 8,
             "Left": 0,
             "Right": 0
         },
@@ -6057,13 +6069,13 @@
     },
     "-12 -25": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
     "-11 -25": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 12,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
@@ -6073,7 +6085,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 12,
+            "Left": 8,
             "Right": 0
         },
         "connectedDirections": [
@@ -6082,66 +6094,6 @@
         ]
     },
     "-9 -25": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 11,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Down",
-            "Left",
-            "Right"
-        ]
-    },
-    "-8 -25": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 10,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Down",
-            "Left",
-            "Right"
-        ]
-    },
-    "-7 -25": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 9,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Down",
-            "Left",
-            "Right"
-        ]
-    },
-    "-6 -25": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 8,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Down",
-            "Left",
-            "Right"
-        ]
-    },
-    "-5 -25": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6156,7 +6108,7 @@
             "Right"
         ]
     },
-    "-4 -25": {
+    "-8 -25": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6171,7 +6123,7 @@
             "Right"
         ]
     },
-    "-3 -25": {
+    "-7 -25": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6186,7 +6138,7 @@
             "Right"
         ]
     },
-    "-2 -25": {
+    "-6 -25": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6201,7 +6153,7 @@
             "Right"
         ]
     },
-    "-1 -25": {
+    "-5 -25": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6216,21 +6168,81 @@
             "Right"
         ]
     },
+    "-4 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "Weak",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 2,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left",
+            "Right"
+        ]
+    },
+    "-3 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "Weak",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 1,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left",
+            "Right"
+        ]
+    },
+    "-2 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "Weak",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left",
+            "Right"
+        ]
+    },
+    "-1 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left",
+            "Right"
+        ]
+    },
     "-16 -24": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 7,
         "direction": "Up",
         "mode": "add"
     },
     "-16 -23": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 7,
         "direction": "Up",
         "mode": "add"
     },
     "-16 -22": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 7,
         "direction": "Up",
         "mode": "add"
     },
@@ -6264,7 +6276,7 @@
     },
     "-16 -21": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
@@ -6272,7 +6284,7 @@
         "type": "RedstoneDust",
         "outputPower": "Strong",
         "inputPowerStrength": {
-            "Up": 11,
+            "Up": 8,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -6284,56 +6296,13 @@
     },
     "-13 -21": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
     "-12 -21": {
         "type": "RedstoneDust",
         "outputPower": "Strong",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 11,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Left",
-            "Right"
-        ]
-    },
-    "-11 -21": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 10,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Up",
-            "Left",
-            "Right"
-        ]
-    },
-    "-10 -21": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
-        "inputPowerStrength": {
-            "Up": 0,
-            "Down": 0,
-            "Left": 9,
-            "Right": 0
-        },
-        "connectedDirections": [
-            "Left",
-            "Right"
-        ]
-    },
-    "-9 -21": {
-        "type": "RedstoneDust",
-        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -6345,7 +6314,7 @@
             "Right"
         ]
     },
-    "-8 -21": {
+    "-11 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6360,7 +6329,7 @@
             "Right"
         ]
     },
-    "-7 -21": {
+    "-10 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6374,7 +6343,7 @@
             "Right"
         ]
     },
-    "-6 -21": {
+    "-9 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6388,7 +6357,7 @@
             "Right"
         ]
     },
-    "-5 -21": {
+    "-8 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6403,7 +6372,7 @@
             "Right"
         ]
     },
-    "-4 -21": {
+    "-7 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6417,7 +6386,7 @@
             "Right"
         ]
     },
-    "-3 -21": {
+    "-6 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6431,7 +6400,7 @@
             "Right"
         ]
     },
-    "-2 -21": {
+    "-5 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6446,7 +6415,7 @@
             "Right"
         ]
     },
-    "-1 -21": {
+    "-4 -21": {
         "type": "RedstoneDust",
         "outputPower": "Weak",
         "inputPowerStrength": {
@@ -6460,15 +6429,58 @@
             "Right"
         ]
     },
+    "-3 -21": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "-2 -21": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Left",
+            "Right"
+        ]
+    },
+    "-1 -21": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
     "-16 -20": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
     "-14 -20": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Down",
         "mode": "add"
     },
@@ -6519,9 +6531,9 @@
     },
     "-2 -20": {
         "type": "RedstoneRepeater",
-        "ticksOn": 1,
-        "ticksOff": 0,
-        "isPowered": true,
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
         "direction": "Up",
         "isLocked": false
     },
@@ -6537,7 +6549,7 @@
         "outputPower": "Strong",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 11,
+            "Down": 8,
             "Left": 0,
             "Right": 0
         },
@@ -6549,7 +6561,7 @@
     },
     "-15 -19": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Right",
         "mode": "add"
     },
@@ -6559,7 +6571,7 @@
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 11,
+            "Left": 8,
             "Right": 0
         },
         "connectedDirections": [
@@ -6630,10 +6642,10 @@
     },
     "-2 -19": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "Weak",
         "inputPowerStrength": {
-            "Up": 0,
-            "Down": 15,
+            "Up": 14,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -6650,7 +6662,7 @@
     },
     "-14 -18": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
@@ -6719,10 +6731,10 @@
     },
     "-2 -18": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "Strong",
         "inputPowerStrength": {
-            "Up": 0,
-            "Down": 14,
+            "Up": 15,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -6740,7 +6752,7 @@
     },
     "-14 -17": {
         "type": "RedstoneComparator",
-        "outputSignalStrength": 11,
+        "outputSignalStrength": 8,
         "direction": "Up",
         "mode": "add"
     },
@@ -6782,7 +6794,7 @@
     },
     "-2 -17": {
         "type": "RedstoneTorch",
-        "isBeingPowered": true,
+        "isBeingPowered": false,
         "direction": "Down"
     },
     "-1 -17": {
@@ -6881,10 +6893,10 @@
     },
     "-23 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 12,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -6895,11 +6907,11 @@
     },
     "-22 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 11,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -6909,11 +6921,11 @@
     },
     "-21 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 10,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -6923,11 +6935,11 @@
     },
     "-20 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 9,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -6937,11 +6949,11 @@
     },
     "-19 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 8,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -6951,11 +6963,11 @@
     },
     "-18 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 7,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -6965,11 +6977,11 @@
     },
     "-17 -32": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 6,
+            "Left": 0,
             "Right": 0
         },
         "connectedDirections": [
@@ -7056,7 +7068,7 @@
     },
     "-27 -19": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
@@ -7071,12 +7083,12 @@
     },
     "-26 -19": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 1
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -7085,12 +7097,12 @@
     },
     "-25 -19": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 2
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -7104,7 +7116,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 3
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -7119,7 +7131,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 4
+            "Right": 1
         },
         "connectedDirections": [
             "Left",
@@ -7133,7 +7145,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 5
+            "Right": 2
         },
         "connectedDirections": [
             "Left",
@@ -7147,7 +7159,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 6
+            "Right": 3
         },
         "connectedDirections": [
             "Up",
@@ -7162,7 +7174,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 7
+            "Right": 4
         },
         "connectedDirections": [
             "Left",
@@ -7176,7 +7188,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 8
+            "Right": 5
         },
         "connectedDirections": [
             "Left",
@@ -7190,7 +7202,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 9
+            "Right": 6
         },
         "connectedDirections": [
             "Up",
@@ -7205,7 +7217,7 @@
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 10
+            "Right": 7
         },
         "connectedDirections": [
             "Left",
@@ -7234,11 +7246,11 @@
     },
     "-16 -35": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Weak",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
-            "Left": 0,
+            "Left": 14,
             "Right": 0
         },
         "connectedDirections": [
@@ -7250,20 +7262,20 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "None",
-        "isPowered": false
+        "outputPower": "Weak",
+        "isPowered": true
     },
     "-16 -34": {
         "type": "RedstoneRepeater",
-        "ticksOn": 3,
-        "ticksOff": 1,
-        "isPowered": false,
+        "ticksOn": 2,
+        "ticksOff": 2,
+        "isPowered": true,
         "direction": "Left",
         "isLocked": false
     },
     "-15 -34": {
         "type": "RedstoneTorch",
-        "isBeingPowered": false,
+        "isBeingPowered": true,
         "direction": "Up"
     },
     "-17 -36": {
@@ -7272,9 +7284,9 @@
     },
     "-17 -35": {
         "type": "RedstoneDust",
-        "outputPower": "None",
+        "outputPower": "Strong",
         "inputPowerStrength": {
-            "Up": 0,
+            "Up": 15,
             "Down": 0,
             "Left": 0,
             "Right": 0
@@ -7286,12 +7298,12 @@
     },
     "-23 -34": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 14
+            "Right": 0
         },
         "connectedDirections": [
             "Up",
@@ -7300,12 +7312,12 @@
     },
     "-22 -34": {
         "type": "RedstoneDust",
-        "outputPower": "Strong",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
             "Down": 0,
             "Left": 0,
-            "Right": 15
+            "Right": 0
         },
         "connectedDirections": [
             "Left",
@@ -7316,28 +7328,33 @@
         "type": "RedstoneRepeater",
         "ticksOn": 1,
         "ticksOff": 3,
-        "isPowered": true,
+        "isPowered": false,
         "direction": "Left",
         "isLocked": false
     },
-    "-19 -34": {
+    "-20 -34": {
         "type": "ObserverBlock",
         "movement": "None",
         "movementDirection": "Left",
         "direction": "Left",
         "lastObservation": {
-            "type": "Piston",
-            "isExtended": false,
+            "type": "PistonHead",
+            "motion": "extended",
             "direction": "Left",
-            "isSticky": true,
-            "movement": "None"
+            "isSticky": true
         },
         "hasObservedChange": false
     },
+    "-19 -34": {
+        "type": "PistonHead",
+        "direction": "Left",
+        "motion": "extended",
+        "isSticky": true
+    },
     "-18 -34": {
         "type": "Piston",
-        "isBeingPowered": false,
-        "isExtended": false,
+        "isBeingPowered": true,
+        "isExtended": true,
         "direction": "Left",
         "movement": "None",
         "movementDirection": "Up",
@@ -7347,15 +7364,15 @@
         "type": "RedstoneLamp",
         "movement": "None",
         "movementDirection": "Up",
-        "outputPower": "None",
-        "isPowered": false
+        "outputPower": "Strong",
+        "isPowered": true
     },
     "-23 -33": {
         "type": "RedstoneDust",
-        "outputPower": "Weak",
+        "outputPower": "None",
         "inputPowerStrength": {
             "Up": 0,
-            "Down": 13,
+            "Down": 0,
             "Left": 0,
             "Right": 0
         },
@@ -9833,6 +9850,878 @@
         ]
     },
     "70 14": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left"
+        ]
+    },
+    "51 -27": {
+        "type": "ObserverBlock",
+        "movement": "None",
+        "movementDirection": "Left",
+        "direction": "Up",
+        "lastObservation": {
+            "type": "Air"
+        },
+        "hasObservedChange": false
+    },
+    "52 -27": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Left",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "53 -27": {
+        "type": "TargetBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None"
+    },
+    "54 -27": {
+        "type": "Lever",
+        "isOn": false
+    },
+    "51 -26": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 3,
+        "isPowered": false,
+        "direction": "Up",
+        "isLocked": false
+    },
+    "53 -26": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Right"
+        ]
+    },
+    "54 -26": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Left",
+            "Right"
+        ]
+    },
+    "55 -26": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "56 -26": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Left"
+        ]
+    },
+    "51 -25": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "color": "light_blue"
+    },
+    "52 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": []
+    },
+    "53 -25": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "color": "light_blue"
+    },
+    "54 -25": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 3,
+        "isPowered": false,
+        "direction": "Up",
+        "isLocked": false
+    },
+    "55 -25": {
+        "type": "ObserverBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "direction": "Up",
+        "lastObservation": {
+            "type": "RedstoneDust",
+            "outputPower": "None",
+            "inputPowerStrength": {
+                "Up": 0,
+                "Down": 0,
+                "Left": 0,
+                "Right": 0
+            },
+            "connectedDirections": [
+                "Left",
+                "Right"
+            ]
+        },
+        "hasObservedChange": false
+    },
+    "56 -25": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down"
+        ]
+    },
+    "50 -24": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Right"
+        ]
+    },
+    "51 -24": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "52 -24": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "53 -24": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Up",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "54 -24": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Right"
+        ]
+    },
+    "55 -24": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Left"
+        ]
+    },
+    "56 -24": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
+        "direction": "Up",
+        "isLocked": false
+    },
+    "50 -23": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Right"
+        ]
+    },
+    "51 -23": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "52 -23": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "53 -23": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Up",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "54 -23": {
+        "type": "TargetBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None"
+    },
+    "55 -23": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
+        "direction": "Up",
+        "isLocked": false
+    },
+    "56 -23": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Right"
+        ]
+    },
+    "57 -23": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "58 -23": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Left"
+        ]
+    },
+    "50 -22": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Right"
+        ]
+    },
+    "51 -22": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "52 -22": {
+        "type": "RedstoneLamp",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "isPowered": false
+    },
+    "53 -22": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "color": "red"
+    },
+    "54 -22": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Left",
+        "outputPower": "None",
+        "color": "orange"
+    },
+    "55 -22": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Left",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "58 -22": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down"
+        ]
+    },
+    "48 -21": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Right"
+        ]
+    },
+    "49 -21": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 3,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "50 -21": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Right",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "51 -21": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Right",
+        "outputPower": "None",
+        "color": "pink"
+    },
+    "55 -21": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Left",
+        "outputPower": "None",
+        "color": "yellow"
+    },
+    "56 -21": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Left",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "57 -21": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
+        "direction": "Left",
+        "isLocked": false
+    },
+    "58 -21": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Left"
+        ]
+    },
+    "48 -20": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Right"
+        ]
+    },
+    "49 -20": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "50 -20": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Right",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "51 -20": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Right",
+        "outputPower": "None",
+        "color": "magenta"
+    },
+    "55 -20": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Left",
+        "outputPower": "None",
+        "color": "lime"
+    },
+    "56 -20": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Left",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "57 -20": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 2,
+        "isPowered": false,
+        "direction": "Left",
+        "isLocked": false
+    },
+    "58 -20": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Left"
+        ]
+    },
+    "48 -19": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Right"
+        ]
+    },
+    "49 -19": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 1,
+        "isPowered": false,
+        "direction": "Right",
+        "isLocked": false
+    },
+    "50 -19": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Right",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "51 -19": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Right",
+        "outputPower": "None",
+        "color": "purple"
+    },
+    "55 -19": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Left",
+        "outputPower": "None",
+        "color": "green"
+    },
+    "56 -19": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Left",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "57 -19": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 3,
+        "isPowered": false,
+        "direction": "Left",
+        "isLocked": false
+    },
+    "58 -19": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down",
+            "Left"
+        ]
+    },
+    "48 -18": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down"
+        ]
+    },
+    "52 -18": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "color": "blue"
+    },
+    "53 -18": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Down",
+        "outputPower": "None",
+        "color": "light_blue"
+    },
+    "54 -18": {
+        "type": "WoolBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None",
+        "color": "cyan"
+    },
+    "58 -18": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Down"
+        ]
+    },
+    "48 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Right"
+        ]
+    },
+    "49 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "50 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "51 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "52 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Up",
+            "Left"
+        ]
+    },
+    "53 -17": {
+        "type": "Piston",
+        "isBeingPowered": false,
+        "isExtended": false,
+        "direction": "Down",
+        "movement": "None",
+        "movementDirection": "Up",
+        "isSticky": true
+    },
+    "54 -17": {
+        "type": "TargetBlock",
+        "movement": "None",
+        "movementDirection": "Up",
+        "outputPower": "None"
+    },
+    "55 -17": {
+        "type": "RedstoneRepeater",
+        "ticksOn": 0,
+        "ticksOff": 4,
+        "isPowered": false,
+        "direction": "Left",
+        "isLocked": false
+    },
+    "56 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "57 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "58 -17": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Left"
+        ]
+    },
+    "52 -16": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Down",
+            "Right"
+        ]
+    },
+    "53 -16": {
+        "type": "RedstoneDust",
+        "outputPower": "None",
+        "inputPowerStrength": {
+            "Up": 0,
+            "Down": 0,
+            "Left": 0,
+            "Right": 0
+        },
+        "connectedDirections": [
+            "Left",
+            "Right"
+        ]
+    },
+    "54 -16": {
         "type": "RedstoneDust",
         "outputPower": "None",
         "inputPowerStrength": {

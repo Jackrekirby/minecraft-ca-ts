@@ -193,7 +193,7 @@ canvas {
 }
 
 .hide {
-  display: none;
+  display: none !important;
 }
 
 #guide-panel {
@@ -256,4 +256,131 @@ canvas {
 
 #guide-panel li {
   padding: 2px 0px;
+}
+
+#block-selection-wrapper {
+  position: absolute;
+  top: 50%;
+  right: 0%;
+  transform: translate(0%, -50%);
+  width: 248px;
+  margin: 0px;
+  margin-right: 32px;
+
+  outline: none;
+
+  border: none;
+  color: white;
+}
+
+#block-selection-panel {
+  width: 100%;
+
+  margin: 0px;
+  outline: 1px solid rgb(255, 255, 255, 0.5);
+  padding: 8px;
+  padding-bottom: 16px;
+  color: white;
+  z-index: 2;
+  margin-top: 12px;
+
+  background-color: rgb(18, 91, 167, 0.8);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  max-height: min(512px, 50vh);
+  overflow-y: auto;
+}
+
+#block-selection-panel-heading {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  background-color: rgb(255, 255, 255, 0.8);
+  color: rgb(18, 91, 167, 1);
+  font-weight: bold;
+  padding: 1px 8px;
+  z-index: 3;
+}
+
+.block-container {
+  width: 48px;
+  height: 48px;
+
+  margin: 4px;
+  outline: 1px solid rgb(255, 255, 255, 0.3);
+  padding: 4px;
+  color: white;
+
+  background-color: rgb(255, 255, 255, 0.1);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.block-container:hover {
+  cursor: url('./src/images/ui/cursor_hover.png'), auto;
+}
+
+#block-selection-panel .tooltip:hover .tooltiptext,
+#inventory-panel .tooltip.selected .tooltiptext {
+  visibility: visible;
+}
+
+.tooltiptext {
+  visibility: hidden;
+  position: absolute;
+  top: -48px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: #333;
+  color: #fff;
+  padding: 8px 16px;
+  border-radius: 4px;
+  white-space: nowrap;
+  z-index: 100;
+}
+
+#inventory-wrapper {
+  position: absolute;
+  bottom: 0%;
+  left: 50%;
+  transform: translate(-50%, 0%);
+  width: 520px;
+  margin: 0px;
+  margin-bottom: 64px;
+
+  outline: none;
+
+  border: none;
+  color: white;
+}
+
+#inventory-panel {
+  width: 100%;
+
+  margin: 0px;
+  outline: 1px solid rgb(255, 255, 255, 0.5);
+  padding: 8px;
+  color: white;
+  z-index: 2;
+
+  background-color: rgb(18, 91, 167, 0.8);
+
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+
+  max-height: min(512px, 50vh);
+  overflow-y: auto;
+}
+
+#block-selection-panel .block-container:hover,
+#inventory-panel .block-container.selected {
+  outline: 1px solid rgb(255, 255, 255, 1);
+  background-color: rgb(255, 255, 255, 0.2);
 }

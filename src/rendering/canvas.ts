@@ -231,6 +231,9 @@ export class Canvas {
 
   handleScaling = () => {
     const handleScroll = (event: WheelEvent): void => {
+      if (!event.ctrlKey) return
+      event.preventDefault()
+
       // scaleOrigin in world pos
       const mouseCanvasPosition: Vec2 = this.calculateAxisFlippedPosition(
         this.mouse.x,

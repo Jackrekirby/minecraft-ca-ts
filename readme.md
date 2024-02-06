@@ -67,7 +67,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Add chunk system (infinite world)
 - [x] Add moveable pistons
 - [ ] Make rendering block more efficient (chunking?)
-- [ ] Make block picker (inventory)
+- [x] Make block picker (inventory)
 - [ ] Make world selection system
 - [ ] Make world snap to grid
 - [x] Make minor and major grid lines
@@ -175,6 +175,8 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Make solid blocks support signal strength
 - [ ] Add block with variable comparator output signal
 - [x] Stop storage variable initialising themselves on file import
+- [ ] Make pickblock goto existing slot on inventory if it exists
+- [ ] Make pickblock not copy state into inventory slot
 
 ### webgl canvas
 

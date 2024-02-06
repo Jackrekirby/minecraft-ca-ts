@@ -3,9 +3,10 @@ import { Vec2, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
-import { Block, BlockContainer, BlockState, BlockType } from './block'
+import { Block, BlockContainer, BlockType } from './block'
 import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
+import { setInventorySlot, toggleInventoryVisibility } from './inventory'
 import { storage } from './storage'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
@@ -68,23 +69,20 @@ export const initBlockEventListeners = (
     } else {
       // console.log('selected block', block.type)
 
-      if (
-        // TODO add interaction() to each block type
-        // OR on update check if any mouse events have been called on you
-        event.ctrlKey &&
-        block.interact
-      ) {
+      if (!event.ctrlKey && block.interact) {
         const newBlock = block.interact()
         blocks.setValue(pi, newBlock)
         blocks.setValue(pi, newBlock.update(pi, blocks))
         addToTickQueue(pi)
         // updateCanvas()
       } else {
-        const copyState: BlockState = block.copy
-          ? block.copy()
-          : { type: block.type }
+        // const copyState: BlockState = block.copy
+        //   ? block.copy()
+        //   : { type: block.type }
 
-        storage.selectedBlockState.set(copyState)
+        // storage.selectedBlockState.set(copyState)
+
+        setInventorySlot(block)
       }
 
       updateCanvasBlocks(blocks, canvas)
@@ -114,6 +112,8 @@ export const initBlockEventListeners = (
       const p = canvas.getMouseWorldPosition()
       const pi = vec2Apply(p, Math.floor)
       console.log(blocks.getValue(pi))
+    } else if (event.key === 'a') {
+      toggleInventoryVisibility()
     }
   })
 }
