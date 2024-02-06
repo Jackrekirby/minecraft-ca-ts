@@ -177,6 +177,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Stop storage variable initialising themselves on file import
 - [ ] Make pickblock goto existing slot on inventory if it exists
 - [ ] Make pickblock not copy state into inventory slot
+- [ ] Save inventory state in local storage
 
 ### webgl canvas
 
