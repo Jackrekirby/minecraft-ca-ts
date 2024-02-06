@@ -10,38 +10,7 @@ https://jackrekirby.github.io/minecraft-ca-ts/
 
 ### Guide
 
-### Commands
-
-Use the command window run commands including
-
-- set and step game ticks
-- load and delete worlds
-- list and pick blocks
-- toggle debug and command window visibility
-
-To open the command window click on it on the bottom left corner or press `/`
-
-- Press `tab` to switch between command suggestions
-- Press `up` to switch between commands in your history
-
-**Use the world clear and load commands to load the latest demo world!**
-
-### Mouse
-
-- Pan around the world map by clicking and dragging the mouse.
-- Scale the world map using the mouse scroll wheel.
-
-- `Left click` will place a block if the location is air, otherwise it will pick the block.
-- `Right click` will delete a block.
-- `Ctrl left click` will interact with a block, such as cycle the delay of a redstone repeater or toggle a lever.
-
-### Keys
-
-- Press `e` to log a block to the (browser) console.
-- Press `z` to toggle between viewing ticks or subticks.
-- Press `x` to step a tick.
-- Press `c` to set the tick speed back to default.
-- Press `v` to set the tick speed to as fast as possible.
+The guide will automatically appear for first time visitors of the website as well as when the version is bumped. To manually open the guide click the `?` icon at the top right of the website.
 
 ## Task List
 
@@ -173,7 +142,7 @@ To open the command window click on it on the bottom left corner or press `/`
 - [x] Fix world not displaying on clear/load when tick rate 0
 - [x] Add redstone junction
 - [ ] Make solid blocks support signal strength
-- [ ] Add block with variable comparator output signal
+- [x] Add block with variable comparator output signal
 - [x] Stop storage variable initialising themselves on file import
 - [x] Make pickblock goto existing slot on inventory if it exists
 - [x] Make pickblock not copy state into inventory slot

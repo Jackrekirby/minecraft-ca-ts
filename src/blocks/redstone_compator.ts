@@ -27,6 +27,16 @@ enum RedstoneComparatorMode {
   Subtract = 'subtract'
 }
 
+export namespace OutputsComparisonStrength {
+  export interface Traits {
+    getOutputComparisonStrength: () => number
+  }
+
+  export function isBlock (block: object): block is Traits {
+    return 'getOutputComparisonStrength' in block
+  }
+}
+
 export class RedstoneComparator
   implements
     DirectionalBlock,
@@ -73,6 +83,8 @@ export class RedstoneComparator
       neighbourPowerStrength = neighbour.getOutputPowerStrength(
         neighbourPowerDirection
       )
+    } else if (OutputsComparisonStrength.isBlock(neighbour)) {
+      neighbourPowerStrength = neighbour.getOutputComparisonStrength()
     } else if (
       OutputPowerBlock.isBlock(neighbour) &&
       neighbour.getOutputPower(neighbourPowerDirection) === BinaryPower.Strong

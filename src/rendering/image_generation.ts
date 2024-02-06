@@ -127,6 +127,9 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   junction_on_vertical: {
     isDirectional: false
+  },
+  redstone_cauldron: {
+    isDirectional: false
   }
 }
 
@@ -168,6 +171,12 @@ const createRepeaterTextureNames = () => {
     }
   }
   return texs
+}
+
+for (let i = 1; i < 16; i += 2) {
+  imageConfigs[`redstone_cauldron_on_${i}`] = {
+    isDirectional: false
+  }
 }
 
 createRepeaterTextureNames().map(name => {

@@ -7,6 +7,7 @@ import { ObserverBlock } from '../blocks/observer_block'
 import { Obsidian } from '../blocks/obsidian'
 import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
+import { RedstoneCauldron } from '../blocks/redstone_cauldron'
 import { RedstoneComparator } from '../blocks/redstone_compator'
 import { RedstoneDust } from '../blocks/redstone_dust'
 import { RedstoneJunction } from '../blocks/redstone_junction'
@@ -52,7 +53,8 @@ export const listSelectableBlocks = (): Block[] => {
     new Obsidian({}),
     new TargetBlock({}),
     new RedstoneComparator({}),
-    new RedstoneJunction({})
+    new RedstoneJunction({}),
+    new RedstoneCauldron({})
   ]
 
   Object.values(Color).forEach((color: string, x: number) => {
