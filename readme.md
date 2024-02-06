@@ -171,13 +171,13 @@ To open the command window click on it on the bottom left corner or press `/`
 - [ ] Investigate web workers
 - [ ] Investigate webgl canvas context
 - [x] Fix world not displaying on clear/load when tick rate 0
-- [ ] Add redstone junction
+- [x] Add redstone junction
 - [ ] Make solid blocks support signal strength
 - [ ] Add block with variable comparator output signal
 - [x] Stop storage variable initialising themselves on file import
-- [ ] Make pickblock goto existing slot on inventory if it exists
-- [ ] Make pickblock not copy state into inventory slot
-- [ ] Save inventory state in local storage
+- [x] Make pickblock goto existing slot on inventory if it exists
+- [x] Make pickblock not copy state into inventory slot
+- [x] Save inventory state in local storage
 
 ### webgl canvas
 

@@ -28,7 +28,8 @@ export enum BlockType {
   ConcretePowder = 'ConcretePowder',
   Obsidian = 'Obsidian',
   TargetBlock = 'TargetBlock',
-  RedstoneComparator = 'RedstoneComparator'
+  RedstoneComparator = 'RedstoneComparator',
+  RedstoneJunction = 'RedstoneJunction'
 }
 
 export interface BlockState {

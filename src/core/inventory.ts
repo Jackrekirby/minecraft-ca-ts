@@ -1,5 +1,7 @@
 import { TileInfo, tilemap } from '../images/tilemap'
 import { CanvasGridCellLayer, CanvasGridItem } from '../rendering/canvas'
+import { createBlock } from '../utils/create_block'
+import { LocalStorageVariable } from '../utils/save'
 import { Block, BlockContainer, BlockState } from './block'
 import { convertObjectToString } from './globals'
 import { storage } from './storage'
@@ -79,14 +81,14 @@ const createCopyBlock = (block: Block): BlockState => {
 
 const createBlockItemRaw = (
   images: Map<string, HTMLImageElement>,
-  block: Block,
+  blockState: BlockState,
   world: BlockContainer,
   imageSize: number,
   containerDiv?: HTMLDivElement
 ) => {
+  const block = createBlock(blockState.type, blockState)
   const canvasItem: CanvasGridItem = block.getTextureName({ x: 8, y: 8 }, world)
   let canvas: HTMLCanvasElement
-  const copyBlock = createCopyBlock(block)
   let tooltipDiv: HTMLDivElement
 
   if (!containerDiv) {
@@ -124,7 +126,7 @@ const createBlockItemRaw = (
   }
 
   tooltipDiv.textContent = convertObjectToString(
-    (copyBlock as unknown) as Record<string, string>
+    (blockState as unknown) as Record<string, string>
   )
 
   return containerDiv
@@ -157,7 +159,7 @@ const scrollInventorySlots = (event: WheelEvent) => {
 }
 
 type CreateBlockItem = (
-  block: Block,
+  blockState: BlockState,
   inventoryItem?: HTMLDivElement
 ) => HTMLDivElement
 
@@ -166,26 +168,32 @@ const initialiseCreateBlockItem = (
   world: BlockContainer,
   imageSize: number
 ): CreateBlockItem => {
-  return (block: Block, inventoryItem?: HTMLDivElement) =>
-    createBlockItemRaw(images, block, world, imageSize, inventoryItem)
+  return (blockState: BlockState, inventoryItem?: HTMLDivElement) =>
+    createBlockItemRaw(images, blockState, world, imageSize, inventoryItem)
+}
+
+const setInventorySlotSave = (blockState: BlockState, slotIndex: number) => {
+  const inventorySlots = storage.inventorySlots.get()
+  inventorySlots[slotIndex] = blockState
+  storage.inventorySlots.set(inventorySlots)
 }
 
 const addInventorySlotOnClick = (
   blockComponent: HTMLDivElement,
-  block: Block,
+  blockState: BlockState,
   slotIndex: number
 ) => {
-  const copyBlock = createCopyBlock(block)
-
   blockComponent.onclick = () => {
-    storage.selectedBlockState.set(copyBlock)
+    storage.selectedBlockState.set(blockState)
+
+    setInventorySlotSave(blockState, slotIndex)
     selectedInventorySlot = slotIndex
 
     selectInventorySlot()
 
     const inventoryItem = inventoryPanel.children[slotIndex] as HTMLDivElement
 
-    inventoryState.createBlockItem(block, inventoryItem)
+    inventoryState.createBlockItem(blockState, inventoryItem)
   }
 }
 
@@ -195,18 +203,48 @@ export const getInventorySlot = (slotIndex: number) => {
 }
 
 export const setInventorySlot = (block: Block) => {
+  const blockState: BlockState = createCopyBlock(block)
+
+  if (gotoExistingSlotItem(blockState)) return
   const blockElement = getInventorySlot(selectedInventorySlot)
-  setInventorySlotOnClick(block, blockElement)
+  setInventorySlotOnClick(blockState, blockElement)
   blockElement.click()
 }
+
+const gotoExistingSlotItem = (blockState: BlockState) => {
+  const currentTooltipText = convertObjectToString(
+    (blockState as unknown) as Record<string, string>
+  )
+
+  const existingInventorySlotIndex = Array.from(
+    inventoryPanel.children
+  ).findIndex(containerDiv => {
+    const tooltipDiv = containerDiv.getElementsByClassName(
+      'tooltiptext'
+    )[0] as HTMLDivElement
+
+    return tooltipDiv.textContent === currentTooltipText
+  }) as number
+
+  // console.log({ block, existingInventorySlotIndex })
+
+  if (existingInventorySlotIndex >= 0) {
+    selectedInventorySlot = existingInventorySlotIndex
+    storage.selectedBlockState.set(blockState)
+
+    selectInventorySlot()
+    return true
+  }
+  return false
+}
+
 const setInventorySlotOnClick = (
-  block: Block,
+  blockState: BlockState,
   blockElement: HTMLDivElement
 ) => {
-  const copyBlock = createCopyBlock(block)
-
   blockElement.onclick = () => {
-    storage.selectedBlockState.set(copyBlock)
+    storage.selectedBlockState.set(blockState)
+    setInventorySlotSave(blockState, selectedInventorySlot)
 
     const inventoryItem = inventoryPanel.children[
       selectedInventorySlot
@@ -214,16 +252,22 @@ const setInventorySlotOnClick = (
     selectInventorySlot()
 
     const newInventoryItem = inventoryState.createBlockItem(
-      block,
+      blockState,
       inventoryItem
     )
-    addInventorySlotOnClick(newInventoryItem, block, selectedInventorySlot)
+    addInventorySlotOnClick(newInventoryItem, blockState, selectedInventorySlot)
   }
 }
 
 export const initialiseInventory = (images: Map<string, HTMLImageElement>) => {
   const emptyWorld: BlockContainer = createEmptyBlockContainer()
   const blocks = listSelectableBlocks()
+
+  storage.inventorySlots = new LocalStorageVariable<BlockState[]>({
+    defaultValue: blocks.slice(0, 9).map(createCopyBlock),
+    localStorageKey: 'inventory-slots',
+    saveInterval: 0
+  })
 
   inventoryState.createBlockItem = initialiseCreateBlockItem(
     images,
@@ -232,19 +276,25 @@ export const initialiseInventory = (images: Map<string, HTMLImageElement>) => {
   )
 
   blocks.forEach(block => {
-    const blockComponent = inventoryState.createBlockItem(block)
-    setInventorySlotOnClick(block, blockComponent)
+    const blockState: BlockState = createCopyBlock(block)
+    const blockComponent = inventoryState.createBlockItem(blockState)
+    setInventorySlotOnClick(blockState, blockComponent)
     blockSelectionPanel.appendChild(blockComponent)
   })
 
-  blocks.slice(0, 9).forEach((block, slotIndex) => {
-    const blockComponent = inventoryState.createBlockItem(block)
-    addInventorySlotOnClick(blockComponent, block, slotIndex)
-    inventoryPanel.appendChild(blockComponent)
-  })
+  storage.inventorySlots
+    .get()
+    .forEach((blockState: BlockState, slotIndex: number) => {
+      const blockComponent = inventoryState.createBlockItem(blockState)
+      addInventorySlotOnClick(blockComponent, blockState, slotIndex)
+      inventoryPanel.appendChild(blockComponent)
+    })
 
-  const inventoryItem = getInventorySlot(selectedInventorySlot)
-  inventoryItem.classList.add('selected')
+  // goto saved selected item otherwise goto slot 0
+  if (!gotoExistingSlotItem(storage.selectedBlockState.get())) {
+    const inventoryItem = getInventorySlot(selectedInventorySlot)
+    inventoryItem.classList.add('selected')
+  }
 
   canvasElement.addEventListener('wheel', scrollInventorySlots)
   inventoryPanel.addEventListener('wheel', scrollInventorySlots)

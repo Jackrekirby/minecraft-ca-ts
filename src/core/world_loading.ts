@@ -9,6 +9,7 @@ import { Piston } from '../blocks/piston'
 import { RedstoneBlock } from '../blocks/redstone_block'
 import { RedstoneComparator } from '../blocks/redstone_compator'
 import { RedstoneDust } from '../blocks/redstone_dust'
+import { RedstoneJunction } from '../blocks/redstone_junction'
 import { RedstoneLamp } from '../blocks/redstone_lamp'
 import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
@@ -50,7 +51,8 @@ export const listSelectableBlocks = (): Block[] => {
     new ObserverBlock({}),
     new Obsidian({}),
     new TargetBlock({}),
-    new RedstoneComparator({})
+    new RedstoneComparator({}),
+    new RedstoneJunction({})
   ]
 
   Object.values(Color).forEach((color: string, x: number) => {
@@ -115,7 +117,7 @@ export const createDemoWorld = async () => {
   const chunks = (await loadWorldSave()) as StringDict<Block>
   loadChunks(chunks, blocks)
 
-  placeAllBlocks(blocks)
+  // placeAllBlocks(blocks)
   return blocks
 }
 

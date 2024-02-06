@@ -24,7 +24,7 @@ import {
   initBlockEventListeners,
   initCanvasResizeListener
 } from './core/user_input'
-import { createDemoWorld, placeAllBlocks } from './core/world_loading'
+import { createDemoWorld } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
 import { loadImages } from './rendering/image_loader'
 
@@ -47,7 +47,7 @@ const main = async () => {
 
   const canvas: Canvas = await createCanvas(textureAtlas)
   const blocks = storage.blockStorage.get()
-  placeAllBlocks(blocks)
+  // placeAllBlocks(blocks)
 
   if (reset) {
     blocks.clone(await createDemoWorld())

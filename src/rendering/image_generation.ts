@@ -118,6 +118,15 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   comparator_add_off: {
     isDirectional: true
+  },
+  junction: {
+    isDirectional: false
+  },
+  junction_on_horizontal: {
+    isDirectional: false
+  },
+  junction_on_vertical: {
+    isDirectional: false
   }
 }
 

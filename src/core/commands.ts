@@ -14,11 +14,7 @@ import {
 import { updateCanvasBlocks } from './game_loop'
 import { convertObjectToString, convertStringToObject } from './globals'
 import { storage } from './storage'
-import {
-  createDemoWorld,
-  createEmptyWorld,
-  placeAllBlocks
-} from './world_loading'
+import { createDemoWorld, createEmptyWorld } from './world_loading'
 
 export const clearFallingBlocksRequested = new LocalStorageVariable<boolean>({
   defaultValue: false
@@ -40,8 +36,8 @@ export const initialiseCommands = (
   })
   commandManager.createCommand('/world clear', async () => {
     // blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
-    blocks.clone(await createEmptyWorld())
-    placeAllBlocks(blocks)
+    blocks.clone(createEmptyWorld())
+    // placeAllBlocks(blocks)
     // updateCanvas()
     updateCanvasBlocks(blocks, canvas)
     fillUpdateQueue()

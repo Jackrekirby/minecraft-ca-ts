@@ -65,7 +65,7 @@ export class RedstoneDust
     inputPowerStrength?: Record<Direction, number>
     connectedDirections?: Direction[]
   } = {}) {
-    this.outputPower = outputPower
+    this.outputPower = outputPower // TODO: this is not being used!
     // this.isPowered = isPowered
     this.inputPowerStrength = inputPowerStrength
     this.connectedDirections = connectedDirections
