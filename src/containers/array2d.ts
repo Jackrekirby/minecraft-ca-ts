@@ -164,6 +164,27 @@ export class ChunkContainer<T> {
     return positions
   }
 
+  public foreach (callback: (value: T, v: Vec2) => void): void {
+    for (const index in this.chunks) {
+      const chunkPos: Vec2 = this.chunkIndexToVec2(index)
+      const chunkBlockPos: Vec2 = {
+        x: chunkPos.x * this.chunkSize,
+        y: chunkPos.y * this.chunkSize
+      }
+      for (let y = chunkBlockPos.y; y < chunkBlockPos.y + this.chunkSize; ++y) {
+        for (
+          let x = chunkBlockPos.x;
+          x < chunkBlockPos.x + this.chunkSize;
+          ++x
+        ) {
+          const position: Vec2 = { x, y }
+          const value: T = this.getValue(position)
+          callback(value, position)
+        }
+      }
+    }
+  }
+
   public map (callback: (value: T, v: Vec2) => T): ChunkContainer<T> {
     const newContainer = new ChunkContainer<T>(
       this.chunkSize,

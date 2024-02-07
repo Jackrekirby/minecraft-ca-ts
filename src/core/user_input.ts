@@ -8,9 +8,10 @@ import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
 import { setInventorySlot, toggleInventoryVisibility } from './inventory'
 import { storage } from './storage'
+import { createEmptyWorld } from './world_loading'
 
 const canvasElement = document.getElementById('canvas') as HTMLCanvasElement
-
+const selectionElement = document.getElementById('selection') as HTMLDivElement
 export const initCanvasResizeListener = () => {
   const resizeCanvas = () => {
     const context = canvasElement.getContext('2d')!
@@ -32,11 +33,121 @@ export const initCanvasResizeListener = () => {
   resizeCanvas()
 }
 
+const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
+  let mouse: Vec2 = { x: 0, y: 0 }
+  let lastMouse: Vec2 = { x: 0, y: 0 }
+  let isPanning: boolean = false
+  let hasMetMinimumMovementThreshold = false
+  let movementThreshold = 8
+
+  const checkMovementThreshold = (offset: Vec2) => {
+    if (hasMetMinimumMovementThreshold) return
+    if (
+      offset.x * offset.x + offset.y * offset.y >
+      movementThreshold * movementThreshold
+    ) {
+      lastMouse = mouse
+      hasMetMinimumMovementThreshold = true
+    }
+  }
+
+  const handleMouseMove = (event: MouseEvent): void => {
+    const pixelRatio = window.devicePixelRatio || 1
+    mouse = {
+      x: event.offsetX * pixelRatio,
+      y: event.offsetY * pixelRatio
+    }
+
+    if (isPanning) {
+      const mouseOffset = vec2Subtract(mouse, lastMouse)
+
+      checkMovementThreshold(mouseOffset)
+    } else {
+      hasMetMinimumMovementThreshold = false
+      lastMouse = mouse
+    }
+
+    if (hasMetMinimumMovementThreshold) {
+      // render selection element
+      selectionElement.classList.remove('hide')
+
+      const minMousePos: Vec2 = {
+        x: Math.min(lastMouse.x, mouse.x),
+        y: Math.min(lastMouse.y, mouse.y)
+      }
+
+      const maxMousePos: Vec2 = {
+        x: Math.max(lastMouse.x, mouse.x),
+        y: Math.max(lastMouse.y, mouse.y)
+      }
+
+      console.log(minMousePos, maxMousePos)
+
+      selectionElement.style.top = `${minMousePos.y}px`
+      selectionElement.style.height = `${maxMousePos.y - minMousePos.y}px`
+      selectionElement.style.left = `${minMousePos.x}px`
+      selectionElement.style.width = `${maxMousePos.x - minMousePos.x}px`
+    }
+  }
+
+  const handleComplete = (event: MouseEvent): void => {
+    if (hasMetMinimumMovementThreshold) {
+      const startPos = vec2Apply(
+        canvas.getMouseWorldPosition(lastMouse),
+        Math.floor
+      )
+      const endPos = vec2Apply(canvas.getMouseWorldPosition(mouse), Math.floor)
+
+      const copyWorld = createEmptyWorld()
+
+      const minPos: Vec2 = {
+        x: Math.min(startPos.x, endPos.x),
+        y: Math.min(startPos.y, endPos.y)
+      }
+
+      const maxPos: Vec2 = {
+        x: Math.max(startPos.x, endPos.x),
+        y: Math.max(startPos.y, endPos.y)
+      }
+
+      for (let y = minPos.y; y < maxPos.y + 1; ++y) {
+        for (let x = minPos.x; x < maxPos.x + 1; ++x) {
+          const v = { x, y }
+          copyWorld.setValue(vec2Subtract(v, minPos), blocks.getValue(v))
+        }
+      }
+
+      // console.log(startPos, endPos)
+      // console.log(copyWorld)
+
+      storage.selectedBlockStorage.set(copyWorld)
+
+      // storage.selectedBlockStorage.set(copyWorld)
+      // downloadWorld(copyWorld, false)
+    }
+    isPanning = false
+    hasMetMinimumMovementThreshold = false
+    selectionElement.classList.add('hide')
+  }
+
+  canvas.canvas.addEventListener('pointermove', handleMouseMove)
+  canvas.canvas.addEventListener('pointerdown', (ev: PointerEvent) => {
+    // do not allow block selection if ctrlKey is pressed
+    if (!ev.ctrlKey) return
+    isPanning = true
+    lastMouse = mouse
+  })
+
+  canvas.canvas.addEventListener('pointerup', handleComplete)
+  canvas.canvas.addEventListener('pointerleave', handleComplete)
+}
+
 export const initBlockEventListeners = (
   canvas: Canvas,
   blocks: BlockContainer,
   addToTickQueue: (v: Vec2) => void
 ) => {
+  initBlockSelection(blocks, canvas)
   const placeBlock = (event: MouseEvent) => {
     // console.log('place block')
     const p = canvas.getMouseWorldPosition()

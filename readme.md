@@ -91,7 +91,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add lever block
 - [x] Should block powering occur in subticks
 - [x] Enable block pick to support state
-- [ ] Add drag selection copy paste
+- [x] Add drag selection copy paste
 - [x] Add button block
 - [x] Add force clear of local storage when version bumped
 - [x] Blocks should not output power whilst moving (quick fix with subtick power processing)
@@ -147,6 +147,8 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Make pickblock goto existing slot on inventory if it exists
 - [x] Make pickblock not copy state into inventory slot
 - [x] Save inventory state in local storage
+- [ ] Add block debug tooltip
+- [ ] Add signs that make use of tooltip
 
 ### webgl canvas
 

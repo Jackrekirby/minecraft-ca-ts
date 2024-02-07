@@ -11,6 +11,8 @@
       <div id="canvas-wrapper">
         <div id="debug-panel" style="display: none;">Debug</div>
 
+        <div id="selection" class="hide"></div>
+
         <div id="block-selection-wrapper" class="">
           <div id="block-selection-panel-heading">Inventory</div>
           <div id="block-selection-panel"></div>
@@ -42,11 +44,11 @@
 
           <ul>
             <li>
-              Pan around the world map by clicking and dragging the mouse.
+              Pan around the world map by <code>click + drag mouse</code>.
             </li>
             <li>
               Scale the world map using the mouse
-              <code>scroll wheel + ctrl</code>.
+              <code>ctrl + scroll wheel</code>.
             </li>
             <li>
               Switch between items in the inventory with the mouse
@@ -60,6 +62,12 @@
             </li>
             <li><code>Right click</code> will delete a block.</li>
             <li><code>Ctrl left click</code> will pick the block.</li>
+            <li>
+              Select an area of blocks using
+              <code>ctrl + click + drag mouse</code>. The selection can be
+              pasted at the mouse position using <code>ctrl + v</code> or
+              downloaded via command.
+            </li>
           </ul>
 
           <h2>Keys</h2>

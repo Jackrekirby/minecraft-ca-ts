@@ -1,4 +1,5 @@
-import { vec2Zero } from './containers/vec2'
+import { Vec2, vec2Add, vec2Apply, vec2Zero } from './containers/vec2'
+import { Block, BlockContainer, BlockType } from './core/block'
 import { initialiseCommands } from './core/commands'
 import {
   CommandManager,
@@ -46,7 +47,7 @@ const main = async () => {
   initialiseInventory(textureAtlas)
 
   const canvas: Canvas = await createCanvas(textureAtlas)
-  const blocks = storage.blockStorage.get()
+  const blocks: BlockContainer = storage.blockStorage.get()
   // placeAllBlocks(blocks)
 
   if (reset) {
@@ -107,16 +108,32 @@ const main = async () => {
     if (isCommandLineCurrentlyVisible()) {
       return
     }
-    if (event.key === 'z') {
-      storage.viewSubTicksState.set(!storage.viewSubTicksState.get())
-    } else if (event.key === 'x') {
-      logicLoop.stop()
-      storage.updatesPerSecondState.set(0)
-      processLogic()
-    } else if (event.key === 'c') {
-      storage.updatesPerSecondState.set(5)
-    } else if (event.key === 'v') {
-      storage.updatesPerSecondState.set(9999)
+    if (event.ctrlKey) {
+      if (event.key === 'v') {
+        const position: Vec2 = vec2Apply(
+          canvas.getMouseWorldPosition(),
+          Math.floor
+        )
+
+        const selectedBlocks: BlockContainer = storage.selectedBlockStorage.get()
+        console.log('paste selected blocks', selectedBlocks)
+        selectedBlocks.foreach((block: Block, v: Vec2) => {
+          if (block.type === BlockType.Air) return
+          blocks.setValue(vec2Add(v, position), block)
+        })
+      }
+    } else {
+      if (event.key === 'z') {
+        storage.viewSubTicksState.set(!storage.viewSubTicksState.get())
+      } else if (event.key === 'x') {
+        logicLoop.stop()
+        storage.updatesPerSecondState.set(0)
+        processLogic()
+      } else if (event.key === 'c') {
+        storage.updatesPerSecondState.set(5)
+      } else if (event.key === 'v') {
+        storage.updatesPerSecondState.set(9999)
+      }
     }
   })
   // TODO: do not need to update canvas blocks unless rendering

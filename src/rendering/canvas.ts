@@ -114,16 +114,18 @@ export class Canvas {
     }
   }
 
-  getMouseWorldPosition () {
+  getMouseWorldPosition (mouse?: Vec2) {
+    if (!mouse) {
+      mouse = this.mouse
+    }
     const axisFlippedPos: Vec2 = this.calculateAxisFlippedPosition(
-      this.mouse.x,
-      this.mouse.y
+      mouse.x,
+      mouse.y
     )
     const worldPos: Vec2 = this.calculateScreenToWorldPosition(
       axisFlippedPos.x,
       axisFlippedPos.y
     )
-    // console.log(this.mouse, worldPos)
     return worldPos
   }
 
@@ -174,7 +176,9 @@ export class Canvas {
     }
 
     canvas.addEventListener('pointermove', handleMouseMove)
-    canvas.addEventListener('pointerdown', () => {
+    canvas.addEventListener('pointerdown', (ev: PointerEvent) => {
+      // do not pan world if ctrlKey is pressed
+      if (ev.ctrlKey) return
       isPanning = true
       lastMouse = this.mouse
       lastOffset = this.offset.get()

@@ -1,8 +1,7 @@
-import { Dict2D } from '../containers/array2d'
-import { Vec2 } from '../containers/vec2'
+import { StringDict } from '../containers/array2d'
 import { Canvas } from '../rendering/canvas'
-import { downloadFile, isEnum } from '../utils/general'
-import { compressObject, LocalStorageVariable } from '../utils/save'
+import { isEnum } from '../utils/general'
+import { decompressObject, LocalStorageVariable } from '../utils/save'
 import { Block, BlockContainer, BlockState, BlockType } from './block'
 import {
   commandFailure,
@@ -14,7 +13,13 @@ import {
 import { updateCanvasBlocks } from './game_loop'
 import { convertObjectToString, convertStringToObject } from './globals'
 import { storage } from './storage'
-import { createDemoWorld, createEmptyWorld } from './world_loading'
+import {
+  createDemoWorld,
+  createEmptyBlockContainer,
+  createEmptyWorld,
+  downloadWorld,
+  loadChunks
+} from './world_loading'
 
 export const clearFallingBlocksRequested = new LocalStorageVariable<boolean>({
   defaultValue: false
@@ -26,14 +31,41 @@ export const initialiseCommands = (
   canvas: Canvas,
   fillUpdateQueue: () => void
 ) => {
-  commandManager.createCommand('/world load {name:string}', async input => {
-    blocks.clone(await createDemoWorld())
-    // blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
-    // updateCanvas()
-    updateCanvasBlocks(blocks, canvas)
-    fillUpdateQueue()
-    return commandSuccess(`loaded world ${input.name}`)
-  })
+  commandManager.createCommand(
+    '/world load by_name {name:string}',
+    async input => {
+      blocks.clone(await createDemoWorld())
+      // blocks.chunks = (await loadChunksFromStorage(false, true)).chunks
+      // updateCanvas()
+      updateCanvasBlocks(blocks, canvas)
+      fillUpdateQueue()
+      return commandSuccess(`loaded world ${input.name}`)
+    }
+  )
+
+  commandManager.createCommand(
+    '/world load from_compressed {data:string}',
+    async input => {
+      const newBlocks: BlockContainer = createEmptyBlockContainer()
+      const chunks = decompressObject(input.data) as StringDict<Block>
+      loadChunks(chunks, newBlocks)
+      blocks.clone(newBlocks)
+      console.log(newBlocks, blocks, chunks, input.data)
+      return commandSuccess(`loaded world from compressed data`)
+    }
+  )
+
+  commandManager.createCommand(
+    '/world load selected_from_compressed {data:string}',
+    async input => {
+      const newBlocks: BlockContainer = createEmptyBlockContainer()
+      const chunks = decompressObject(input.data) as StringDict<Block>
+      loadChunks(chunks, newBlocks)
+      storage.selectedBlockStorage.set(newBlocks)
+      return commandSuccess(`loaded compressed block data into selection`)
+    }
+  )
+
   commandManager.createCommand('/world clear', async () => {
     // blocks.chunks = (await loadChunksFromStorage(false, false)).chunks
     blocks.clone(createEmptyWorld())
@@ -74,34 +106,29 @@ export const initialiseCommands = (
   )
 
   commandManager.createCommand('/world download', async input => {
-    const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
-      (block: Block, v: Vec2) => {
-        return block
-      }
-    )
-
-    const stringValue = JSON.stringify(
-      Object.fromEntries(blocksForStorage.items),
-      null,
-      2
-    )
-    downloadFile(stringValue, 'world.json')
+    downloadWorld(blocks, false)
     return commandSuccess(`downloaded world`)
   })
 
   commandManager.createCommand('/world download compressed', async input => {
-    const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
-      (block: Block, v: Vec2) => {
-        return block
-      }
-    )
+    downloadWorld(blocks, true)
 
-    const stringValue = compressObject(
-      Object.fromEntries(blocksForStorage.items)
-    )
-    downloadFile(stringValue, 'world.txt')
-    return commandSuccess(`downloaded world`)
+    return commandSuccess(`downloaded compressed world`)
   })
+
+  commandManager.createCommand('/world download selected', async input => {
+    downloadWorld(storage.selectedBlockStorage.get(), false)
+    return commandSuccess(`downloaded selected world`)
+  })
+
+  commandManager.createCommand(
+    '/world download selected compressed',
+    async input => {
+      downloadWorld(storage.selectedBlockStorage.get(), true)
+
+      return commandSuccess(`downloaded compressed selected world`)
+    }
+  )
 
   commandManager.createCommand('/toggle view_subticks', async () => {
     storage.viewSubTicksState.set(!storage.viewSubTicksState.get())

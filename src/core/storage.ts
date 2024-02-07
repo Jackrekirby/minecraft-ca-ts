@@ -75,6 +75,28 @@ export const initialiseStorage = () => {
     }
   })
 
+  storage.selectedBlockStorage = new LocalStorageVariable<BlockContainer>({
+    localStorageKey: 'selected-blocks',
+    defaultValue: createEmptyWorld(),
+    valueToStorage: (blocks: BlockContainer) => {
+      const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+        (block: Block, v: Vec2) => {
+          return block
+        }
+      )
+
+      // console.log('save', Object.fromEntries(blocksForStorage.items))
+
+      return compressObject(Object.fromEntries(blocksForStorage.items))
+    },
+    storageToValue: (storage: string) => {
+      const blocks: BlockContainer = createEmptyBlockContainer()
+      const chunks = decompressObject(storage) as StringDict<Block>
+      loadChunks(chunks, blocks)
+      return blocks
+    }
+  })
+
   storage.tickState = new LocalStorageVariable<number>({
     defaultValue: 0,
     saveInterval: 0

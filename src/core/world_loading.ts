@@ -16,9 +16,16 @@ import { RedstoneRepeater } from '../blocks/redstone_repeater'
 import { RedstoneTorch } from '../blocks/redstone_torch'
 import { TargetBlock } from '../blocks/target_block'
 import { Color, WoolBlock } from '../blocks/wool_block'
-import { ChunkContainer, Dict2D2, StringDict } from '../containers/array2d'
+import {
+  ChunkContainer,
+  Dict2D,
+  Dict2D2,
+  StringDict
+} from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { createBlock } from '../utils/create_block'
+import { downloadFile } from '../utils/general'
+import { compressObject } from '../utils/save'
 import { Block, BlockContainer, BlockType } from './block'
 
 export const loadWorldSave = async () => {
@@ -126,4 +133,24 @@ export const createDemoWorld = async () => {
 export const createEmptyWorld = () => {
   const blocks: BlockContainer = createEmptyBlockContainer()
   return blocks
+}
+
+export const downloadWorld = (blocks: BlockContainer, compress?: boolean) => {
+  const blocksForStorage: Dict2D<Block> = blocks.mapToDict2D(
+    (block: Block, v: Vec2) => {
+      return block
+    }
+  )
+  let stringValue: string
+  if (compress) {
+    stringValue = compressObject(Object.fromEntries(blocksForStorage.items))
+    downloadFile(stringValue, 'world.txt')
+  } else {
+    stringValue = JSON.stringify(
+      Object.fromEntries(blocksForStorage.items),
+      null,
+      2
+    )
+    downloadFile(stringValue, 'world.json')
+  }
 }

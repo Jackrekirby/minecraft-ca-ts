@@ -384,3 +384,13 @@ canvas {
   outline: 1px solid rgb(255, 255, 255, 1);
   background-color: rgb(255, 255, 255, 0.2);
 }
+
+#selection {
+  position: absolute;
+  margin: 0px;
+  padding: 0px;
+  outline: 1px solid rgb(255, 255, 255, 1);
+  background-color: rgb(255, 255, 255, 0.2);
+  border: none;
+  pointer-events: none;
+}
