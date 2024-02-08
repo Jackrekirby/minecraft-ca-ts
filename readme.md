@@ -128,7 +128,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add target block
 - [x] Add obsidian
 - [ ] Add random texture rotation
-- [ ] Add hard and soft power types
+- [x] Add hard and soft power types
 - [x] Support texture layers
 - [ ] Support rotated textures
 - [x] Convert all textures to texture layers that could benefit from it
@@ -149,6 +149,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Save inventory state in local storage
 - [ ] Add block debug tooltip
 - [ ] Add signs that make use of tooltip
+- [ ] Make moving block a type rather than a feature of all blocks
 
 ### webgl canvas
 

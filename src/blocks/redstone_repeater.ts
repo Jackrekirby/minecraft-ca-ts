@@ -8,7 +8,11 @@ import {
   isBlock
 } from '../core/block'
 import { Direction, getOppositeDirection } from '../core/direction'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import {
   getNeighbourBlock,
@@ -155,8 +159,9 @@ export class RedstoneRepeater
       return BinaryPower.None
     }
   }
-  public transmitsBetweenSelf (): boolean {
-    return true
+
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Hard
   }
 
   public getMovementMethod (): BlockMovement {

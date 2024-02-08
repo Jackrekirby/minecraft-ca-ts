@@ -10,7 +10,8 @@ import { Direction } from '../core/direction'
 import {
   BinaryPower,
   OutputPowerBlock,
-  OutputSignalStrengthBlock
+  OutputSignalStrengthBlock,
+  PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import {
@@ -151,8 +152,8 @@ export class RedstoneComparator
     }
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return true
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Hard
   }
 
   public getMovementMethod (): BlockMovement {

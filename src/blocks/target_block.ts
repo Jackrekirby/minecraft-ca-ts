@@ -17,7 +17,11 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 
 import { addCreateBlockFunction } from '../utils/create_block'
@@ -105,8 +109,8 @@ export class TargetBlock
     return BlockMovement.Moveable
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return false
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Soft
   }
 
   public doesConnectToRedstoneDust (_direction: Direction): boolean {

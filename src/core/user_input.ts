@@ -81,7 +81,7 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
         y: Math.max(lastMouse.y, mouse.y)
       }
 
-      console.log(minMousePos, maxMousePos)
+      // console.log(minMousePos, maxMousePos)
 
       selectionElement.style.top = `${minMousePos.y}px`
       selectionElement.style.height = `${maxMousePos.y - minMousePos.y}px`

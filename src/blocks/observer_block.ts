@@ -17,7 +17,11 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
 
@@ -153,8 +157,8 @@ export class ObserverBlock
     return BlockMovement.Moveable
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return true
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Hard
   }
 
   public filteredState (): Record<string, any> {

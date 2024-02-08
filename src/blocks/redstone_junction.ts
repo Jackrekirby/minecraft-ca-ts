@@ -14,7 +14,8 @@ import {
 import {
   BinaryPower,
   OutputPowerBlock,
-  OutputSignalStrengthBlock
+  OutputSignalStrengthBlock,
+  PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
@@ -161,8 +162,8 @@ export class RedstoneJunction
     return true
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return true
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Hard
   }
 }
 

@@ -9,10 +9,15 @@ export enum BinaryPower {
   Weak = 'Weak'
 }
 
+export enum PowerHardness {
+  Hard = 'hard',
+  Soft = 'soft'
+}
+
 export namespace OutputPowerBlock {
   export interface Traits {
     getOutputPower: (direction: Direction) => BinaryPower
-    transmitsBetweenSelf: () => boolean
+    getPowerHardness: (direction: Direction) => PowerHardness
   }
 
   export function isBlock (block: object): block is Traits {
@@ -31,8 +36,12 @@ export namespace OutputPowerBlock {
       let inputPower: BinaryPower = BinaryPower.None
 
       if (OutputPowerBlock.isBlock(neighbour)) {
-        if (state.transmitsBetweenSelf() || neighbour.transmitsBetweenSelf()) {
-          inputPower = neighbour.getOutputPower(getOppositeDirection(direction))
+        const oppositeDirection = getOppositeDirection(direction)
+        if (
+          neighbour.getPowerHardness &&
+          neighbour.getPowerHardness(oppositeDirection) === PowerHardness.Hard
+        ) {
+          inputPower = neighbour.getOutputPower(oppositeDirection)
         }
       }
 

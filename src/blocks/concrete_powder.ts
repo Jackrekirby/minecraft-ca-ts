@@ -19,7 +19,11 @@ import {
   updateMovement,
   updateSubMovement
 } from '../core/moveable_block'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 import {
   CanvasGridCell,
   CanvasGridCellLayer,
@@ -163,8 +167,8 @@ export class ConcretePowder
     }
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return false
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Soft
   }
 
   public copy (): BlockState {

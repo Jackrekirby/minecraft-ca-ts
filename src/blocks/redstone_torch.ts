@@ -7,7 +7,11 @@ import {
   DirectionalBlock
 } from '../core/block'
 import { Direction, getOppositeDirection } from '../core/direction'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
@@ -58,8 +62,13 @@ export class RedstoneTorch
       return BinaryPower.None
     }
   }
-  public transmitsBetweenSelf (): boolean {
-    return false // TODO: rename powerDirectsIntoBlock
+
+  public getPowerHardness (direction: Direction): PowerHardness {
+    if (direction === this.direction) {
+      return PowerHardness.Hard
+    } else {
+      return PowerHardness.Soft
+    }
   }
 
   public getMovementMethod (): BlockMovement {

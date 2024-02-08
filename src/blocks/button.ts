@@ -1,7 +1,11 @@
 import { Vec2 } from '../containers/vec2'
 import { Block, BlockContainer, BlockMovement, BlockType } from '../core/block'
 import { Direction } from '../core/direction'
-import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
+import {
+  BinaryPower,
+  OutputPowerBlock,
+  PowerHardness
+} from '../core/powerable_block'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { createObjectSubset } from '../utils/general'
@@ -28,8 +32,8 @@ export class Button
     this.delay = delay
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return false
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Soft
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {

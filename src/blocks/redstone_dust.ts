@@ -15,7 +15,8 @@ import {
 import {
   BinaryPower,
   OutputPowerBlock,
-  OutputSignalStrengthBlock
+  OutputSignalStrengthBlock,
+  PowerHardness
 } from '../core/powerable_block'
 import { storage } from '../core/storage'
 import {
@@ -229,6 +230,10 @@ export class RedstoneDust
     return powerStrength
   }
 
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Hard
+  }
+
   public getOutputPower (direction: Direction): BinaryPower {
     const powerStrength = this.getOutputPowerStrength(direction)
     if (
@@ -247,10 +252,6 @@ export class RedstoneDust
   }
 
   public doesConnectToRedstoneDust (_direction: Direction): boolean {
-    return true
-  }
-
-  public transmitsBetweenSelf (): boolean {
     return true
   }
 }

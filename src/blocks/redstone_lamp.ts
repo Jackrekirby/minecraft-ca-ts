@@ -20,7 +20,8 @@ import {
 import {
   BinaryPower,
   IsPoweredBlock,
-  OutputPowerBlock
+  OutputPowerBlock,
+  PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 
@@ -112,8 +113,8 @@ export class RedstoneLamp
     return BlockMovement.Moveable
   }
 
-  public transmitsBetweenSelf (): boolean {
-    return false
+  public getPowerHardness (direction: Direction): PowerHardness {
+    return PowerHardness.Soft
   }
 
   public filteredState (): Record<string, any> {
