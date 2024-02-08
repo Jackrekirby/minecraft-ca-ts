@@ -110,3 +110,35 @@ export namespace OutputSignalStrengthBlock {
     return 'getOutputPowerStrength' in block
   }
 }
+
+export const getInputSignalStrength = (
+  position: Vec2,
+  blocks: BlockContainer
+): number => {
+  let signalStrength = 0
+  for (const direction of getAllDirections()) {
+    const neighbour: Block = getNeighbourBlock(position, blocks, direction)
+
+    if (OutputPowerBlock.isBlock(neighbour)) {
+      const outputPower = neighbour.getOutputPower(
+        getOppositeDirection(direction)
+      )
+      if ([BinaryPower.Strong, BinaryPower.Weak].includes(outputPower)) {
+        if (OutputSignalStrengthBlock.isBlock(neighbour)) {
+          const powerStrength = neighbour.getOutputPowerStrength(
+            getOppositeDirection(direction)
+          )
+          if (powerStrength == 15) {
+            return 15
+          } else if (powerStrength > signalStrength) {
+            signalStrength = powerStrength
+          }
+        } else {
+          return 15
+        }
+      }
+    }
+  }
+
+  return signalStrength
+}

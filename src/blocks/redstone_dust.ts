@@ -74,17 +74,6 @@ export class RedstoneDust
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
     let newState = { ...this }
-    // let powerStrength = this.powerStrength
-    // for (const direction of getAllDirections()) {
-    //   const neighbour: Block = getNeighbourBlock(position, blocks, direction)
-
-    //   if (isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)) {
-    //     if (neighbour.powerStrength - 1 > powerStrength) {
-    //       powerStrength = neighbour.powerStrength - 1
-    //     }
-    //   }
-    // }
-    // newState.powerStrength = powerStrength
 
     let inputPowerStrength: Record<Direction, number> = {
       [Direction.Up]: 0,
@@ -97,19 +86,21 @@ export class RedstoneDust
 
       let neighbourPowerStrength = 0
       if (
-        OutputSignalStrengthBlock.isBlock(neighbour) &&
-        !isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)
-      ) {
-        neighbourPowerStrength = neighbour.getOutputPowerStrength(
-          getOppositeDirection(direction)
-        )
-      } else if (
         OutputPowerBlock.isBlock(neighbour) &&
         neighbour.getOutputPower(getOppositeDirection(direction)) ===
           BinaryPower.Strong &&
         !isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)
       ) {
-        neighbourPowerStrength = 15
+        if (
+          OutputSignalStrengthBlock.isBlock(neighbour) &&
+          !isBlock<RedstoneDust>(neighbour, BlockType.RedstoneDust)
+        ) {
+          neighbourPowerStrength = neighbour.getOutputPowerStrength(
+            getOppositeDirection(direction)
+          )
+        } else {
+          neighbourPowerStrength = 15
+        }
       }
 
       if (neighbourPowerStrength) {

@@ -13,7 +13,7 @@ import {
 } from './world_loading'
 
 export const clearStorageOnVersionIncrease = () => {
-  const latestVersion = 8
+  const latestVersion = 9
   const savedVersion = Number(localStorage.getItem('version'))
   const hasVersionIncreased =
     isNaN(savedVersion) || savedVersion !== latestVersion

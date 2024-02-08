@@ -91,6 +91,7 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
   }
 
   const handleComplete = (event: MouseEvent): void => {
+    const deleteBlocks = event.shiftKey
     if (hasMetMinimumMovementThreshold) {
       const startPos = vec2Apply(
         canvas.getMouseWorldPosition(lastMouse),
@@ -114,6 +115,9 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
         for (let x = minPos.x; x < maxPos.x + 1; ++x) {
           const v = { x, y }
           copyWorld.setValue(vec2Subtract(v, minPos), blocks.getValue(v))
+          if (deleteBlocks) {
+            blocks.setValue(v, new Air())
+          }
         }
       }
 

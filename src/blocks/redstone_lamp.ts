@@ -19,8 +19,10 @@ import {
 } from '../core/moveable_block'
 import {
   BinaryPower,
+  getInputSignalStrength,
   IsPoweredBlock,
   OutputPowerBlock,
+  OutputSignalStrengthBlock,
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
@@ -33,28 +35,33 @@ export class RedstoneLamp
     MoveableBlock,
     OutputPowerBlock.Traits,
     IsPoweredBlock.Traits,
-    ObserverFilter {
+    ObserverFilter,
+    OutputSignalStrengthBlock.Traits {
   type: BlockType = BlockType.RedstoneLamp
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
   isPowered: boolean
+  internalSignalStrength: number
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
     outputPower = BinaryPower.None,
-    isPowered = false
+    isPowered = false,
+    internalSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
     outputPower?: BinaryPower
     isPowered?: boolean
+    internalSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.isPowered = isPowered
+    this.internalSignalStrength = internalSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -89,6 +96,7 @@ export class RedstoneLamp
     } else {
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
       Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
+      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
       Object.assign(newState, movementUpdateChange.state)
       return new RedstoneLamp(newState)
     }
@@ -107,6 +115,10 @@ export class RedstoneLamp
 
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
+  }
+
+  public getOutputPowerStrength (direction: Direction): number {
+    return this.internalSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

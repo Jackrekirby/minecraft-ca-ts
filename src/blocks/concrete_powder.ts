@@ -21,7 +21,9 @@ import {
 } from '../core/moveable_block'
 import {
   BinaryPower,
+  getInputSignalStrength,
   OutputPowerBlock,
+  OutputSignalStrengthBlock,
   PowerHardness
 } from '../core/powerable_block'
 import {
@@ -43,20 +45,26 @@ export enum GravityMotion {
 }
 
 export class ConcretePowder
-  implements MoveableBlock, OutputPowerBlock.Traits, ObserverFilter {
+  implements
+    MoveableBlock,
+    OutputPowerBlock.Traits,
+    ObserverFilter,
+    OutputSignalStrengthBlock.Traits {
   type: BlockType = BlockType.ConcretePowder
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
   gravityMotion: GravityMotion
   color: Color
+  internalSignalStrength: number
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
     outputPower = BinaryPower.None,
     color = Color.White,
-    gravityMotion = GravityMotion.None
+    gravityMotion = GravityMotion.None,
+    internalSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
@@ -64,12 +72,14 @@ export class ConcretePowder
     isPowered?: boolean
     color?: Color
     gravityMotion?: GravityMotion
+    internalSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.color = color
     this.gravityMotion = gravityMotion
+    this.internalSignalStrength = internalSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -112,6 +122,7 @@ export class ConcretePowder
     } else {
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
 
       const downNeighbour = getNeighbourBlock(position, blocks, Direction.Down)
 
@@ -157,6 +168,10 @@ export class ConcretePowder
 
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
+  }
+
+  public getOutputPowerStrength (direction: Direction): number {
+    return this.internalSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

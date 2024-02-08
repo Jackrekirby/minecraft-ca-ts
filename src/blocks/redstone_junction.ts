@@ -148,7 +148,7 @@ export class RedstoneJunction
   public getOutputPower (direction: Direction): BinaryPower {
     const powerStrength = this.getOutputPowerStrength(direction)
     if (powerStrength > 0) {
-      return BinaryPower.Weak
+      return BinaryPower.Strong
     } else {
       return BinaryPower.None
     }

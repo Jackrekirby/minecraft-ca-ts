@@ -20,7 +20,9 @@ import {
 } from '../core/moveable_block'
 import {
   BinaryPower,
+  getInputSignalStrength,
   OutputPowerBlock,
+  OutputSignalStrengthBlock,
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
@@ -48,29 +50,37 @@ export enum Color {
 }
 
 export class WoolBlock
-  implements MoveableBlock, OutputPowerBlock.Traits, ObserverFilter {
+  implements
+    MoveableBlock,
+    OutputPowerBlock.Traits,
+    ObserverFilter,
+    OutputSignalStrengthBlock.Traits {
   type: BlockType = BlockType.WoolBlock
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
   color: Color
+  internalSignalStrength: number
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
     outputPower = BinaryPower.None,
-    color = Color.White
+    color = Color.White,
+    internalSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
     outputPower?: BinaryPower
     isPowered?: boolean
     color?: Color
+    internalSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.color = color
+    this.internalSignalStrength = internalSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -105,6 +115,7 @@ export class WoolBlock
     } else {
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
       return new WoolBlock(newState)
     }
   }
@@ -122,6 +133,10 @@ export class WoolBlock
 
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
+  }
+
+  public getOutputPowerStrength (direction: Direction): number {
+    return this.internalSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

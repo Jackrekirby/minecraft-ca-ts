@@ -19,7 +19,9 @@ import {
 } from '../core/moveable_block'
 import {
   BinaryPower,
+  getInputSignalStrength,
   OutputPowerBlock,
+  OutputSignalStrengthBlock,
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
@@ -33,25 +35,30 @@ export class TargetBlock
     MoveableBlock,
     OutputPowerBlock.Traits,
     ConnectsToRedstoneDustBlock.Traits,
-    ObserverFilter {
+    ObserverFilter,
+    OutputSignalStrengthBlock.Traits {
   type: BlockType = BlockType.TargetBlock
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
+  internalSignalStrength: number
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
-    outputPower = BinaryPower.None
+    outputPower = BinaryPower.None,
+    internalSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
     outputPower?: BinaryPower
     isPowered?: boolean
+    internalSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
+    this.internalSignalStrength = internalSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -86,6 +93,7 @@ export class TargetBlock
     } else {
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
+      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
       return new TargetBlock(newState)
     }
   }
@@ -103,6 +111,10 @@ export class TargetBlock
 
   public getOutputPower (_direction: Direction): BinaryPower {
     return this.outputPower
+  }
+
+  public getOutputPowerStrength (direction: Direction): number {
+    return this.internalSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

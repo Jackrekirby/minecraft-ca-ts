@@ -234,6 +234,16 @@ const strToVec = (v: string): Vec2 => {
   return { x: Number(x), y: Number(y) }
 }
 
+const getBlocksInQueue = (blocks: BlockContainer, updateQueue: Set<string>) => {
+  const newBlocks: BlockVec[] = []
+  for (const vs of updateQueue) {
+    const v: Vec2 = strToVec(vs)
+    const block: Block = blocks.getValue(v)
+    newBlocks.push({ v, block })
+  }
+  return newBlocks
+}
+
 const addToUpdateQueue = (queue: Set<string>, v: Vec2) => {
   queue.add(vecToStr(v))
   queue.add(vecToStr({ x: v.x + 1, y: v.y }))
@@ -361,6 +371,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   const processLogic = () => {
     let combinedUpdateQueue: Set<string>
+    // console.log(queues)
     if (storage.viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
       if (queues.subtick.size > 0) {
@@ -401,6 +412,13 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
         subtick += 1
         elapsedSubticksInSecond += 1
+        if (subtick > 100) {
+          console.warn(
+            `High number of subticks (${subtick}). Likely a bug! Here are the blocks being updated:`,
+            getBlocksInQueue(blocks, queues.subtick)
+          )
+          break
+        }
       }
 
       storage.subtickState.set(subtick)

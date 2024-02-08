@@ -141,7 +141,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [ ] Investigate webgl canvas context
 - [x] Fix world not displaying on clear/load when tick rate 0
 - [x] Add redstone junction
-- [ ] Make solid blocks support signal strength
+- [x] Make solid blocks support signal strength
 - [x] Add block with variable comparator output signal
 - [x] Stop storage variable initialising themselves on file import
 - [x] Make pickblock goto existing slot on inventory if it exists
@@ -150,6 +150,17 @@ The guide will automatically appear for first time visitors of the website as we
 - [ ] Add block debug tooltip
 - [ ] Add signs that make use of tooltip
 - [ ] Make moving block a type rather than a feature of all blocks
+- [ ] Add all copied blocks to queue
+- [x] Add drag deletion
+- [x] Add max subticks to avoid game freeze
+- [ ] Add grass & dirt
+- [ ] Add crops
+- [ ] Add trees
+- [ ] Add water
+- [ ] Add lava
+- [ ] Add cobble generator
+- [ ] Add tnt
+- [ ] Add dispenser (block copier)
 
 ### webgl canvas
 
