@@ -1,6 +1,5 @@
 import { invisibleRightPad } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
-import { convertObjectToString } from './globals'
 import { storage } from './storage'
 const debugPanel = document.getElementById('debug-panel') as HTMLButtonElement
 
@@ -28,9 +27,9 @@ export const updateDebugInfo = () => {
     : ''
 
   const variables = [
-    `${invisibleRightPad('Selected', varWidth - 2)} ${convertObjectToString(
-      (storage.selectedBlockState.get() as unknown) as Record<string, string>
-    )}`,
+    // `${invisibleRightPad('Selected', varWidth - 2)} ${convertObjectToString(
+    //   (storage.selectedBlockState.get() as unknown) as Record<string, string>
+    // )}`,
     `${invisibleRightPad('Tick', varWidth + 2)} ${storage.tickState.get()}`,
     `${invisibleRightPad(
       'Subtick',

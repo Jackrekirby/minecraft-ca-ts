@@ -18,6 +18,7 @@ import {
   getNeighbourBlock,
   getOppositeRelativeDirection
 } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { createObjectSubset } from '../utils/general'
 import { ObserverFilter } from './observer_block'
@@ -178,3 +179,4 @@ export class RedstoneComparator
 }
 
 addCreateBlockFunction(BlockType.RedstoneComparator, RedstoneComparator)
+addBlockVariant(new RedstoneComparator({}))

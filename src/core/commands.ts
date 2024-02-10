@@ -1,8 +1,8 @@
 import { StringDict } from '../containers/array2d'
 import { Canvas } from '../rendering/canvas'
-import { isEnum } from '../utils/general'
+import { getAllBlockVariants, getBlockFromAlias } from '../utils/block_variants'
 import { decompressObject, LocalStorageVariable } from '../utils/save'
-import { Block, BlockContainer, BlockState, BlockType } from './block'
+import { Block, BlockContainer, getBlockName } from './block'
 import {
   commandFailure,
   commandInfo,
@@ -11,7 +11,7 @@ import {
 } from './command_line'
 
 import { updateCanvasBlocks } from './game_loop'
-import { convertObjectToString, convertStringToObject } from './globals'
+import { setInventorySlot } from './inventory'
 import { storage } from './storage'
 import {
   createDemoWorld,
@@ -212,51 +212,48 @@ export const initialiseCommands = (
   })
 
   commandManager.createCommand('/block list', async _ => {
-    const blockList = (Object.values(BlockType) as String[]).join(', ')
+    const blockList = getAllBlockVariants()
+      .map(getBlockName)
+      .join(', ')
+    // (Object.values(BlockType) as String[]).join(', ')
     return commandInfo(`blocks: ${blockList}`)
   })
 
-  commandManager.createCommand('/block pick {type:string}', async input => {
-    const block = (convertStringToObject(input.type) as unknown) as BlockState
-    if (isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))) {
-      storage.selectedBlockState.set(block)
-      return commandSuccess(
-        `picked block ${convertObjectToString(
-          (block as unknown) as Record<string, string>
-        )}`
-      )
+  commandManager.createCommand('/block pick {name:string}', async input => {
+    // const block = (convertStringToObject(input.type) as unknown) as BlockState
+    const block = getBlockFromAlias(input.name)
+    if (block) {
+      // storage.selectedBlockState.set(block)
+      setInventorySlot(block)
+      return commandSuccess(`picked block ${input.name}`)
     } else {
-      return commandFailure(
-        `cannot pick invalid block ${convertObjectToString(
-          (block as unknown) as Record<string, string>
-        )}`
-      )
+      return commandFailure(`cannot pick invalid block ${input.name}`)
     }
   })
 
-  commandManager.createCommand(
-    '/block pick {type:string} {meta:string}',
-    async input => {
-      const block = (convertStringToObject(
-        `${input.type} ${input.meta}`
-      ) as unknown) as BlockState
-      console.log(block)
-      if (
-        isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))
-      ) {
-        storage.selectedBlockState.set(block)
-        return commandSuccess(
-          `picked block ${convertObjectToString(
-            (block as unknown) as Record<string, string>
-          )}`
-        )
-      } else {
-        return commandFailure(
-          `cannot pick invalid block ${convertObjectToString(
-            (block as unknown) as Record<string, string>
-          )}`
-        )
-      }
-    }
-  )
+  // commandManager.createCommand(
+  //   '/block pick {type:string} {meta:string}',
+  //   async input => {
+  //     const block = (convertStringToObject(
+  //       `${input.type} ${input.meta}`
+  //     ) as unknown) as BlockState
+  //     console.log(block)
+  //     if (
+  //       isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))
+  //     ) {
+  //       storage.selectedBlockState.set(block)
+  //       return commandSuccess(
+  //         `picked block ${convertObjectToString(
+  //           (block as unknown) as Record<string, string>
+  //         )}`
+  //       )
+  //     } else {
+  //       return commandFailure(
+  //         `cannot pick invalid block ${convertObjectToString(
+  //           (block as unknown) as Record<string, string>
+  //         )}`
+  //       )
+  //     }
+  //   }
+  // )
 }

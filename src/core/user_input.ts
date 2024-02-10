@@ -149,7 +149,7 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
 
 const formatObject = (
   block: Record<string, any>,
-  joiner: string = '@'
+  isNested: boolean = false
 ): string => {
   return Object.entries(block)
     .map(([key, value]) => {
@@ -159,15 +159,17 @@ const formatObject = (
         value !== null
       ) {
         // Handle nested objects recursively
-        return `${key}={${formatObject(value, ' ')}}`
+        //
+        // console.log(value, formatObject(value, ' '))
+        return `${key}=${formatObject(value, true)}`
       } else if (Array.isArray(value)) {
         // Surround arrays with angled brackets
-        return `${key}=[${value.join(',')}]`
+        return `${key}=[${value.join(', ')}]`
       } else {
         return `${key}=${value}`
       }
     })
-    .join(joiner)
+    .join(isNested ? ' ' : '@')
 }
 
 export const initBlockEventListeners = (
@@ -210,9 +212,13 @@ export const initBlockEventListeners = (
 
       if (!event.ctrlKey && block.interact) {
         const newBlock = block.interact()
-        blocks.setValue(pi, newBlock)
-        blocks.setValue(pi, newBlock.update(pi, blocks))
-        addToTickQueue(pi)
+        if (typeof newBlock === 'string') {
+        } else {
+          blocks.setValue(pi, newBlock)
+          blocks.setValue(pi, newBlock.update(pi, blocks))
+          addToTickQueue(pi)
+        }
+
         // updateCanvas()
       } else {
         // const copyState: BlockState = block.copy
@@ -263,18 +269,38 @@ export const initBlockEventListeners = (
       const block = blocks.getValue(v)
 
       const x = formatObject(block)
+      // console.log(x)
 
       if (x !== lastBlockText) {
+        lastBlockText = x
         blockStateDebugElement.innerHTML = ''
         x.split('@').map(text => {
-          const item = document.createElement('p')
-          item.textContent = text
+          const key = text.split('=').slice(0, 1)
+          const value = text
+            .split('=')
+            .slice(1)
+            .join('=')
+          console.log({ text, key, value })
+
+          const item = document.createElement('div')
+          item.className = 'item'
+          const label = document.createElement('label')
+          const input = document.createElement('span')
+          input.className = 'input'
+          input.contentEditable = 'true'
+          const id = `block-field-${key}`
+          input.id = id
+          label.textContent = key + ':'
+          label.htmlFor = id
+          input.textContent = value
+          item.appendChild(label)
+          item.appendChild(input)
           blockStateDebugElement.appendChild(item)
         })
       }
     }
 
-    const lastBlockText = ''
+    let lastBlockText = ''
     blockStateDebugInterval = setInterval(updateBlockDebugState, 100)
 
     updateBlockDebugState()

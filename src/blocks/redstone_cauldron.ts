@@ -22,6 +22,7 @@ import {
   CanvasGridCellLayer,
   CanvasGridItem
 } from '../rendering/canvas'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
@@ -130,3 +131,4 @@ export class RedstoneCauldron
 }
 
 addCreateBlockFunction(BlockType.RedstoneCauldron, RedstoneCauldron)
+addBlockVariant(new RedstoneCauldron({}))

@@ -13,6 +13,7 @@ import {
   PowerHardness
 } from '../core/powerable_block'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
@@ -85,3 +86,4 @@ export class RedstoneTorch
 }
 
 addCreateBlockFunction(BlockType.RedstoneTorch, RedstoneTorch)
+addBlockVariant(new RedstoneTorch({}))

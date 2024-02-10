@@ -2929,152 +2929,158 @@
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_down": {
+  "sign": {
     "x": 137,
+    "y": 715,
+    "w": 16,
+    "h": 16
+  },
+  "sticky_piston_head_down": {
+    "x": 171,
     "y": 715,
     "w": 16,
     "h": 16
   },
   "sticky_piston_head_extending_down": {
-    "x": 171,
-    "y": 715,
-    "w": 16,
-    "h": 16
-  },
-  "sticky_piston_head_extending_left": {
     "x": 205,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_extending_right": {
+  "sticky_piston_head_extending_left": {
     "x": 239,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_extending_up": {
+  "sticky_piston_head_extending_right": {
     "x": 273,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_left": {
+  "sticky_piston_head_extending_up": {
     "x": 307,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_retracting_down": {
+  "sticky_piston_head_left": {
     "x": 341,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_retracting_left": {
+  "sticky_piston_head_retracting_down": {
     "x": 375,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_retracting_right": {
+  "sticky_piston_head_retracting_left": {
     "x": 409,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_retracting_up": {
+  "sticky_piston_head_retracting_right": {
     "x": 443,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_right": {
+  "sticky_piston_head_retracting_up": {
     "x": 477,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_head_up": {
+  "sticky_piston_head_right": {
     "x": 511,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_down": {
+  "sticky_piston_head_up": {
     "x": 545,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_extended_down": {
+  "sticky_piston_off_down": {
     "x": 579,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_extended_left": {
+  "sticky_piston_off_extended_down": {
     "x": 613,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_extended_right": {
+  "sticky_piston_off_extended_left": {
     "x": 647,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_extended_up": {
+  "sticky_piston_off_extended_right": {
     "x": 681,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_left": {
+  "sticky_piston_off_extended_up": {
     "x": 715,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_right": {
+  "sticky_piston_off_left": {
     "x": 749,
     "y": 715,
     "w": 16,
     "h": 16
   },
-  "sticky_piston_off_up": {
+  "sticky_piston_off_right": {
     "x": 1,
     "y": 749,
     "w": 16,
     "h": 16
   },
-  "target_block": {
+  "sticky_piston_off_up": {
     "x": 35,
     "y": 749,
     "w": 16,
     "h": 16
   },
-  "white_concrete_powder": {
+  "target_block": {
     "x": 69,
     "y": 749,
     "w": 16,
     "h": 16
   },
-  "white_wool": {
+  "white_concrete_powder": {
     "x": 103,
     "y": 749,
     "w": 16,
     "h": 16
   },
-  "yellow_concrete_powder": {
+  "white_wool": {
     "x": 137,
     "y": 749,
     "w": 16,
     "h": 16
   },
-  "yellow_wool": {
+  "yellow_concrete_powder": {
     "x": 171,
+    "y": 749,
+    "w": 16,
+    "h": 16
+  },
+  "yellow_wool": {
+    "x": 205,
     "y": 749,
     "w": 16,
     "h": 16

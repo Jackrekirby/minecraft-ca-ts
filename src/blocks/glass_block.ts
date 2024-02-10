@@ -21,6 +21,7 @@ import {
   CanvasGridCellLayer,
   CanvasGridItem
 } from '../rendering/canvas'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
 
@@ -94,3 +95,4 @@ export class GlassBlock implements MoveableBlock, ObserverFilter {
 }
 
 addCreateBlockFunction(BlockType.GlassBlock, GlassBlock)
+addBlockVariant(new GlassBlock({}))

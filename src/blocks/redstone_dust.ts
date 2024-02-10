@@ -25,6 +25,7 @@ import {
   CanvasGridItem
 } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 
 export namespace ConnectsToRedstoneDustBlock {
@@ -248,3 +249,4 @@ export class RedstoneDust
 }
 
 addCreateBlockFunction(BlockType.RedstoneDust, RedstoneDust)
+addBlockVariant(new RedstoneDust({}))

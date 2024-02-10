@@ -6,6 +6,7 @@ import {
   OutputPowerBlock,
   PowerHardness
 } from '../core/powerable_block'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
@@ -57,3 +58,4 @@ export class Lever
 }
 
 addCreateBlockFunction(BlockType.Lever, Lever)
+addBlockVariant(new Lever({}))

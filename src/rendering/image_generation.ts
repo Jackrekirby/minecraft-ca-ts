@@ -130,6 +130,9 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   redstone_cauldron: {
     isDirectional: false
+  },
+  sign: {
+    isDirectional: false
   }
 }
 

@@ -26,6 +26,7 @@ import {
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 
 import { ObserverFilter } from './observer_block'
@@ -47,6 +48,27 @@ export enum Color {
   LightGray = 'light_gray',
   Gray = 'gray',
   Black = 'black'
+}
+
+export const getColors = (): Color[] => {
+  return [
+    Color.Red,
+    Color.Orange,
+    Color.Yellow,
+    Color.Lime,
+    Color.Green,
+    Color.Cyan,
+    Color.LightBlue,
+    Color.Blue,
+    Color.Purple,
+    Color.Magenta,
+    Color.Pink,
+    Color.Brown,
+    Color.White,
+    Color.LightGray,
+    Color.Gray,
+    Color.Black
+  ]
 }
 
 export class WoolBlock
@@ -151,6 +173,10 @@ export class WoolBlock
     return { type: this.type, color: this.color } as BlockState
   }
 
+  public getName (): string {
+    return `${this.color}_wool`
+  }
+
   public filteredState (): Record<string, any> {
     return {
       type: this.type,
@@ -162,3 +188,5 @@ export class WoolBlock
 }
 
 addCreateBlockFunction(BlockType.WoolBlock, WoolBlock)
+
+getColors().forEach(color => addBlockVariant(new WoolBlock({ color })))

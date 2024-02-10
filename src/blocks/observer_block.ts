@@ -24,6 +24,7 @@ import {
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { areObjectsEqual, createObjectSubset } from '../utils/general'
@@ -171,6 +172,11 @@ export class ObserverBlock
       // not lastObservation
     ])
   }
+
+  public getName (): string {
+    return `observer`
+  }
 }
 
 addCreateBlockFunction(BlockType.ObserverBlock, ObserverBlock)
+addBlockVariant(new ObserverBlock({}))

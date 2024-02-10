@@ -147,7 +147,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Make pickblock goto existing slot on inventory if it exists
 - [x] Make pickblock not copy state into inventory slot
 - [x] Save inventory state in local storage
-- [ ] Add block debug tooltip
+- [x] Add block debug tooltip
 - [ ] Add signs that make use of tooltip
 - [ ] Make moving block a type rather than a feature of all blocks
 - [x] Add all copied blocks to queue
@@ -164,6 +164,8 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Fix inventory disappear whilst writing commands
 - [x] Fix infinite subticks with solid block internal power state
 - [x] Improve debug tools for infinite subticks to isolate blocks at fault
+- [x] Add block name aliasing
+- [ ] Make editable block state debug
 
 ### webgl canvas
 

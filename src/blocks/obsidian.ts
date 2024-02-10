@@ -7,6 +7,7 @@ import {
   OutputPowerBlock,
   PowerHardness
 } from '../core/powerable_block'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 
@@ -52,3 +53,4 @@ export class Obsidian implements OutputPowerBlock.Traits {
 }
 
 addCreateBlockFunction(BlockType.Obsidian, Obsidian)
+addBlockVariant(new Obsidian({}))

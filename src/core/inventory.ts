@@ -1,14 +1,12 @@
 import { TileInfo, tilemap } from '../images/tilemap'
 import { CanvasGridCellLayer, CanvasGridItem } from '../rendering/canvas'
+import { getAllBlockVariants } from '../utils/block_variants'
 import { createBlock } from '../utils/create_block'
+import { snakeCaseToWords } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
-import { Block, BlockContainer, BlockState } from './block'
-import { convertObjectToString } from './globals'
+import { Block, BlockContainer, BlockState, getBlockName } from './block'
 import { storage } from './storage'
-import {
-  createEmptyBlockContainer,
-  listSelectableBlocks
-} from './world_loading'
+import { createEmptyBlockContainer } from './world_loading'
 
 const blockSelectionPanel = document.getElementById(
   'block-selection-panel'
@@ -125,9 +123,10 @@ const createBlockItemRaw = (
     }
   }
 
-  tooltipDiv.textContent = convertObjectToString(
-    (blockState as unknown) as Record<string, string>
-  )
+  tooltipDiv.textContent = createToolTipText(block)
+  // convertObjectToString(
+  //   (blockState as unknown) as Record<string, string>
+  // )
 
   return containerDiv
 }
@@ -211,9 +210,13 @@ export const setInventorySlot = (block: Block) => {
   blockElement.click()
 }
 
+const createToolTipText = (block: Block) => {
+  return snakeCaseToWords(getBlockName(block))
+}
+
 const gotoExistingSlotItem = (blockState: BlockState) => {
-  const currentTooltipText = convertObjectToString(
-    (blockState as unknown) as Record<string, string>
+  const currentTooltipText = createToolTipText(
+    createBlock(blockState.type, blockState)
   )
 
   const existingInventorySlotIndex = Array.from(
@@ -261,7 +264,7 @@ const setInventorySlotOnClick = (
 
 export const initialiseInventory = (images: Map<string, HTMLImageElement>) => {
   const emptyWorld: BlockContainer = createEmptyBlockContainer()
-  const blocks = listSelectableBlocks()
+  const blocks = getAllBlockVariants()
 
   storage.inventorySlots = new LocalStorageVariable<BlockState[]>({
     defaultValue: blocks.slice(0, 9).map(createCopyBlock),

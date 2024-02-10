@@ -17,6 +17,8 @@ body {
   background-color: white;
   margin: 0;
   padding: 0;
+  height: 100vh;
+  width: 100vw;
   overflow: hidden;
   cursor: url('./src/images/ui/cursor.png'), auto;
 }
@@ -365,8 +367,30 @@ canvas {
   justify-content: center;
 }
 
-#block-state-debug > p {
+#block-state-debug .item {
   margin: 4px 8px;
+
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+#block-state-debug label {
+  color: rgba(255, 255, 255, 0.6);
+}
+
+#block-state-debug .input {
+  display: inline-block;
+  border: none;
+  outline: none;
+  color: white;
+  min-width: 16px;
+  width: auto;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin-left: 4px;
+  padding: 2px 4px;
+  border-radius: 4px;
 }
 
 #inventory-wrapper {

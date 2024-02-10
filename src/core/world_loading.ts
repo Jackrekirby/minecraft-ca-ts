@@ -1,21 +1,4 @@
 import { Air } from '../blocks/air'
-import { Button } from '../blocks/button'
-import { ConcretePowder } from '../blocks/concrete_powder'
-import { GlassBlock } from '../blocks/glass_block'
-import { Lever } from '../blocks/lever'
-import { ObserverBlock } from '../blocks/observer_block'
-import { Obsidian } from '../blocks/obsidian'
-import { Piston } from '../blocks/piston'
-import { RedstoneBlock } from '../blocks/redstone_block'
-import { RedstoneCauldron } from '../blocks/redstone_cauldron'
-import { RedstoneComparator } from '../blocks/redstone_compator'
-import { RedstoneDust } from '../blocks/redstone_dust'
-import { RedstoneJunction } from '../blocks/redstone_junction'
-import { RedstoneLamp } from '../blocks/redstone_lamp'
-import { RedstoneRepeater } from '../blocks/redstone_repeater'
-import { RedstoneTorch } from '../blocks/redstone_torch'
-import { TargetBlock } from '../blocks/target_block'
-import { Color, WoolBlock } from '../blocks/wool_block'
 import {
   ChunkContainer,
   Dict2D,
@@ -44,61 +27,61 @@ export const loadWorldSave = async () => {
   }
 }
 
-export const listSelectableBlocks = (): Block[] => {
-  const blocks: Block[] = [
-    new RedstoneBlock({}),
-    new RedstoneTorch({}),
-    new GlassBlock({}),
-    new RedstoneLamp({}),
-    new Piston({}),
-    new RedstoneRepeater({}),
-    new RedstoneDust({}),
-    new Lever({}),
-    new Button({}),
-    new Piston({ isSticky: true }),
-    new ObserverBlock({}),
-    new Obsidian({}),
-    new TargetBlock({}),
-    new RedstoneComparator({}),
-    new RedstoneJunction({}),
-    new RedstoneCauldron({})
-  ]
+// export const listSelectableBlocks = (): Block[] => {
+//   const blocks: Block[] = [
+//     new RedstoneBlock({}),
+//     new RedstoneTorch({}),
+//     new GlassBlock({}),
+//     new RedstoneLamp({}),
+//     new Piston({}),
+//     new RedstoneRepeater({}),
+//     new RedstoneDust({}),
+//     new Lever({}),
+//     new Button({}),
+//     new Piston({ isSticky: true }),
+//     new ObserverBlock({}),
+//     new Obsidian({}),
+//     new TargetBlock({}),
+//     new RedstoneComparator({}),
+//     new RedstoneJunction({}),
+//     new RedstoneCauldron({})
+//   ]
 
-  Object.values(Color).forEach((color: string, x: number) => {
-    blocks.push(new WoolBlock({ color: color as Color }))
-  })
+//   getColors().forEach(color => {
+//     blocks.push(new WoolBlock({ color }))
+//   })
 
-  Object.values(Color).forEach((color: string, x: number) => {
-    blocks.push(new ConcretePowder({ color: color as Color }))
-  })
+//   getColors().forEach(color => {
+//     blocks.push(new ConcretePowder({ color }))
+//   })
 
-  return blocks
-}
+//   return blocks
+// }
 
-export const placeAllBlocks = (blocks: BlockContainer) => {
-  const allBlocks = listSelectableBlocks()
+// export const placeAllBlocks = (blocks: BlockContainer) => {
+//   const allBlocks = listSelectableBlocks()
 
-  allBlocks
-    .filter(
-      block =>
-        ![BlockType.ConcretePowder, BlockType.WoolBlock].includes(block.type)
-    )
-    .forEach((block, x) => {
-      blocks.setValue({ x, y: 2 }, block)
-    })
+//   allBlocks
+//     .filter(
+//       block =>
+//         ![BlockType.ConcretePowder, BlockType.WoolBlock].includes(block.type)
+//     )
+//     .forEach((block, x) => {
+//       blocks.setValue({ x, y: 2 }, block)
+//     })
 
-  allBlocks
-    .filter(block => [BlockType.WoolBlock].includes(block.type))
-    .forEach((block, x) => {
-      blocks.setValue({ x, y: 0 }, block)
-    })
+//   allBlocks
+//     .filter(block => [BlockType.WoolBlock].includes(block.type))
+//     .forEach((block, x) => {
+//       blocks.setValue({ x, y: 0 }, block)
+//     })
 
-  allBlocks
-    .filter(block => [BlockType.ConcretePowder].includes(block.type))
-    .forEach((block, x) => {
-      blocks.setValue({ x, y: 1 }, block)
-    })
-}
+//   allBlocks
+//     .filter(block => [BlockType.ConcretePowder].includes(block.type))
+//     .forEach((block, x) => {
+//       blocks.setValue({ x, y: 1 }, block)
+//     })
+// }
 export const loadChunks = (
   chunks: StringDict<Block>,
   blocks: BlockContainer

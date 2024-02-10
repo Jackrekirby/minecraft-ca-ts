@@ -28,6 +28,7 @@ import { BinaryPower, OutputPowerBlock } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 
 import { getNeighbourBlock, getNeighbourBlocks } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { zipArrays } from '../utils/general'
 import { ObserverFilter } from './observer_block'
@@ -216,6 +217,11 @@ export class Piston implements DirectionalBlock, MoveableBlock, ObserverFilter {
     return { type: this.type, isSticky: this.isSticky } as BlockState
   }
 
+  public getName (): string {
+    const sticky = this.isSticky ? 'Sticky' : ''
+    return `${sticky}${this.type}`
+  }
+
   public filteredState (): Record<string, any> {
     return {
       type: this.type,
@@ -228,3 +234,9 @@ export class Piston implements DirectionalBlock, MoveableBlock, ObserverFilter {
 }
 
 addCreateBlockFunction(BlockType.Piston, Piston)
+
+const variants = [
+  new Piston({ isSticky: false }),
+  new Piston({ isSticky: true })
+]
+variants.forEach(addBlockVariant)

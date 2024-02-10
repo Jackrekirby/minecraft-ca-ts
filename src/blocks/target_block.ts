@@ -25,6 +25,7 @@ import {
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ObserverFilter } from './observer_block'
@@ -139,3 +140,4 @@ export class TargetBlock
 }
 
 addCreateBlockFunction(BlockType.TargetBlock, TargetBlock)
+addBlockVariant(new TargetBlock({}))

@@ -19,6 +19,7 @@ import {
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
 import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
@@ -168,3 +169,4 @@ export class RedstoneJunction
 }
 
 addCreateBlockFunction(BlockType.RedstoneJunction, RedstoneJunction)
+addBlockVariant(new RedstoneJunction({}))

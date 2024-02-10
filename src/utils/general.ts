@@ -304,3 +304,14 @@ export const downloadFile = (value: string, fileName: string): void => {
   document.body.removeChild(a)
   URL.revokeObjectURL(url)
 }
+
+export const toSnakeCase = (input: string): string => {
+  return input.replace(/([a-z])([A-Z])/g, '$1_$2').toLowerCase()
+}
+
+export const snakeCaseToWords = (input: string): string => {
+  return input
+    .split('_')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+    .join(' ')
+}

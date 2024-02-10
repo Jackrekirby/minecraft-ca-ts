@@ -32,11 +32,12 @@ import {
   CanvasGridItem
 } from '../rendering/canvas'
 import { getNeighbourBlock } from '../utils/block_fetching'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { Air } from './air'
 import { ObserverFilter } from './observer_block'
-import { Color } from './wool_block'
+import { Color, getColors } from './wool_block'
 
 export enum GravityMotion {
   None = 'none',
@@ -190,6 +191,10 @@ export class ConcretePowder
     return { type: this.type, color: this.color } as BlockState
   }
 
+  public getName (): string {
+    return `${this.color}_${this.type}`
+  }
+
   public filteredState (): Record<string, any> {
     return {
       type: this.type,
@@ -200,3 +205,4 @@ export class ConcretePowder
 }
 
 addCreateBlockFunction(BlockType.ConcretePowder, ConcretePowder)
+getColors().forEach(color => addBlockVariant(new ConcretePowder({ color })))

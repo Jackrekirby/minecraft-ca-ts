@@ -6,6 +6,7 @@ import {
   OutputPowerBlock,
   PowerHardness
 } from '../core/powerable_block'
+import { addBlockVariant } from '../utils/block_variants'
 
 import { addCreateBlockFunction } from '../utils/create_block'
 import { createObjectSubset } from '../utils/general'
@@ -78,3 +79,4 @@ export class Button
 }
 
 addCreateBlockFunction(BlockType.Button, Button)
+addBlockVariant(new Button({}))

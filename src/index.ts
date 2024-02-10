@@ -1,5 +1,6 @@
 import { Vec2, vec2Add, vec2Apply, vec2Zero } from './containers/vec2'
 import { Block, BlockContainer, BlockType } from './core/block'
+import { loadBlockFiles } from './core/block_import'
 import { initialiseCommands } from './core/commands'
 import {
   CommandManager,
@@ -38,6 +39,7 @@ const createCanvas = async (textureAtlas: Map<string, HTMLImageElement>) => {
 
 const main = async () => {
   const reset = clearStorageOnVersionIncrease()
+  loadBlockFiles()
   initialiseStorage()
   initialiseDebugPanel()
   initialiseCommandLine()

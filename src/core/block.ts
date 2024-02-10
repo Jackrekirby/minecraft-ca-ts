@@ -1,6 +1,7 @@
 import { ChunkContainer } from '../containers/array2d'
 import { Vec2 } from '../containers/vec2'
 import { CanvasGridItem } from '../rendering/canvas'
+import { toSnakeCase } from '../utils/general'
 import { Direction } from './direction'
 
 export type BlockContainer = ChunkContainer<Block>
@@ -30,7 +31,8 @@ export enum BlockType {
   TargetBlock = 'TargetBlock',
   RedstoneComparator = 'RedstoneComparator',
   RedstoneJunction = 'RedstoneJunction',
-  RedstoneCauldron = 'RedstoneCauldron'
+  RedstoneCauldron = 'RedstoneCauldron',
+  SignBlock = 'SignBlock'
 }
 
 export interface BlockState {
@@ -41,13 +43,14 @@ export interface Block extends BlockState {
   update: (position: Vec2, blocks: BlockContainer) => Block
   subupdate: (position: Vec2, blocks: BlockContainer) => Block
   getTextureName: (position: Vec2, blocks: BlockContainer) => CanvasGridItem
-  // TODO make power redstone interface
-  // direction relative to the block you are requesting power from
-  // isOutputtingPower: (direction: Direction) => boolean
-  // general traits
-  getMovementMethod: () => BlockMovement
+  getMovementMethod: () => BlockMovement // TODO put in moveableBlock interface
   copy?: () => BlockState
-  interact?: () => Block
+  getName?: () => string
+  interact?: () => Block | string // if string display text
+}
+
+export const getBlockName = (block: Block): string => {
+  return toSnakeCase(block.getName ? block.getName() : block.type)
 }
 
 export function isBlock<T extends Block> (
