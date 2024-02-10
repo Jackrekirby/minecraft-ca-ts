@@ -120,21 +120,25 @@ export const getInputSignalStrength = (
     const neighbour: Block = getNeighbourBlock(position, blocks, direction)
 
     if (OutputPowerBlock.isBlock(neighbour)) {
-      const outputPower = neighbour.getOutputPower(
-        getOppositeDirection(direction)
-      )
-      if ([BinaryPower.Strong, BinaryPower.Weak].includes(outputPower)) {
-        if (OutputSignalStrengthBlock.isBlock(neighbour)) {
-          const powerStrength = neighbour.getOutputPowerStrength(
-            getOppositeDirection(direction)
-          )
-          if (powerStrength == 15) {
+      const oppositeDirection = getOppositeDirection(direction)
+
+      // TODO: assuming this is for blocks, they do not output soft power
+      // so this should really be getOutputSignalStrengthOfSolidBlock
+      if (neighbour.getPowerHardness(direction) === PowerHardness.Hard) {
+        const outputPower = neighbour.getOutputPower(oppositeDirection)
+        if ([BinaryPower.Strong, BinaryPower.Weak].includes(outputPower)) {
+          if (OutputSignalStrengthBlock.isBlock(neighbour)) {
+            const powerStrength = neighbour.getOutputPowerStrength(
+              getOppositeDirection(direction)
+            )
+            if (powerStrength == 15) {
+              return 15
+            } else if (powerStrength > signalStrength) {
+              signalStrength = powerStrength
+            }
+          } else {
             return 15
-          } else if (powerStrength > signalStrength) {
-            signalStrength = powerStrength
           }
-        } else {
-          return 15
         }
       }
     }

@@ -150,7 +150,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [ ] Add block debug tooltip
 - [ ] Add signs that make use of tooltip
 - [ ] Make moving block a type rather than a feature of all blocks
-- [ ] Add all copied blocks to queue
+- [x] Add all copied blocks to queue
 - [x] Add drag deletion
 - [x] Add max subticks to avoid game freeze
 - [ ] Add grass & dirt
@@ -161,6 +161,9 @@ The guide will automatically appear for first time visitors of the website as we
 - [ ] Add cobble generator
 - [ ] Add tnt
 - [ ] Add dispenser (block copier)
+- [x] Fix inventory disappear whilst writing commands
+- [x] Fix infinite subticks with solid block internal power state
+- [x] Improve debug tools for infinite subticks to isolate blocks at fault
 
 ### webgl canvas
 

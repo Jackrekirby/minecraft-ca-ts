@@ -1,11 +1,12 @@
 import { Air } from '../blocks/air'
 import { ConcretePowder, GravityMotion } from '../blocks/concrete_powder'
 import { Dict2D } from '../containers/array2d'
-import { Vec2 } from '../containers/vec2'
+import { Vec2, vec2Add } from '../containers/vec2'
 import { Canvas, CanvasGridItem } from '../rendering/canvas'
 import { areObjectsEqual, now, sleep } from '../utils/general'
 import { Block, BlockContainer, BlockType, isBlock } from './block'
 import { clearFallingBlocksRequested } from './commands'
+import { directionToVec2, getAllDirections } from './direction'
 import { storage } from './storage'
 
 export class Game {
@@ -332,6 +333,23 @@ const appendSet = <T>(set1: Set<T>, set2: Set<T>) => {
   }
 }
 
+const filterQueueToThoseWithoutNeighbours = (queue: Set<string>) => {
+  const positions: Vec2[] = []
+  for (const vs of queue) {
+    const v: Vec2 = strToVec(vs)
+
+    const hasAllNeighbours = getAllDirections().every(direction => {
+      const offset: Vec2 = directionToVec2(direction)
+      return queue.has(vecToStr(vec2Add(v, offset)))
+    })
+
+    if (hasAllNeighbours) {
+      positions.push(v)
+    }
+  }
+  return positions
+}
+
 export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   let subtick = 0
   let tick = 0
@@ -366,6 +384,26 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     elapsedUpdatesInSecond = 0
   }, 1000)
 
+  const areSubticksExcessive = () => {
+    if (subtick > 99) {
+      const neighbouredPositions = filterQueueToThoseWithoutNeighbours(
+        queues.subtick
+      )
+      console.warn(
+        `High number of subticks (${subtick}). Likely a bug! Queue length (${neighbouredPositions.length})`
+      )
+      console.groupCollapsed('Subtick queue at max subticks:')
+      neighbouredPositions.forEach(v =>
+        console.log(v, { ...blocks.getValue(v) })
+      )
+      console.groupEnd()
+      if (subtick > 100) {
+        return true
+      }
+    }
+    return false
+  }
+
   // queue items from a tick need to go to next tick and subtick
   // queue items from a subtick become the next subtick queue AND need to be appended to tick quue
 
@@ -374,7 +412,7 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
     // console.log(queues)
     if (storage.viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
-      if (queues.subtick.size > 0) {
+      if (queues.subtick.size > 0 && !areSubticksExcessive()) {
         // while there are subticks process them
         elapsedUpdatesInSecond += queues.subtick.size
         combinedUpdateQueue = queues.subtick
@@ -412,11 +450,8 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
         subtick += 1
         elapsedSubticksInSecond += 1
-        if (subtick > 100) {
-          console.warn(
-            `High number of subticks (${subtick}). Likely a bug! Here are the blocks being updated:`,
-            getBlocksInQueue(blocks, queues.subtick)
-          )
+
+        if (areSubticksExcessive()) {
           break
         }
       }

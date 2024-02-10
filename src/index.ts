@@ -116,10 +116,13 @@ const main = async () => {
         )
 
         const selectedBlocks: BlockContainer = storage.selectedBlockStorage.get()
-        console.log('paste selected blocks', selectedBlocks)
+        // console.log('paste selected blocks', selectedBlocks)
         selectedBlocks.foreach((block: Block, v: Vec2) => {
           if (block.type === BlockType.Air) return
-          blocks.setValue(vec2Add(v, position), block)
+          const newPosition = vec2Add(v, position)
+          blocks.setValue(newPosition, block)
+          // add all pasted blocks and their neighbours to queue
+          addToTickQueue(newPosition)
         })
       }
     } else {

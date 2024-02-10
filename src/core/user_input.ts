@@ -4,6 +4,7 @@ import { Canvas } from '../rendering/canvas'
 import { createBlock } from '../utils/create_block'
 import { addClickHandlerWithDragCheck } from '../utils/general'
 import { Block, BlockContainer, BlockType } from './block'
+import { isCommandLineCurrentlyVisible } from './command_line'
 import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
 import { setInventorySlot, toggleInventoryVisibility } from './inventory'
@@ -146,6 +147,29 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
   canvas.canvas.addEventListener('pointerleave', handleComplete)
 }
 
+const formatObject = (
+  block: Record<string, any>,
+  joiner: string = '@'
+): string => {
+  return Object.entries(block)
+    .map(([key, value]) => {
+      if (
+        typeof value === 'object' &&
+        !Array.isArray(value) &&
+        value !== null
+      ) {
+        // Handle nested objects recursively
+        return `${key}={${formatObject(value, ' ')}}`
+      } else if (Array.isArray(value)) {
+        // Surround arrays with angled brackets
+        return `${key}=[${value.join(',')}]`
+      } else {
+        return `${key}=${value}`
+      }
+    })
+    .join(joiner)
+}
+
 export const initBlockEventListeners = (
   canvas: Canvas,
   blocks: BlockContainer,
@@ -214,21 +238,69 @@ export const initBlockEventListeners = (
     // updateCanvas()
   }
 
-  canvasElement.addEventListener('contextmenu', function (event) {
-    // right click
-    event.preventDefault() // Prevent the default context menu from appearing
-    deleteBlock()
-  })
-
   addClickHandlerWithDragCheck(canvasElement, placeBlock, 8)
 
+  const blockStateDebugElement = document.getElementById('block-state-debug')!
+  let blockStateDebugInterval: NodeJS.Timeout
+  const handleBlockStateDebug = (event: MouseEvent): void => {
+    const pixelRatio = window.devicePixelRatio || 1
+    const mouse: Vec2 = {
+      x: event.offsetX * pixelRatio,
+      y: event.offsetY * pixelRatio
+    }
+
+    const v: Vec2 = vec2Apply(canvas.getMouseWorldPosition(mouse), Math.floor)
+
+    clearInterval(blockStateDebugInterval)
+    const block = blocks.getValue(v)
+    if (block.type === BlockType.Air) {
+      // do not show tracking for an air block (used to turn debug off)
+      blockStateDebugElement.classList.add('hide')
+      return
+    }
+
+    const updateBlockDebugState = () => {
+      const block = blocks.getValue(v)
+
+      const x = formatObject(block)
+
+      if (x !== lastBlockText) {
+        blockStateDebugElement.innerHTML = ''
+        x.split('@').map(text => {
+          const item = document.createElement('p')
+          item.textContent = text
+          blockStateDebugElement.appendChild(item)
+        })
+      }
+    }
+
+    const lastBlockText = ''
+    blockStateDebugInterval = setInterval(updateBlockDebugState, 100)
+
+    updateBlockDebugState()
+    blockStateDebugElement.classList.remove('hide')
+  }
+
   document.addEventListener('keydown', event => {
+    if (isCommandLineCurrentlyVisible()) {
+      return
+    }
     if (event.key === 'e') {
       const p = canvas.getMouseWorldPosition()
       const pi = vec2Apply(p, Math.floor)
       console.log(blocks.getValue(pi))
     } else if (event.key === 'a') {
       toggleInventoryVisibility()
+    }
+  })
+
+  canvasElement.addEventListener('contextmenu', function (event) {
+    // right click
+    event.preventDefault() // Prevent the default context menu from appearing
+    if (event.ctrlKey) {
+      handleBlockStateDebug(event)
+    } else {
+      deleteBlock()
     }
   })
 }
