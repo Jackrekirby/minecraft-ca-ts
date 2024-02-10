@@ -29,9 +29,6 @@ export class SignBlock implements Block {
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable
   }
-  public interact (): string {
-    return this.text
-  }
 }
 
 addCreateBlockFunction(BlockType.SignBlock, SignBlock)

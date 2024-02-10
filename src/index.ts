@@ -5,8 +5,7 @@ import { initialiseCommands } from './core/commands'
 import {
   CommandManager,
   initCommandLineEventListeners,
-  initialiseCommandLine,
-  isCommandLineCurrentlyVisible
+  initialiseCommandLine
 } from './core/command_line'
 import { initialiseDebugPanel, updateDebugInfo } from './core/debug_panel'
 import {
@@ -24,7 +23,8 @@ import {
 } from './core/storage'
 import {
   initBlockEventListeners,
-  initCanvasResizeListener
+  initCanvasResizeListener,
+  isBodyCurrentlyFocused
 } from './core/user_input'
 import { createDemoWorld } from './core/world_loading'
 import { Canvas } from './rendering/canvas'
@@ -107,7 +107,7 @@ const main = async () => {
   }
 
   document.addEventListener('keydown', event => {
-    if (isCommandLineCurrentlyVisible()) {
+    if (!isBodyCurrentlyFocused()) {
       return
     }
     if (event.ctrlKey) {

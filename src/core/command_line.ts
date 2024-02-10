@@ -1,6 +1,7 @@
 import { StateHandler, zipArrays } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
 import { storage } from './storage'
+import { isBodyCurrentlyFocused } from './user_input'
 
 const commandLineElement = document.getElementById(
   'command-line'
@@ -321,6 +322,9 @@ export const isCommandLineCurrentlyVisible = () => {
 
 export const initCommandLineEventListeners = (cm: CommandManager) => {
   document.addEventListener('keydown', event => {
+    if (!isBodyCurrentlyFocused()) {
+      return
+    }
     if (event.key === '/') {
       if (
         commandLineElement !== document.activeElement &&

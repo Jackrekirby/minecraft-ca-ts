@@ -2,9 +2,11 @@ import { Air } from '../blocks/air'
 import { Vec2, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { createBlock } from '../utils/create_block'
-import { addClickHandlerWithDragCheck } from '../utils/general'
+import {
+  addClickHandlerWithDragCheck,
+  interpretCastString
+} from '../utils/general'
 import { Block, BlockContainer, BlockType } from './block'
-import { isCommandLineCurrentlyVisible } from './command_line'
 import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
 import { setInventorySlot, toggleInventoryVisibility } from './inventory'
@@ -32,6 +34,10 @@ export const initCanvasResizeListener = () => {
   })
 
   resizeCanvas()
+}
+
+export const isBodyCurrentlyFocused = () => {
+  return document.activeElement === document.body
 }
 
 const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
@@ -147,7 +153,7 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
   canvas.canvas.addEventListener('pointerleave', handleComplete)
 }
 
-const formatObject = (
+const stringifyBlock = (
   block: Record<string, any>,
   isNested: boolean = false
 ): string => {
@@ -159,17 +165,60 @@ const formatObject = (
         value !== null
       ) {
         // Handle nested objects recursively
-        //
-        // console.log(value, formatObject(value, ' '))
-        return `${key}=${formatObject(value, true)}`
+        return `${key}=[${stringifyBlock(value, true)}]`
       } else if (Array.isArray(value)) {
         // Surround arrays with angled brackets
-        return `${key}=[${value.join(', ')}]`
+        return `${key}=[${value.join(',')}]`
       } else {
         return `${key}=${value}`
       }
     })
-    .join(isNested ? ' ' : '@')
+    .join(isNested ? ',' : '@')
+}
+
+const parseBlockString = (input: string): Record<string, any> => {
+  const result: Record<string, any> = {}
+  const texts = input.split('@')
+
+  for (const text of texts) {
+    const key = text.split('=')[0]
+    const valueRaw = text
+      .split('=')
+      .slice(1)
+      .join('=')
+    let value: any = valueRaw
+
+    // console.log('parse ?', valueRaw)
+    if (valueRaw.startsWith('[') && value.endsWith(']')) {
+      if (valueRaw.includes('=')) {
+        // parse object
+        // console.log('parse object', valueRaw)
+
+        value = Object.fromEntries(
+          valueRaw
+            .substring(1, valueRaw.length - 1)
+            .split(',')
+            .map(item => {
+              const [key, value] = item.trim().split('=')
+              return [key, interpretCastString(value)]
+            })
+        )
+      } else {
+        // console.log('parse array', valueRaw)
+        // Parse array
+        value = valueRaw
+          .substring(1, valueRaw.length - 1)
+          .split(',')
+          .map(item => interpretCastString(item.trim()))
+      }
+    } else {
+      value = interpretCastString(valueRaw)
+    }
+
+    result[key] = value
+  }
+
+  return result
 }
 
 export const initBlockEventListeners = (
@@ -268,19 +317,18 @@ export const initBlockEventListeners = (
     const updateBlockDebugState = () => {
       const block = blocks.getValue(v)
 
-      const x = formatObject(block)
-      // console.log(x)
+      const x = stringifyBlock(block)
 
       if (x !== lastBlockText) {
+        // console.log(x, parseBlockString(x))
         lastBlockText = x
         blockStateDebugElement.innerHTML = ''
         x.split('@').map(text => {
-          const key = text.split('=').slice(0, 1)
+          const key = text.split('=')[0]
           const value = text
             .split('=')
             .slice(1)
             .join('=')
-          console.log({ text, key, value })
 
           const item = document.createElement('div')
           item.className = 'item'
@@ -292,7 +340,28 @@ export const initBlockEventListeners = (
           input.id = id
           label.textContent = key + ':'
           label.htmlFor = id
-          input.textContent = value
+          input.innerHTML = value
+
+          const updateBlockState = () => {
+            const newBlockState: any = { ...block }
+            newBlockState[key] = interpretCastString(input.innerHTML)
+            const newBlock = createBlock(block.type, newBlockState)
+            // console.log(newBlock)
+            blocks.setValue(v, newBlock)
+            updateCanvasBlocks(blocks, canvas)
+          }
+
+          document.addEventListener('keydown', event => {
+            if (input !== document.activeElement) {
+              return
+            }
+            if (event.key === 'Enter' && !event.shiftKey) {
+              updateBlockState()
+              event.preventDefault()
+            }
+          })
+
+          input.onblur = updateBlockState
           item.appendChild(label)
           item.appendChild(input)
           blockStateDebugElement.appendChild(item)
@@ -308,7 +377,7 @@ export const initBlockEventListeners = (
   }
 
   document.addEventListener('keydown', event => {
-    if (isCommandLineCurrentlyVisible()) {
+    if (!isBodyCurrentlyFocused()) {
       return
     }
     if (event.key === 'e') {
@@ -324,9 +393,9 @@ export const initBlockEventListeners = (
     // right click
     event.preventDefault() // Prevent the default context menu from appearing
     if (event.ctrlKey) {
-      handleBlockStateDebug(event)
-    } else {
       deleteBlock()
+    } else {
+      handleBlockStateDebug(event)
     }
   })
 }

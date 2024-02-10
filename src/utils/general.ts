@@ -315,3 +315,18 @@ export const snakeCaseToWords = (input: string): string => {
     .map(word => word.charAt(0).toUpperCase() + word.slice(1))
     .join(' ')
 }
+
+export const interpretCastString = (
+  input: string
+): number | boolean | string => {
+  const parsedNumber = Number(input)
+  if (!isNaN(parsedNumber)) {
+    return parsedNumber
+  } else if (input.toLowerCase() === 'true') {
+    return true
+  } else if (input.toLowerCase() === 'false') {
+    return false
+  } else {
+    return input
+  }
+}
