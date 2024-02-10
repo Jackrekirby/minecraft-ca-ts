@@ -57,7 +57,7 @@ export class ConcretePowder
   outputPower: BinaryPower
   gravityMotion: GravityMotion
   color: Color
-  internalSignalStrength: number
+  outputSignalStrength: number
 
   constructor ({
     movement = Movement.None,
@@ -65,7 +65,7 @@ export class ConcretePowder
     outputPower = BinaryPower.None,
     color = Color.White,
     gravityMotion = GravityMotion.None,
-    internalSignalStrength = 0
+    outputSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
@@ -73,14 +73,14 @@ export class ConcretePowder
     isPowered?: boolean
     color?: Color
     gravityMotion?: GravityMotion
-    internalSignalStrength?: number
+    outputSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.color = color
     this.gravityMotion = gravityMotion
-    this.internalSignalStrength = internalSignalStrength
+    this.outputSignalStrength = outputSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -123,7 +123,7 @@ export class ConcretePowder
     } else {
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
-      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
+      newState.outputSignalStrength = getInputSignalStrength(position, blocks)
 
       const downNeighbour = getNeighbourBlock(position, blocks, Direction.Down)
 
@@ -172,7 +172,7 @@ export class ConcretePowder
   }
 
   public getOutputPowerStrength (direction: Direction): number {
-    return this.internalSignalStrength
+    return this.outputSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

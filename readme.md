@@ -155,7 +155,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add max subticks to avoid game freeze
 - [ ] Add grass & dirt
 - [ ] Add crops
-- [ ] Add trees
+- [x] Add trees
 - [ ] Add water
 - [ ] Add lava
 - [ ] Add cobble generator
@@ -167,6 +167,7 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add block name aliasing
 - [x] Make editable block state debug
 - [ ] Add command blocks
+- [ ] Improve tree growth check to enable growth into leaves
 
 ### webgl canvas
 

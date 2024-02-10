@@ -32,7 +32,11 @@ export enum BlockType {
   RedstoneComparator = 'RedstoneComparator',
   RedstoneJunction = 'RedstoneJunction',
   RedstoneCauldron = 'RedstoneCauldron',
-  SignBlock = 'SignBlock'
+  SignBlock = 'SignBlock',
+  OakSapling = 'OakSapling',
+  OakLog = 'OakLog',
+  OakSaplingGrowth = 'OakSaplingGrowth',
+  OakLeaves = 'OakLeaves'
 }
 
 export interface BlockState {

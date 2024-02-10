@@ -133,6 +133,18 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   sign: {
     isDirectional: false
+  },
+  oak_sapling: {
+    isDirectional: false
+  },
+  oak_log: {
+    isDirectional: false
+  },
+  oak_leaves: {
+    isDirectional: false
+  },
+  cross: {
+    isDirectional: false
   }
 }
 

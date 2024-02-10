@@ -25,20 +25,19 @@ import {
   PowerHardness
 } from '../core/powerable_block'
 import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
+import { getNeighbourBlocks } from '../utils/block_fetching'
 import { addBlockVariant } from '../utils/block_variants'
-
 import { addCreateBlockFunction } from '../utils/create_block'
-import { ObserverFilter } from './observer_block'
-import { ConnectsToRedstoneDustBlock } from './redstone_dust'
 
-export class TargetBlock
+import { ObserverFilter } from './observer_block'
+
+export class OakLog
   implements
     MoveableBlock,
     OutputPowerBlock.Traits,
-    ConnectsToRedstoneDustBlock.Traits,
     ObserverFilter,
     OutputSignalStrengthBlock.Traits {
-  type: BlockType = BlockType.TargetBlock
+  type: BlockType = BlockType.OakLog
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
@@ -76,7 +75,7 @@ export class TargetBlock
     } else {
       Object.assign(newState, movementUpdateChange.state)
 
-      return new TargetBlock(newState)
+      return new OakLog(newState)
     }
   }
 
@@ -95,15 +94,25 @@ export class TargetBlock
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
       newState.outputSignalStrength = getInputSignalStrength(position, blocks)
-      return new TargetBlock(newState)
+      return new OakLog(newState)
     }
   }
 
-  public getTextureName (): CanvasGridItem {
+  public getTextureName (
+    position: Vec2,
+    blocks: BlockContainer
+  ): CanvasGridItem {
+    const anyNeigbourLeaves = getNeighbourBlocks(position, blocks, [
+      Direction.Left,
+      Direction.Right
+    ]).some(neigbour => neigbour.type == BlockType.OakLeaves)
     return {
       layers: [
         {
-          textureName: `target_block`
+          textureName: `oak_log`
+        },
+        {
+          textureName: anyNeigbourLeaves ? `oak_leaves` : ''
         },
         getMovementTextureName(this)
       ].filter(x => x.textureName !== '')
@@ -126,10 +135,6 @@ export class TargetBlock
     return PowerHardness.Soft
   }
 
-  public doesConnectToRedstoneDust (_direction: Direction): boolean {
-    return true
-  }
-
   public filteredState (): Record<string, any> {
     return {
       type: this.type,
@@ -139,5 +144,6 @@ export class TargetBlock
   }
 }
 
-addCreateBlockFunction(BlockType.TargetBlock, TargetBlock)
-addBlockVariant(new TargetBlock({}))
+addCreateBlockFunction(BlockType.OakLog, OakLog)
+
+addBlockVariant(new OakLog({}))

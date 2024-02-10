@@ -3,6 +3,10 @@ import { Button } from '../blocks/button'
 import { ConcretePowder } from '../blocks/concrete_powder'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
+import { OakLeaves } from '../blocks/oak_leaves'
+import { OakLog } from '../blocks/oak_log'
+import { OakSapling } from '../blocks/oak_sapling'
+import { OakSaplingGrowth } from '../blocks/oak_sapling_growth'
 import { ObserverBlock } from '../blocks/observer_block'
 import { Obsidian } from '../blocks/obsidian'
 import { Piston } from '../blocks/piston'
@@ -19,7 +23,7 @@ import { SignBlock } from '../blocks/sign_block'
 import { TargetBlock } from '../blocks/target_block'
 import { WoolBlock } from '../blocks/wool_block'
 import { getAllBlockVariants } from '../utils/block_variants'
-import { Block } from './block'
+import { Block, BlockType } from './block'
 
 export const loadBlockFiles = (): void => {
   const blocks: Block[] = [
@@ -28,6 +32,10 @@ export const loadBlockFiles = (): void => {
     new ConcretePowder({}),
     new GlassBlock({}),
     new Lever({}),
+    new OakLeaves({}),
+    new OakLog({}),
+    new OakSapling({}),
+    new OakSaplingGrowth({}),
     new ObserverBlock({}),
     new Obsidian({}),
     new PistonHead({}),
@@ -44,6 +52,13 @@ export const loadBlockFiles = (): void => {
     new TargetBlock({}),
     new WoolBlock({})
   ]
+
+  for (const blockType of Object.values(BlockType)) {
+    if (!blocks.some(block => block.type === blockType)) {
+      console.warn(`Block type '${blockType}' not imported`)
+    }
+  }
+
   console.log('blocks imported', {
     blocks,
     variants: getAllBlockVariants()

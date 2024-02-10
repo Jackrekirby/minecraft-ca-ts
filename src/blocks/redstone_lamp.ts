@@ -43,26 +43,26 @@ export class RedstoneLamp
   movementDirection: Direction
   outputPower: BinaryPower
   isPowered: boolean
-  internalSignalStrength: number
+  outputSignalStrength: number
 
   constructor ({
     movement = Movement.None,
     movementDirection = Direction.Up,
     outputPower = BinaryPower.None,
     isPowered = false,
-    internalSignalStrength = 0
+    outputSignalStrength = 0
   }: {
     movement?: Movement
     movementDirection?: Direction
     outputPower?: BinaryPower
     isPowered?: boolean
-    internalSignalStrength?: number
+    outputSignalStrength?: number
   } = {}) {
     this.movement = movement
     this.movementDirection = movementDirection
     this.outputPower = outputPower
     this.isPowered = isPowered
-    this.internalSignalStrength = internalSignalStrength
+    this.outputSignalStrength = outputSignalStrength
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
@@ -97,7 +97,7 @@ export class RedstoneLamp
     } else {
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
       Object.assign(newState, IsPoweredBlock.update(this, position, blocks))
-      newState.internalSignalStrength = getInputSignalStrength(position, blocks)
+      newState.outputSignalStrength = getInputSignalStrength(position, blocks)
       Object.assign(newState, movementUpdateChange.state)
       return new RedstoneLamp(newState)
     }
@@ -119,7 +119,7 @@ export class RedstoneLamp
   }
 
   public getOutputPowerStrength (direction: Direction): number {
-    return this.internalSignalStrength
+    return this.outputSignalStrength
   }
 
   public getMovementMethod (): BlockMovement {

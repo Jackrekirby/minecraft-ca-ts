@@ -16,6 +16,7 @@ import {
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction, createBlock } from '../utils/create_block'
 import { ConcretePowder, GravityMotion } from './concrete_powder'
+import { OakSaplingGrowth } from './oak_sapling_growth'
 import { Piston } from './piston'
 import { PistonHead } from './piston_head'
 
@@ -61,6 +62,14 @@ export class Air implements Block {
           gravityMotion: GravityMotion.Fallen
         })
       }
+    }
+
+    const oakSaplingGrowth: Block | null = OakSaplingGrowth.airSubupdate(
+      position,
+      blocks
+    )
+    if (oakSaplingGrowth) {
+      return oakSaplingGrowth
     }
 
     return new Air()

@@ -128,6 +128,8 @@ const initBlockSelection = (blocks: BlockContainer, canvas: Canvas) => {
         }
       }
 
+      updateCanvasBlocks(blocks, canvas)
+
       // console.log(startPos, endPos)
       // console.log(copyWorld)
 
