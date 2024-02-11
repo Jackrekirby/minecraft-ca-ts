@@ -173,6 +173,8 @@ The guide will automatically appear for first time visitors of the website as we
 - [ ] Moved blocks should not carry across power
 - [x] Fix 4 tick repeater texture
 - [x] Make leaves breakable
+- [x] Add set and fill commands
+- [ ] Add clear commands
 
 ### webgl canvas
 

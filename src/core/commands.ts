@@ -1,4 +1,5 @@
 import { StringDict } from '../containers/array2d'
+import { Vec2, vec2Apply } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { getAllBlockVariants, getBlockFromAlias } from '../utils/block_variants'
 import { decompressObject, LocalStorageVariable } from '../utils/save'
@@ -29,8 +30,33 @@ export const initialiseCommands = (
   commandManager: CommandManager,
   blocks: BlockContainer,
   canvas: Canvas,
-  fillUpdateQueue: () => void
+  fillUpdateQueue: () => void,
+  addToTickQueue: (v: Vec2) => void
 ) => {
+  const processPosition = (xs: string, ys: string): Vec2 | null => {
+    const v = vec2Apply(canvas.getMouseWorldPosition(), Math.floor)
+
+    let x: number
+    if (xs.startsWith('~')) {
+      x = v.x + Number(xs.length === 1 ? '0' : xs.substring(1))
+    } else {
+      x = Number(xs)
+    }
+
+    let y: number
+    if (ys.startsWith('~')) {
+      y = v.y + Number(ys.length === 1 ? '0' : ys.substring(1))
+    } else {
+      y = Number(ys)
+    }
+
+    if (isNaN(x) || isNaN(y)) {
+      return null
+    } else {
+      return { x, y }
+    }
+  }
+
   commandManager.createCommand(
     '/world load by_name {name:string}',
     async input => {
@@ -82,13 +108,12 @@ export const initialiseCommands = (
   })
 
   commandManager.createCommand('/teleport {x:float} {y:float}', async input => {
-    const x = Number(input.x),
-      y = Number(input.y)
-    if (isNaN(x) || isNaN(y)) {
+    const v: Vec2 | null = processPosition(input.x, input.y)
+    if (!v) {
       return commandFailure(`failed to teleport. x or y is not a valid number`)
     }
-    canvas.moveTo({ x, y })
-    return commandSuccess(`teleported to {x: ${x}, y: ${y}}`)
+    canvas.moveTo(v)
+    return commandSuccess(`teleported to {x: ${v.x}, y: ${v.y}}`)
   })
 
   commandManager.createCommand(
@@ -231,29 +256,53 @@ export const initialiseCommands = (
     }
   })
 
-  // commandManager.createCommand(
-  //   '/block pick {type:string} {meta:string}',
-  //   async input => {
-  //     const block = (convertStringToObject(
-  //       `${input.type} ${input.meta}`
-  //     ) as unknown) as BlockState
-  //     console.log(block)
-  //     if (
-  //       isEnum<BlockType>(block.type as BlockType, Object.values(BlockType))
-  //     ) {
-  //       storage.selectedBlockState.set(block)
-  //       return commandSuccess(
-  //         `picked block ${convertObjectToString(
-  //           (block as unknown) as Record<string, string>
-  //         )}`
-  //       )
-  //     } else {
-  //       return commandFailure(
-  //         `cannot pick invalid block ${convertObjectToString(
-  //           (block as unknown) as Record<string, string>
-  //         )}`
-  //       )
-  //     }
-  //   }
-  // )
+  commandManager.createCommand(
+    '/block set {x:float} {y:float} {name:string}',
+    async input => {
+      const block = getBlockFromAlias(input.name)
+      const v: Vec2 | null = processPosition(input.x, input.y)
+      if (!v) {
+        return commandFailure(
+          `failed to set block. x or y is not a valid number`
+        )
+      }
+
+      if (block) {
+        blocks.setValue(v, block)
+        addToTickQueue(v)
+        return commandSuccess(`set block ${input.name} {x: ${v.x}, y: ${v.y}}`)
+      } else {
+        return commandFailure(`cannot set invalid block ${input.name}`)
+      }
+    }
+  )
+
+  commandManager.createCommand(
+    '/block set {x1:float} {y1:float} {x2:float} {y2:float} {name:string}',
+    async input => {
+      const v1: Vec2 | null = processPosition(input.x1, input.y1)
+      const v2: Vec2 | null = processPosition(input.x2, input.y2)
+      if (!v1 || !v2) {
+        return commandFailure(
+          `failed to set block. position is not a valid number`
+        )
+      }
+
+      const block = getBlockFromAlias(input.name)
+      if (block) {
+        for (let y = v1.y; y <= v2.y; ++y) {
+          for (let x = v1.x; x <= v2.x; ++x) {
+            const v = { x, y }
+            blocks.setValue(v, block)
+            addToTickQueue(v)
+          }
+        }
+        return commandSuccess(
+          `fill blocks ${input.name} {x1: ${v1.x}, y1: ${v1.y}, x2: ${v2.x}, y2: ${v2.y}}`
+        )
+      } else {
+        return commandFailure(`cannot set invalid block ${input.name}`)
+      }
+    }
+  )
 }

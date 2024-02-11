@@ -75,7 +75,13 @@ const main = async () => {
 
   const commandManager = new CommandManager()
 
-  initialiseCommands(commandManager, blocks, canvas, fillUpdateQueue)
+  initialiseCommands(
+    commandManager,
+    blocks,
+    canvas,
+    fillUpdateQueue,
+    addToTickQueue
+  )
 
   initCommandLineEventListeners(commandManager)
 
