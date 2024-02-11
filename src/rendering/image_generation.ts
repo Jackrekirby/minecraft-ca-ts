@@ -145,6 +145,9 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   cross: {
     isDirectional: false
+  },
+  dirt: {
+    isDirectional: false
   }
 }
 

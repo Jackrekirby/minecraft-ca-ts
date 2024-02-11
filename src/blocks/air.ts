@@ -8,6 +8,7 @@ import {
   isMoveableBlock,
   Movement
 } from '../core/block'
+import { breakableNeighbourSubupdate } from '../core/breakable_block'
 import {
   Direction,
   getAllDirections,
@@ -16,9 +17,10 @@ import {
 import { getNeighbourBlock } from '../utils/block_fetching'
 import { addCreateBlockFunction, createBlock } from '../utils/create_block'
 import { ConcretePowder, GravityMotion } from './concrete_powder'
-import { OakSaplingGrowth } from './oak_sapling_growth'
-import { Piston } from './piston'
-import { PistonHead } from './piston_head'
+import {
+  OakSaplingBlockReplacedByGrowth,
+  OakSaplingGrowth
+} from './oak_sapling_growth'
 
 export class Air implements Block {
   type: BlockType = BlockType.Air
@@ -26,20 +28,16 @@ export class Air implements Block {
   constructor ({}: {} = {}) {}
 
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
+    const block = breakableNeighbourSubupdate(position, blocks)
+    if (block) {
+      return block
+    }
+
     for (const direction of getAllDirections()) {
       const neighbour: Block = getNeighbourBlock(position, blocks, direction)
       const oppositeDirection = getOppositeDirection(direction)
 
       if (
-        isBlock<Piston>(neighbour, BlockType.Piston) &&
-        neighbour.direction === oppositeDirection &&
-        neighbour.isBeingPowered
-      ) {
-        return new PistonHead({
-          direction: neighbour.direction,
-          isSticky: neighbour.isSticky
-        })
-      } else if (
         // TODO: check if instance of movable block
         // TODO: add movement direction
         isMoveableBlock(neighbour) &&
@@ -64,9 +62,10 @@ export class Air implements Block {
       }
     }
 
-    const oakSaplingGrowth: Block | null = OakSaplingGrowth.airSubupdate(
+    const oakSaplingGrowth: Block | null = OakSaplingGrowth.neighbourSubupdate(
       position,
-      blocks
+      blocks,
+      OakSaplingBlockReplacedByGrowth.Air
     )
     if (oakSaplingGrowth) {
       return oakSaplingGrowth

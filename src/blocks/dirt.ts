@@ -28,20 +28,16 @@ import { CanvasGridCell, CanvasGridItem } from '../rendering/canvas'
 import { getNeighbourBlocks } from '../utils/block_fetching'
 import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
-import {
-  OakSaplingBlockReplacedByGrowth,
-  OakSaplingGrowth
-} from './oak_sapling_growth'
 
 import { ObserverFilter } from './observer_block'
 
-export class OakLog
+export class Dirt
   implements
     MoveableBlock,
     OutputPowerBlock.Traits,
     ObserverFilter,
     OutputSignalStrengthBlock.Traits {
-  type: BlockType = BlockType.OakLog
+  type: BlockType = BlockType.Dirt
   movement: Movement
   movementDirection: Direction
   outputPower: BinaryPower
@@ -79,7 +75,7 @@ export class OakLog
     } else {
       Object.assign(newState, movementUpdateChange.state)
 
-      return new OakLog(newState)
+      return new Dirt(newState)
     }
   }
 
@@ -98,16 +94,7 @@ export class OakLog
       Object.assign(newState, movementUpdateChange.state)
       Object.assign(newState, OutputPowerBlock.update(this, position, blocks))
       newState.outputSignalStrength = getInputSignalStrength(position, blocks)
-
-      const oakSaplingGrowth: Block | null = OakSaplingGrowth.neighbourSubupdate(
-        position,
-        blocks,
-        OakSaplingBlockReplacedByGrowth.Log
-      )
-      if (oakSaplingGrowth) {
-        return oakSaplingGrowth
-      }
-      return new OakLog(newState)
+      return new Dirt(newState)
     }
   }
 
@@ -122,10 +109,7 @@ export class OakLog
     return {
       layers: [
         {
-          textureName: `oak_log`
-        },
-        {
-          textureName: anyNeigbourLeaves ? `oak_leaves` : ''
+          textureName: `dirt`
         },
         getMovementTextureName(this)
       ].filter(x => x.textureName !== '')
@@ -157,6 +141,6 @@ export class OakLog
   }
 }
 
-addCreateBlockFunction(BlockType.OakLog, OakLog)
+addCreateBlockFunction(BlockType.Dirt, Dirt)
 
-addBlockVariant(new OakLog({}))
+addBlockVariant(new Dirt({}))

@@ -1,12 +1,13 @@
 import { Air } from '../blocks/air'
 import { Vec2, vec2Apply, vec2Subtract } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
+import { getBlockFromAlias } from '../utils/block_variants'
 import { createBlock } from '../utils/create_block'
 import {
   addClickHandlerWithDragCheck,
   interpretCastString
 } from '../utils/general'
-import { Block, BlockContainer, BlockType } from './block'
+import { Block, BlockContainer, BlockType, getBlockName } from './block'
 import { Direction } from './direction'
 import { updateCanvasBlocks } from './game_loop'
 import { setInventorySlot, toggleInventoryVisibility } from './inventory'
@@ -277,8 +278,10 @@ export const initBlockEventListeners = (
         //   : { type: block.type }
 
         // storage.selectedBlockState.set(copyState)
-
-        setInventorySlot(block)
+        if (getBlockFromAlias(getBlockName(block))) {
+          // do not allow pick block of a block not allowed in inventory (piston head)
+          setInventorySlot(block)
+        }
       }
 
       updateCanvasBlocks(blocks, canvas)

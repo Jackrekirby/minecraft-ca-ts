@@ -1,4 +1,4 @@
-import { Vec2, vec2Add, vec2AreEqual } from '../containers/vec2'
+import { Vec2, vec2Add } from '../containers/vec2'
 import {
   Block,
   BlockContainer,
@@ -7,7 +7,6 @@ import {
   isBlock
 } from '../core/block'
 import {
-  Direction,
   directionToVec2,
   getAllDirections,
   getOppositeDirection
@@ -29,119 +28,87 @@ export enum OakSaplingGrowthType {
   Leaves = 'leaves'
 }
 
-type NeighbourGrowthTypes = Record<Direction, OakSaplingGrowthType | null>
-const generateTriangularProfile = (value: number, min: number, max: number) => {
-  if (value < min || value > max) {
-    return 0
-  }
+export enum OakSaplingBlockReplacedByGrowth {
+  Log = 'log',
+  Leaves = 'leaves',
+  Air = 'air',
+  Sapling = 'sapling'
+}
 
-  return (value - min) / (max - min)
+const zeroOutside = (value: number, max: number) => {
+  if (value < 0) return 0
+  if (value > max) return 0
+  return value
 }
 
 export class OakSaplingGrowth implements Block {
   type: BlockType = BlockType.OakSaplingGrowth
   distanceFromSapling: Vec2
   growthType: OakSaplingGrowthType
-  expectedNeighbourGrowthTypes: NeighbourGrowthTypes
   targetHeight: number
-  hasGrowthFailed: boolean // needs pending, complete and failed, only continue growth when complete
+  hasGrowthFailed: boolean
+  blockReplacedByGrowth: OakSaplingBlockReplacedByGrowth
 
   constructor ({
     distanceFromSapling = { x: 0, y: 0 },
     growthType = OakSaplingGrowthType.Log,
-    expectedNeighbourGrowthTypes = undefined,
     targetHeight = 0,
-    hasGrowthFailed = false
+    hasGrowthFailed = false,
+    blockReplacedByGrowth = OakSaplingBlockReplacedByGrowth.Sapling
   }: {
     distanceFromSapling?: Vec2
     growthType?: OakSaplingGrowthType
-    expectedNeighbourGrowthTypes?: NeighbourGrowthTypes
     targetHeight?: number
     hasGrowthFailed?: boolean
+    blockReplacedByGrowth?: OakSaplingBlockReplacedByGrowth
   } = {}) {
     this.distanceFromSapling = distanceFromSapling
     this.growthType = growthType
     this.targetHeight =
-      targetHeight === 0 ? Math.floor(5 + Math.random() * 3) : targetHeight
-    this.expectedNeighbourGrowthTypes =
-      expectedNeighbourGrowthTypes ??
-      OakSaplingGrowth.getExpectedNeighbourGrowthTypes(
-        null,
-        distanceFromSapling,
-        OakSaplingGrowthType.Log,
-        null,
-        this.targetHeight
-      )
+      targetHeight === 0 ? Math.floor(5 + Math.random() * 4) : targetHeight
     this.hasGrowthFailed = hasGrowthFailed
+    this.blockReplacedByGrowth = blockReplacedByGrowth
   }
 
-  private static getExpectedNeighbourGrowthTypes (
-    direction: Direction | null,
-    distanceFromSapling: Vec2,
-    growthType: OakSaplingGrowthType,
-    fromGrowthType: OakSaplingGrowthType | null,
-    targetHeight: number
-  ): NeighbourGrowthTypes {
-    const targetDistanceFromSapling = vec2Add(
-      distanceFromSapling,
-      direction ? directionToVec2(direction) : { x: 0, y: 0 }
-    )
-
-    const neighbourGrowthTypes: NeighbourGrowthTypes = {
-      [Direction.Up]: null,
-      [Direction.Down]: null,
-      [Direction.Left]: null,
-      [Direction.Right]: null
-    }
-
-    if (direction) {
-      neighbourGrowthTypes[getOppositeDirection(direction)] = fromGrowthType
-    }
-
-    for (const neighbourDirection of getAllDirections().filter(d =>
-      direction ? d !== getOppositeDirection(direction) : true
-    )) {
-      const newDistanceFromSapling = vec2Add(
-        targetDistanceFromSapling,
-        directionToVec2(neighbourDirection)
-      )
-
-      let newGrowthType: OakSaplingGrowthType | null = null
-
-      if (Math.abs(newDistanceFromSapling.x) > 0) {
-        let maxSideGrowth = targetHeight > 5 ? 2 : 1
-        if (targetHeight - newDistanceFromSapling.y <= 1) {
-          maxSideGrowth -= 1
-        }
-        if (Math.abs(newDistanceFromSapling.x) <= maxSideGrowth) {
-          if (
-            newDistanceFromSapling.y >= targetHeight - 3 &&
-            newDistanceFromSapling.y < targetHeight
-          ) {
-            newGrowthType = OakSaplingGrowthType.Leaves
-          }
-        }
+  private static getGrowthType (
+    targetHeight: number,
+    distanceFromSapling: Vec2
+  ): OakSaplingGrowthType | null {
+    if (distanceFromSapling.x === 0) {
+      const leaveHeightAboveLogs = 1
+      const height = zeroOutside(distanceFromSapling.y + 1, targetHeight)
+      if (height === 0) {
+        return null
+      } else if (height <= targetHeight - leaveHeightAboveLogs) {
+        return OakSaplingGrowthType.Log
       } else {
-        if (newDistanceFromSapling.y < 0) {
-          // do not allow negative growth
-        } else if (
-          newDistanceFromSapling.y <
-          targetHeight - (targetHeight > 6 ? 2 : 1)
-        ) {
-          newGrowthType = OakSaplingGrowthType.Log
-        } else if (newDistanceFromSapling.y < targetHeight) {
-          newGrowthType = OakSaplingGrowthType.Leaves
+        return OakSaplingGrowthType.Leaves
+      }
+    } else {
+      // distanceFromSapling.x > 0
+      const leaveHeightAboveLogs = 1
+      const leaveheight = Math.max(2, targetHeight - 4)
+      const leaveWidth = targetHeight > 5 ? 2 : 1
+      const height = zeroOutside(distanceFromSapling.y + 1, targetHeight)
+      if (height === 0) {
+        return null
+      } else if (height > targetHeight - leaveHeightAboveLogs) {
+        if (Math.abs(distanceFromSapling.x) <= leaveWidth - 1) {
+          return OakSaplingGrowthType.Leaves
+        }
+      } else if (height >= targetHeight - leaveheight) {
+        if (Math.abs(distanceFromSapling.x) <= leaveWidth) {
+          return OakSaplingGrowthType.Leaves
         }
       }
-      neighbourGrowthTypes[neighbourDirection] = newGrowthType
+      return null
     }
-
-    return neighbourGrowthTypes
   }
 
-  public static airSubupdate (
+  public static neighbourSubupdate (
     position: Vec2,
-    blocks: BlockContainer
+    blocks: BlockContainer,
+    blockReplacedByGrowth: OakSaplingBlockReplacedByGrowth
   ): Block | null {
     for (const direction of getAllDirections()) {
       const neighbour = getNeighbourBlock(
@@ -150,25 +117,27 @@ export class OakSaplingGrowth implements Block {
         getOppositeDirection(direction)
       )
       if (isBlock<OakSaplingGrowth>(neighbour, BlockType.OakSaplingGrowth)) {
-        const growthType: OakSaplingGrowthType | null =
-          neighbour.expectedNeighbourGrowthTypes[direction]
+        const distanceFromSapling = vec2Add(
+          neighbour.distanceFromSapling,
+          directionToVec2(direction)
+        )
+        const growthType: OakSaplingGrowthType | null = OakSaplingGrowth.getGrowthType(
+          neighbour.targetHeight,
+          distanceFromSapling
+        )
         if (growthType) {
-          const distanceFromSapling = vec2Add(
-            neighbour.distanceFromSapling,
-            directionToVec2(direction)
-          )
+          // leaves should not replace logs
+          if (
+            growthType === OakSaplingGrowthType.Leaves &&
+            blockReplacedByGrowth === OakSaplingBlockReplacedByGrowth.Log
+          ) {
+            return null
+          }
           return new OakSaplingGrowth({
             distanceFromSapling,
             growthType,
-            expectedNeighbourGrowthTypes: OakSaplingGrowth.getExpectedNeighbourGrowthTypes(
-              direction,
-              // should really be non static as below variables are all this
-              neighbour.distanceFromSapling,
-              growthType,
-              neighbour.growthType,
-              neighbour.targetHeight
-            ),
-            targetHeight: neighbour.targetHeight
+            targetHeight: neighbour.targetHeight,
+            blockReplacedByGrowth
           })
         }
       }
@@ -180,52 +149,58 @@ export class OakSaplingGrowth implements Block {
   public subupdate (position: Vec2, blocks: BlockContainer): Block {
     if (this.hasGrowthFailed) {
       return new OakSaplingGrowth(this)
-    }
-    const hasExpectedNeighbours = Object.entries(
-      this.expectedNeighbourGrowthTypes
-    ).every(
-      ([directionStr, growthType]: [string, OakSaplingGrowthType | null]) => {
-        const direction = directionStr as Direction
+    } else {
+      const hasGrowthFailed = !getAllDirections().every(direction => {
+        // return true if growth succeeded
+        // distanceFromSapling at neighbour position
+        const distanceFromSapling = vec2Add(
+          this.distanceFromSapling,
+          directionToVec2(direction)
+        )
+        // get growth at neighbour
+        const growthType: OakSaplingGrowthType | null = OakSaplingGrowth.getGrowthType(
+          this.targetHeight,
+          distanceFromSapling
+        )
+
+        // if tree wants to grow to a block that cannot be grown into growth has failed
+        if (!growthType) {
+          return true
+        }
+
         const neighbour = getNeighbourBlock(position, blocks, direction)
         if (
-          // do not allow directly adjacent logs
-          this.growthType === OakSaplingGrowthType.Log &&
-          isBlock<OakLog>(neighbour, BlockType.OakLog) &&
-          [Direction.Left, Direction.Right].includes(direction)
-        ) {
-          return false
-        }
-        if (!growthType) return true
-
-        if (isBlock<OakSaplingGrowth>(neighbour, BlockType.OakSaplingGrowth)) {
-          if (neighbour.hasGrowthFailed) {
-            return false
-          } else {
-            return true
-          }
-        } else if (
           isBlock<Air>(neighbour, BlockType.Air) ||
           isBlock<OakLog>(neighbour, BlockType.OakLog) ||
-          isBlock<OakLeaves>(neighbour, BlockType.OakLeaves)
+          isBlock<OakLeaves>(neighbour, BlockType.OakLeaves) ||
+          (isBlock<OakSaplingGrowth>(neighbour, BlockType.OakSaplingGrowth) &&
+            !neighbour.hasGrowthFailed)
         ) {
-          return true // growth pending
-        } else {
-          return false
+          return true
         }
-      }
-    )
-    return new OakSaplingGrowth({
-      ...this,
-      hasGrowthFailed: !hasExpectedNeighbours
-    })
+
+        return false
+      })
+
+      return new OakSaplingGrowth({
+        ...this,
+        hasGrowthFailed
+      })
+    }
   }
 
   public update (position: Vec2, blocks: BlockContainer): Block {
     if (this.hasGrowthFailed) {
-      if (vec2AreEqual(this.distanceFromSapling, { x: 0, y: 0 })) {
-        return new OakSapling({})
+      switch (this.blockReplacedByGrowth) {
+        case OakSaplingBlockReplacedByGrowth.Air:
+          return new Air({})
+        case OakSaplingBlockReplacedByGrowth.Log:
+          return new OakLog({})
+        case OakSaplingBlockReplacedByGrowth.Sapling:
+          return new OakSapling({})
+        case OakSaplingBlockReplacedByGrowth.Leaves:
+          return new OakLeaves({})
       }
-      return new Air({})
     } else if (this.growthType === OakSaplingGrowthType.Log) {
       return new OakLog({})
     } else {

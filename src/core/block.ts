@@ -36,7 +36,8 @@ export enum BlockType {
   OakSapling = 'OakSapling',
   OakLog = 'OakLog',
   OakSaplingGrowth = 'OakSaplingGrowth',
-  OakLeaves = 'OakLeaves'
+  OakLeaves = 'OakLeaves',
+  Dirt = 'Dirt'
 }
 
 export interface BlockState {

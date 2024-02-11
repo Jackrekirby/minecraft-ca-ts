@@ -153,7 +153,8 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add all copied blocks to queue
 - [x] Add drag deletion
 - [x] Add max subticks to avoid game freeze
-- [ ] Add grass & dirt
+- [ ] Add grass
+- [ ] Add dirt
 - [ ] Add crops
 - [x] Add trees
 - [ ] Add water
@@ -167,7 +168,11 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Add block name aliasing
 - [x] Make editable block state debug
 - [ ] Add command blocks
-- [ ] Improve tree growth check to enable growth into leaves
+- [x] Improve tree growth check to enable growth into leaves
+- [x] Prevent non-inventory blocks being picked (piston head)
+- [ ] Moved blocks should not carry across power
+- [x] Fix 4 tick repeater texture
+- [x] Make leaves breakable
 
 ### webgl canvas
 

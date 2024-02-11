@@ -1,8 +1,20 @@
 import { Vec2 } from '../containers/vec2'
-import { Block, BlockContainer, BlockMovement, BlockType } from '../core/block'
+import {
+  Block,
+  BlockContainer,
+  BlockMovement,
+  BlockType,
+  isBlock
+} from '../core/block'
+import { Direction } from '../core/direction'
+import { getNeighbourBlock } from '../utils/block_fetching'
 import { addBlockVariant } from '../utils/block_variants'
 import { addCreateBlockFunction } from '../utils/create_block'
-import { OakSaplingGrowth } from './oak_sapling_growth'
+import { Dirt } from './dirt'
+import {
+  OakSaplingBlockReplacedByGrowth,
+  OakSaplingGrowth
+} from './oak_sapling_growth'
 
 export class OakSapling implements Block {
   type: BlockType = BlockType.OakSapling
@@ -28,7 +40,17 @@ export class OakSapling implements Block {
   public update (position: Vec2, blocks: BlockContainer): Block {
     const ticksUntilGrowthAttempt = this.ticksUntilGrowthAttempt - 1
     if (ticksUntilGrowthAttempt === 0) {
-      return new OakSaplingGrowth({})
+      const neighbour = getNeighbourBlock(position, blocks, Direction.Down)
+      if (isBlock<Dirt>(neighbour, BlockType.Dirt)) {
+        return new OakSaplingGrowth({
+          blockReplacedByGrowth: OakSaplingBlockReplacedByGrowth.Sapling
+        })
+      } else {
+        return new OakSapling({
+          ...this,
+          ticksUntilGrowthAttempt: OakSapling.generateTicksUntilGrowthAttempt()
+        })
+      }
     }
     return new OakSapling({ ...this, ticksUntilGrowthAttempt })
   }

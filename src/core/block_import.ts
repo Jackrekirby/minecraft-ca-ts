@@ -1,6 +1,7 @@
 import { Air } from '../blocks/air'
 import { Button } from '../blocks/button'
 import { ConcretePowder } from '../blocks/concrete_powder'
+import { Dirt } from '../blocks/dirt'
 import { GlassBlock } from '../blocks/glass_block'
 import { Lever } from '../blocks/lever'
 import { OakLeaves } from '../blocks/oak_leaves'
@@ -30,6 +31,7 @@ export const loadBlockFiles = (): void => {
     new Air({}),
     new Button({}),
     new ConcretePowder({}),
+    new Dirt({}),
     new GlassBlock({}),
     new Lever({}),
     new OakLeaves({}),
