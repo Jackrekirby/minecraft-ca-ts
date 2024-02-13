@@ -3,9 +3,9 @@ import { Block, BlockContainer, BlockType } from './core/block'
 import { loadBlockFiles } from './core/block_import'
 import { initialiseCommands } from './core/commands'
 import {
-  CommandManager,
   initCommandLineEventListeners,
-  initialiseCommandLine
+  initialiseCommandLine,
+  initialiseCommandManager
 } from './core/command_line'
 import { initialiseDebugPanel, updateDebugInfo } from './core/debug_panel'
 import {
@@ -63,27 +63,30 @@ const main = async () => {
     updateDebugInfo()
   }, 500)
 
-  const { processLogic, addToTickQueue, fillUpdateQueue } = createLogicLoop(
-    blocks,
-    canvas
-  )
+  const {
+    processLogic,
+    addToTickQueue,
+    fillUpdateQueue,
+    addToCallQueue
+  } = createLogicLoop(blocks, canvas)
 
   initBlockEventListeners(canvas, blocks, addToTickQueue)
   initCanvasResizeListener()
 
   // load commands
 
-  const commandManager = new CommandManager()
+  const commandManager = initialiseCommandManager()
 
   initialiseCommands(
     commandManager,
     blocks,
     canvas,
     fillUpdateQueue,
-    addToTickQueue
+    addToTickQueue,
+    addToCallQueue
   )
 
-  initCommandLineEventListeners(commandManager)
+  initCommandLineEventListeners(commandManager, canvas)
 
   // initialise render and processing loop
 
@@ -132,6 +135,8 @@ const main = async () => {
           // add all pasted blocks and their neighbours to queue
           addToTickQueue(newPosition)
         })
+
+        updateCanvasBlocks(blocks, canvas)
       }
     } else {
       if (event.key === 'z') {

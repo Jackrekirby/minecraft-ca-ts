@@ -167,14 +167,17 @@ The guide will automatically appear for first time visitors of the website as we
 - [x] Improve debug tools for infinite subticks to isolate blocks at fault
 - [x] Add block name aliasing
 - [x] Make editable block state debug
-- [ ] Add command blocks
+- [x] Add command blocks
 - [x] Improve tree growth check to enable growth into leaves
 - [x] Prevent non-inventory blocks being picked (piston head)
 - [ ] Moved blocks should not carry across power
 - [x] Fix 4 tick repeater texture
 - [x] Make leaves breakable
 - [x] Add set and fill commands
-- [ ] Add clear commands
+- [x] Add clear commands
+- [ ] Add animated textures
+- [x] User inputs need to be processed as part of processing loop to prevent race conditions. Command blocks cannot update a block during block update loop as block is about to be overridden.
+- [ ] Command blocks do not follow rules of cellular automaton. Is this ok?
 
 ### webgl canvas
 

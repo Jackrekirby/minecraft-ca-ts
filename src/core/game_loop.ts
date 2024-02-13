@@ -360,8 +360,11 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   const queues = {
     tick: new Set<string>(),
-    subtick: new Set<string>()
+    subtick: new Set<string>(),
+    user: new Set<string>()
   }
+
+  const callbackQueue: (() => void)[] = []
 
   const fillUpdateQueue = () => {
     ;(queues.tick = new Set<string>()), (queues.subtick = new Set<string>())
@@ -409,6 +412,17 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
 
   const processLogic = () => {
     let combinedUpdateQueue: Set<string>
+
+    appendSet(queues.subtick, queues.user)
+    appendSet(queues.tick, queues.user)
+    // console.log('queues', queues)
+    queues.user.clear()
+
+    for (const callback of callbackQueue) {
+      callback()
+    }
+    callbackQueue.length = 0
+
     // console.log(queues)
     if (storage.viewSubTicksState.get()) {
       // process one subtick or one tick before updating canvas blocks
@@ -486,9 +500,15 @@ export const createLogicLoop = (blocks: BlockContainer, canvas: Canvas) => {
   return {
     processLogic,
     addToTickQueue: (v: Vec2) => {
-      addToUpdateQueue(queues.tick, v)
-      addToUpdateQueue(queues.subtick, v)
+      // console.log('addToTickQueue', v)
+      // addToUpdateQueue(queues.subtick, v)
+      // addToUpdateQueue(queues.tick, v)
+
+      addToUpdateQueue(queues.user, v)
     },
-    fillUpdateQueue
+    fillUpdateQueue,
+    addToCallQueue: (fnc: () => void) => {
+      callbackQueue.push(fnc)
+    }
   }
 }

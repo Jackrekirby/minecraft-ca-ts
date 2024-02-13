@@ -1,5 +1,6 @@
+import { Air } from '../blocks/air'
 import { StringDict } from '../containers/array2d'
-import { Vec2, vec2Apply } from '../containers/vec2'
+import { Vec2 } from '../containers/vec2'
 import { Canvas } from '../rendering/canvas'
 import { getAllBlockVariants, getBlockFromAlias } from '../utils/block_variants'
 import { decompressObject, LocalStorageVariable } from '../utils/save'
@@ -31,10 +32,15 @@ export const initialiseCommands = (
   blocks: BlockContainer,
   canvas: Canvas,
   fillUpdateQueue: () => void,
-  addToTickQueue: (v: Vec2) => void
+  addToTickQueue: (v: Vec2) => void,
+  addToCallQueue: (fnc: () => void) => void
 ) => {
-  const processPosition = (xs: string, ys: string): Vec2 | null => {
-    const v = vec2Apply(canvas.getMouseWorldPosition(), Math.floor)
+  const processPosition = (
+    xs: string,
+    ys: string,
+    position: Vec2
+  ): Vec2 | null => {
+    const v = position
 
     let x: number
     if (xs.startsWith('~')) {
@@ -76,7 +82,8 @@ export const initialiseCommands = (
       const chunks = decompressObject(input.data) as StringDict<Block>
       loadChunks(chunks, newBlocks)
       blocks.clone(newBlocks)
-      console.log(newBlocks, blocks, chunks, input.data)
+      updateCanvasBlocks(blocks, canvas)
+      // console.log(newBlocks, blocks, chunks, input.data)
       return commandSuccess(`loaded world from compressed data`)
     }
   )
@@ -87,6 +94,7 @@ export const initialiseCommands = (
       const newBlocks: BlockContainer = createEmptyBlockContainer()
       const chunks = decompressObject(input.data) as StringDict<Block>
       loadChunks(chunks, newBlocks)
+      updateCanvasBlocks(blocks, canvas)
       storage.selectedBlockStorage.set(newBlocks)
       return commandSuccess(`loaded compressed block data into selection`)
     }
@@ -108,7 +116,11 @@ export const initialiseCommands = (
   })
 
   commandManager.createCommand('/teleport {x:float} {y:float}', async input => {
-    const v: Vec2 | null = processPosition(input.x, input.y)
+    const v: Vec2 | null = processPosition(
+      input.x,
+      input.y,
+      input.callerPosition
+    )
     if (!v) {
       return commandFailure(`failed to teleport. x or y is not a valid number`)
     }
@@ -260,7 +272,11 @@ export const initialiseCommands = (
     '/block set {x:float} {y:float} {name:string}',
     async input => {
       const block = getBlockFromAlias(input.name)
-      const v: Vec2 | null = processPosition(input.x, input.y)
+      const v: Vec2 | null = processPosition(
+        input.x,
+        input.y,
+        input.callerPosition
+      )
       if (!v) {
         return commandFailure(
           `failed to set block. x or y is not a valid number`
@@ -268,8 +284,12 @@ export const initialiseCommands = (
       }
 
       if (block) {
-        blocks.setValue(v, block)
+        // console.log('set block')
+        addToCallQueue(() => {
+          blocks.setValue(v, block)
+        })
         addToTickQueue(v)
+
         return commandSuccess(`set block ${input.name} {x: ${v.x}, y: ${v.y}}`)
       } else {
         return commandFailure(`cannot set invalid block ${input.name}`)
@@ -280,11 +300,19 @@ export const initialiseCommands = (
   commandManager.createCommand(
     '/block set {x1:float} {y1:float} {x2:float} {y2:float} {name:string}',
     async input => {
-      const v1: Vec2 | null = processPosition(input.x1, input.y1)
-      const v2: Vec2 | null = processPosition(input.x2, input.y2)
+      const v1: Vec2 | null = processPosition(
+        input.x1,
+        input.y1,
+        input.callerPosition
+      )
+      const v2: Vec2 | null = processPosition(
+        input.x2,
+        input.y2,
+        input.callerPosition
+      )
       if (!v1 || !v2) {
         return commandFailure(
-          `failed to set block. position is not a valid number`
+          `failed to set blocks. position is not a valid number`
         )
       }
 
@@ -293,16 +321,78 @@ export const initialiseCommands = (
         for (let y = v1.y; y <= v2.y; ++y) {
           for (let x = v1.x; x <= v2.x; ++x) {
             const v = { x, y }
-            blocks.setValue(v, block)
+            addToCallQueue(() => {
+              blocks.setValue(v, block)
+            })
             addToTickQueue(v)
           }
         }
         return commandSuccess(
-          `fill blocks ${input.name} {x1: ${v1.x}, y1: ${v1.y}, x2: ${v2.x}, y2: ${v2.y}}`
+          `set blocks ${input.name} {x1: ${v1.x}, y1: ${v1.y}, x2: ${v2.x}, y2: ${v2.y}}`
         )
       } else {
         return commandFailure(`cannot set invalid block ${input.name}`)
       }
+    }
+  )
+
+  commandManager.createCommand(
+    '/block clear {x:float} {y:float}',
+    async input => {
+      const v: Vec2 | null = processPosition(
+        input.x,
+        input.y,
+        input.callerPosition
+      )
+      if (!v) {
+        return commandFailure(
+          `failed to clear block. x or y is not a valid number`
+        )
+      }
+
+      // console.log('clear block')
+
+      addToCallQueue(() => {
+        blocks.setValue(v, new Air({}))
+      })
+      addToTickQueue(v)
+      return commandSuccess(`cleared block {x: ${v.x}, y: ${v.y}}`)
+    }
+  )
+
+  commandManager.createCommand(
+    '/block clear {x1:float} {y1:float} {x2:float} {y2:float}',
+    async input => {
+      const v1: Vec2 | null = processPosition(
+        input.x1,
+        input.y1,
+        input.callerPosition
+      )
+      const v2: Vec2 | null = processPosition(
+        input.x2,
+        input.y2,
+        input.callerPosition
+      )
+      if (!v1 || !v2) {
+        return commandFailure(
+          `failed to clear blocks. position is not a valid number`
+        )
+      }
+
+      const block = new Air({})
+
+      for (let y = v1.y; y <= v2.y; ++y) {
+        for (let x = v1.x; x <= v2.x; ++x) {
+          const v = { x, y }
+          addToCallQueue(() => {
+            blocks.setValue(v, block)
+          })
+          addToTickQueue(v)
+        }
+      }
+      return commandSuccess(
+        `cleared blocks {x1: ${v1.x}, y1: ${v1.y}, x2: ${v2.x}, y2: ${v2.y}}`
+      )
     }
   )
 }

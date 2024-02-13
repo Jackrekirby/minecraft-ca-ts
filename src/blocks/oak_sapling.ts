@@ -15,8 +15,9 @@ import {
   OakSaplingBlockReplacedByGrowth,
   OakSaplingGrowth
 } from './oak_sapling_growth'
+import { ObserverFilter } from './observer_block'
 
-export class OakSapling implements Block {
+export class OakSapling implements Block, ObserverFilter {
   type: BlockType = BlockType.OakSapling
   ticksUntilGrowthAttempt: number
 
@@ -61,6 +62,13 @@ export class OakSapling implements Block {
 
   public getMovementMethod (): BlockMovement {
     return BlockMovement.Immovable
+  }
+
+  public filteredState (): Record<string, any> {
+    return {
+      type: this.type,
+      growthAttempt: this.ticksUntilGrowthAttempt === 1
+    }
   }
 }
 

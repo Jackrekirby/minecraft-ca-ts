@@ -391,6 +391,8 @@ canvas {
   margin-left: 4px;
   padding: 2px 4px;
   border-radius: 4px;
+  max-width: 512px;
+  overflow-x: hidden;
 }
 
 #inventory-wrapper {

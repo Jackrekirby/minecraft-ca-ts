@@ -1,3 +1,5 @@
+import { Vec2, vec2Apply } from '../containers/vec2'
+import { Canvas } from '../rendering/canvas'
 import { StateHandler, zipArrays } from '../utils/general'
 import { LocalStorageVariable } from '../utils/save'
 import { storage } from './storage'
@@ -65,7 +67,7 @@ export const commandFailure = (message: string) => {
   }
 }
 
-type StringDict = { [key: string]: string }
+type StringDict = { [key: string]: any }
 
 export class CommandManager {
   public commands: Command[] = []
@@ -197,22 +199,48 @@ export class CommandManager {
     this.outputs.set([output, ...this.outputs.get().slice(0, 50)])
   }
 
-  public async ifCommandExecute (input: string) {
+  public async ifCommandExecute (input: string, position: Vec2) {
     for (const command of this.commands) {
       const inputs = this.ifCommandGetInputs(input, command.pattern)
       // console.log({ inputs, input, cmd: command.pattern })
       if (inputs) {
         this.addHistory(input)
+        inputs.callerSource = 'user'
+        inputs.callerPosition = position
         const output: CommandOutput = await command.callback(inputs)
         this.addOutput(output)
-
         return
       }
     }
 
     this.addOutput(commandFailure(`command '${input}' not recognised`))
   }
+
+  public async ifCommandExecuteFromCommandBlock (
+    inputCommand: string,
+    position: Vec2
+  ): Promise<CommandOutput> {
+    for (const command of this.commands) {
+      const inputs = this.ifCommandGetInputs(inputCommand, command.pattern)
+
+      if (inputs) {
+        inputs.callerSource = 'command_block'
+        inputs.callerPosition = position
+        const output: CommandOutput = await command.callback(inputs)
+
+        return output
+      }
+    }
+
+    return commandFailure(`command '${inputCommand}' not recognised`)
+  }
 }
+
+export const initialiseCommandManager = () => {
+  commandManager = new CommandManager()
+  return commandManager
+}
+export let commandManager: CommandManager // global...
 
 const replaceCommandPlaceholders = (input: string) => {
   // replaces anything in curley braces with a question mark
@@ -320,7 +348,10 @@ export const isCommandLineCurrentlyVisible = () => {
   return commandLineElement === document.activeElement
 }
 
-export const initCommandLineEventListeners = (cm: CommandManager) => {
+export const initCommandLineEventListeners = (
+  cm: CommandManager,
+  canvas: Canvas
+) => {
   document.addEventListener('keydown', event => {
     if (!isBodyCurrentlyFocused()) {
       return
@@ -396,7 +427,10 @@ export const initCommandLineEventListeners = (cm: CommandManager) => {
           commandListWrapperElement.style.display = 'none'
           commandLineElement.blur()
         } else {
-          await cm.ifCommandExecute(command)
+          await cm.ifCommandExecute(
+            command,
+            vec2Apply(canvas.getMouseWorldPosition(), Math.floor)
+          )
         }
 
         commandLineElement.value = ''

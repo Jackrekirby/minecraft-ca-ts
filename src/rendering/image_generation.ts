@@ -148,6 +148,9 @@ const imageConfigs: { [key: string]: ImageConfig } = {
   },
   dirt: {
     isDirectional: false
+  },
+  command_block: {
+    isDirectional: false
   }
 }
 
